@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element label="Participants" max_length="40" name="x_305439_digital_m_participants" type="collection">
         <element label="CG ID" max_length="37" name="cg_id" type="string"/>
-        <element label="Participant Name" max_length="64" name="participant_name" type="string"/>
+        <element display="true" label="Participant Name" max_length="64" name="participant_name" type="string"/>
         <element choice="3" default="app" label="Type" max_length="8" name="type" type="choice">
             <choice>
                 <element inactive_on_update="false" label="Applications" value="app"/>
