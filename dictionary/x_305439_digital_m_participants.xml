@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element label="Participants" max_length="40" name="x_305439_digital_m_participants" type="collection">
-        <element label="CG ID" max_length="37" name="cg_id" type="string"/>
+        <element label="CG ID" max_length="37" name="cg_id" type="string" unique="true"/>
         <element display="true" label="Participant Name" max_length="64" name="participant_name" type="string"/>
-        <element choice="3" default="app" label="Type" max_length="8" name="type" type="choice">
+        <element choice="3" default="application" label="Type" max_length="11" name="type" type="choice">
             <choice>
-                <element inactive_on_update="false" label="Applications" value="app"/>
+                <element inactive_on_update="false" label="Application" value="application"/>
                 <element inactive_on_update="false" label="Partner" value="partner"/>
             </choice>
         </element>
+        <index name="index">
+            <element name="cg_id"/>
+        </index>
     </element>
 </database>
