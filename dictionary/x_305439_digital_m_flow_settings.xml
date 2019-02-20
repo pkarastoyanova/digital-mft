@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element label="Flow Settings" max_length="40" name="x_305439_digital_m_flow_settings" type="collection">
         <element attributes="edge_encryption_enabled=true" label="cg id" max_length="40" name="cg_id" type="string"/>
-        <element label="Destination" max_length="32" name="destination" reference="x_305439_digital_m_base_flow" type="reference"/>
-        <element label="Source" max_length="32" name="source" reference="x_305439_digital_m_sources" type="reference"/>
+        <element label="Destination" max_length="32" name="destination" reference="x_305439_digital_m_participants" type="reference"/>
+        <element label="Source" max_length="32" name="source" reference="x_305439_digital_m_participants" type="reference"/>
         <element attributes="edge_encryption_enabled=true" label="Commnets" max_length="1024" name="u_comments" type="string"/>
         <element attributes="edge_encryption_enabled=true" label="Destination file" max_length="40" name="u_destination_file" type="string"/>
         <element attributes="edge_encryption_enabled=true" label="Destination folder" max_length="40" name="u_destination_folder" type="string"/>

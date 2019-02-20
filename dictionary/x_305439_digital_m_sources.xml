@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><database>
-    <element label="Sources" max_length="40" name="x_305439_digital_m_sources" type="collection">
-        <element display="true" label="Source" max_length="32" name="source" reference="x_305439_digital_m_participants" type="reference"/>
-        <index name="index">
-            <element name="source"/>
-        </index>
-    </element>
-</database>
