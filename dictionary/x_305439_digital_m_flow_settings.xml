@@ -2,6 +2,7 @@
     <element label="Flow Settings" max_length="40" name="x_305439_digital_m_flow_settings" type="collection">
         <element attributes="edge_encryption_enabled=true" label="cg id" max_length="40" name="cg_id" type="string"/>
         <element label="Destination" max_length="32" name="destination" reference="x_305439_digital_m_participants" type="reference"/>
+        <element label="Flow name" max_length="64" name="flow_name" type="string"/>
         <element label="Source" max_length="32" name="source" reference="x_305439_digital_m_participants" type="reference"/>
         <element attributes="edge_encryption_enabled=true" label="Commnets" max_length="1024" name="u_comments" type="string"/>
         <element attributes="edge_encryption_enabled=true" label="Destination file" max_length="40" name="u_destination_file" type="string"/>
@@ -12,7 +13,6 @@
                 <element inactive_on_update="false" label="SSH Key" sequence="1" value="ssh key"/>
             </choice>
         </element>
-        <element attributes="edge_encryption_enabled=true" label="Flow name" max_length="40" name="u_string_4" type="string"/>
         <element attributes="edge_encryption_enabled=true" choice="1" default="text" label="Transfer type" max_length="40" name="u_type" type="string">
             <choice>
                 <element inactive_on_update="false" label="Text" sequence="0" value="text"/>

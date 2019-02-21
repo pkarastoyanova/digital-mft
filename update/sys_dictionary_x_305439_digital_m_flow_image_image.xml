@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update>
-    <sys_dictionary action="INSERT_OR_UPDATE" element="u_string_4" table="x_305439_digital_m_flow_settings">
+    <sys_dictionary action="INSERT_OR_UPDATE" element="image" table="x_305439_digital_m_flow_image">
         <active>true</active>
         <array>false</array>
         <array_denormalized>false</array_denormalized>
-        <attributes>edge_encryption_enabled=true</attributes>
+        <attributes/>
         <audit>false</audit>
-        <calculation/>
-        <choice>0</choice>
+        <calculation><![CDATA[(function calculatedFieldValue(current) {
+
+	// Add your code here
+	return '';  // return the calculated value
+
+})(current);]]></calculation>
+        <choice/>
         <choice_field/>
         <choice_table/>
-        <column_label>Flow name</column_label>
+        <column_label>Image</column_label>
         <comments/>
         <create_roles/>
         <default_value/>
@@ -22,15 +27,15 @@
         <dynamic_creation_script/>
         <dynamic_default_value/>
         <dynamic_ref_qual/>
-        <element>u_string_4</element>
+        <element>image</element>
         <element_reference>false</element_reference>
         <foreign_database/>
         <function_definition/>
         <function_field>false</function_field>
         <internal_type display_value="String">string</internal_type>
         <mandatory>false</mandatory>
-        <max_length>40</max_length>
-        <name>x_305439_digital_m_flow_settings</name>
+        <max_length>5000</max_length>
+        <name>x_305439_digital_m_flow_image</name>
         <next_element/>
         <primary>false</primary>
         <read_only>false</read_only>
@@ -47,16 +52,16 @@
         <staged>false</staged>
         <sys_class_name>sys_dictionary</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2019-02-14 12:12:50</sys_created_on>
-        <sys_id>9133cdb24fe323002f86b5e18110c768</sys_id>
+        <sys_created_on>2019-02-21 13:39:31</sys_created_on>
+        <sys_id>1739914d4fb323002f86b5e18110c781</sys_id>
         <sys_mod_count>0</sys_mod_count>
-        <sys_name>Flow name</sys_name>
+        <sys_name>Image</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
-        <sys_update_name>sys_dictionary_x_305439_digital_m_flow_settings_u_string_4</sys_update_name>
+        <sys_update_name>sys_dictionary_x_305439_digital_m_flow_image_image</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-02-14 12:12:50</sys_updated_on>
+        <sys_updated_on>2019-02-21 13:39:31</sys_updated_on>
         <table_reference>false</table_reference>
         <text_index>false</text_index>
         <unique>false</unique>

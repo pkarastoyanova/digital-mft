@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="content_css">
+    <content_css action="INSERT_OR_UPDATE">
+        <name>flow-image-style</name>
+        <style>.participant {&#13;
+    background: #8BC34A;&#13;
+    width: 110px;&#13;
+    text-align: center;&#13;
+    border-color: black;&#13;
+    border-style: solid;&#13;
+    border-width: thin;&#13;
+    border-radius: 12px;&#13;
+    float: left;&#13;
+    padding: 4px;&#13;
+    &#13;
+    height:auto;&#13;
+    min-height:40px;&#13;
+    height:auto !important;        /* for IE as it does not support min-height */&#13;
+    height:40px; &#13;
+}&#13;
+&#13;
+.participant.cft {&#13;
+    background-image: linear-gradient(#bf9000, #bf9000, #bf9000, #ffd966);&#13;
+}&#13;
+&#13;
+.participant.st {&#13;
+    background-image: linear-gradient(#66a03a, #66a03a, #66a03a, #b4dd61);&#13;
+}&#13;
+&#13;
+.participant.part {&#13;
+    background-image: linear-gradient(#1687b1, #1687b1, #1687b1, #57c4eb);&#13;
+}&#13;
+&#13;
+.participant.relay.st {&#13;
+    background-image: linear-gradient( #1d5501, #1d5501, #1d5501, #7ec234 );&#13;
+}&#13;
+&#13;
+.participant.relay.cft {&#13;
+    background-image: linear-gradient( #553900, #553900, #553900, #d4b16a );&#13;
+}&#13;
+&#13;
+.rectangle {&#13;
+    height: 2px;&#13;
+    width: 126px;&#13;
+    float: left;&#13;
+}&#13;
+&#13;
+.rectangle.push {&#13;
+  background-color: #555;&#13;
+  margin-top:4px&#13;
+}&#13;
+&#13;
+.rectangle.push-pull {&#13;
+  background-color: #555;&#13;
+  margin-top:2px;&#13;
+}&#13;
+&#13;
+.rectangle.pull {&#13;
+    border-top-style: dashed;&#13;
+    border-top-color: #555;&#13;
+    margin-top: 4px;&#13;
+}&#13;
+&#13;
+.triangle {&#13;
+    width: 0;&#13;
+	height: 0;&#13;
+	border-top: 5px solid transparent;&#13;
+    border-bottom: 5px solid transparent;&#13;
+}&#13;
+&#13;
+.triangle.right {&#13;
+    border-left: 14px solid #555;&#13;
+    float:right;&#13;
+    margin-top: 1px;&#13;
+}&#13;
+&#13;
+.triangle.left {&#13;
+    border-right: 14px solid #555;&#13;
+    float:left;&#13;
+}&#13;
+&#13;
+.protocol{&#13;
+    margin-left: 57px;&#13;
+    font-weight: bold;&#13;
+    font-size: 13px;&#13;
+    font-family: roboto;&#13;
+}&#13;
+&#13;
+.arrow {&#13;
+    float: left;&#13;
+    width: 140px;&#13;
+    height: 50px;&#13;
+}&#13;
+&#13;
+.arrow.left {&#13;
+   margin-top: -4px;&#13;
+}&#13;
+&#13;
+.name {&#13;
+    margin-top: 5px;&#13;
+    display: inline-block;&#13;
+    color: #fdfdfd;&#13;
+    font-size: 12px;&#13;
+    font-family: roboto;&#13;
+}</style>
+        <sys_class_name>content_css</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-02-21 18:11:36</sys_created_on>
+        <sys_id>746852094f7723002f86b5e18110c7e4</sys_id>
+        <sys_mod_count>11</sys_mod_count>
+        <sys_name>flow-image-style</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>content_css_746852094f7723002f86b5e18110c7e4</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-02-21 18:40:07</sys_updated_on>
+        <type>local</type>
+        <url/>
+    </content_css>
+</record_update>

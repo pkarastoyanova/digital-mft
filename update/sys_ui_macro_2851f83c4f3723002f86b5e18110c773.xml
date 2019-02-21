@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_macro">
+    <sys_ui_macro action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category>general</category>
+        <description>Inserts an image representation for the current flow.</description>
+        <media_type/>
+        <name>flow_diagram</name>
+        <scoped_name>x_305439_digital_m_flow_diagram</scoped_name>
+        <sys_class_name>sys_ui_macro</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-02-20 16:03:16</sys_created_on>
+        <sys_id>2851f83c4f3723002f86b5e18110c773</sys_id>
+        <sys_mod_count>12</sys_mod_count>
+        <sys_name>flow_diagram</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_ui_macro_2851f83c4f3723002f86b5e18110c773</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-02-21 14:59:44</sys_updated_on>
+        <xml><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	<g:evaluate var="jvar_usr_image">
+     var gr = new GlideRecord('x_305439_digital_m_flow_image');
+     gr.get('name', 'APP_CFT_PESIT_PUSH_ST_FTP_PULL_PARTNER');
+     gr.image;
+   </g:evaluate>
+	
+	<g:evaluate var="jvar_user_photo_path" jelly="true">
+		var imageName = '';
+		
+		var a = new GlideRecord('x_305439_digital_m_flow_image');
+		if(a.get('name', 'APP_CFT_PESIT_PUSH_ST_FTP_PULL_PARTNER')){
+			imageName = a.image_attachment.getDisplayValue();
+		}
+		imageName;
+	</g:evaluate>
+
+	<g:no_escape><img src="${jvar_user_photo_path}"/></g:no_escape>
+	
+</j:jelly>]]></xml>
+    </sys_ui_macro>
+</record_update>

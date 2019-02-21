@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update>
     <sys_ui_section caption="" section_id="7e54e8b04f3723002f86b5e18110c79a" sys_domain="global" table="x_305439_digital_m_flow_settings" version="3" view="destsettings">
         <sys_ui_element action="INSERT_OR_UPDATE">
-            <element>u_string_4</element>
+            <element>flow_name</element>
             <position>0</position>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-02-20 15:05:54</sys_created_on>
-            <sys_id>fe54e8b04f3723002f86b5e18110c79c</sys_id>
+            <sys_created_on>2019-02-21 12:11:00</sys_created_on>
+            <sys_id>76e5894d4f7323002f86b5e18110c73e</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_305439_digital_m_flow_settings" sys_domain="global" view="f254e8b04f3723002f86b5e18110c797">7e54e8b04f3723002f86b5e18110c79a</sys_ui_section>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-02-20 15:05:54</sys_updated_on>
+            <sys_updated_on>2019-02-21 12:11:00</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
@@ -18,13 +18,13 @@
             <element>destination</element>
             <position>1</position>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-02-20 15:05:54</sys_created_on>
-            <sys_id>f654e8b04f3723002f86b5e18110c79d</sys_id>
+            <sys_created_on>2019-02-21 12:11:00</sys_created_on>
+            <sys_id>f6e5894d4f7323002f86b5e18110c73e</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_305439_digital_m_flow_settings" sys_domain="global" view="f254e8b04f3723002f86b5e18110c797">7e54e8b04f3723002f86b5e18110c79a</sys_ui_section>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-02-20 15:05:54</sys_updated_on>
+            <sys_updated_on>2019-02-21 12:11:00</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>

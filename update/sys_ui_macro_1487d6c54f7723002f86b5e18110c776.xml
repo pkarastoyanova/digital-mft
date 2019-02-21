@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_macro">
+    <sys_ui_macro action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category>general</category>
+        <description/>
+        <media_type/>
+        <name>dynamic_diagram</name>
+        <scoped_name>x_305439_digital_m_dynamic_diagram</scoped_name>
+        <sys_class_name>sys_ui_macro</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-02-21 18:15:07</sys_created_on>
+        <sys_id>1487d6c54f7723002f86b5e18110c776</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>dynamic_diagram</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_ui_macro_1487d6c54f7723002f86b5e18110c776</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-02-21 18:15:07</sys_updated_on>
+        <xml><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	<g:evaluate>
+	  var css = new GlideRecord("content_css");
+	  css.addQuery("name", "flow-image-style");
+	  css.query()
+	  css.next();
+	  var cssid = ""+css.sys_id;
+	</g:evaluate>
+<link href="${cssid}.cssdbx?" rel="stylesheet" type="text/css"/>
+	<div>
+		<div class="participant cft"><span class="name">CFT APP</span></div>
+		<div class="arrow right">
+			<div class="protocol"> FTP </div>
+			<div class="rectangle push"></div>
+			<div class="triangle right"></div>
+		</div>
+		<div class="participant relay st"><span class="name">ST relay</span></div>
+		<div class="arrow left">
+			<div class="protocol"> PeSIT </div>
+			<div class="triangle left"></div>
+			<div class="rectangle pull"></div>
+			<div class="triangle right"></div>
+			<div class="rectangle push-pull"></div>
+		</div>
+		<div class="participant part"><span class="name">CASTA DIVA</span></div>
+	</div>
+</j:jelly>]]></xml>
+    </sys_ui_macro>
+</record_update>
