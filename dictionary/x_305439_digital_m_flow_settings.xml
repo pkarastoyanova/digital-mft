@@ -3,22 +3,26 @@
         <element attributes="edge_encryption_enabled=true" label="cg id" max_length="40" name="cg_id" type="string"/>
         <element label="Destination" max_length="32" name="destination" reference="x_305439_digital_m_participants" type="reference"/>
         <element label="Flow name" max_length="64" name="flow_name" type="string"/>
+        <element label="Password" max_length="255" name="password" type="password2"/>
         <element label="Source" max_length="32" name="source" reference="x_305439_digital_m_participants" type="reference"/>
         <element attributes="edge_encryption_enabled=true" label="Commnets" max_length="1024" name="u_comments" type="string"/>
         <element attributes="edge_encryption_enabled=true" label="Destination file" max_length="40" name="u_destination_file" type="string"/>
         <element attributes="edge_encryption_enabled=true" label="Destination folder" max_length="40" name="u_destination_folder" type="string"/>
-        <element attributes="edge_encryption_enabled=true" choice="1" label="Login type" max_length="40" name="u_login_type" type="string">
+        <element attributes="edge_encryption_enabled=true" choice="1" default="user name" label="Login type" max_length="40" name="u_login_type" type="string">
             <choice>
+                <element inactive="true" inactive_on_update="true" label="None" sequence="0" value="none"/>
                 <element inactive_on_update="false" label="User name" sequence="0" value="user name"/>
                 <element inactive_on_update="false" label="SSH Key" sequence="1" value="ssh key"/>
             </choice>
         </element>
+        <element label="SSH Key" max_length="40" name="u_ssh_key" type="file_attachment"/>
         <element attributes="edge_encryption_enabled=true" choice="1" default="text" label="Transfer type" max_length="40" name="u_type" type="string">
             <choice>
                 <element inactive_on_update="false" label="Text" sequence="0" value="text"/>
                 <element inactive_on_update="false" label="Binary" sequence="1" value="binary"/>
             </choice>
         </element>
+        <element attributes="edge_encryption_enabled=true" label="User Name" max_length="40" name="u_user_name" type="string"/>
         <index name="index">
             <element name="destination"/>
         </index>

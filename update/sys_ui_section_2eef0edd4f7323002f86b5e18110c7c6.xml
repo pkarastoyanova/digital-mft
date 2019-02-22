@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_section caption="" section_id="2eef0edd4f7323002f86b5e18110c7c6" sys_domain="global" table="x_305439_digital_m_flow_settings" version="3" view="settings">
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>x_305439_digital_m_dynamic_diagram.xml</element>
+            <position>0</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-02-22 12:37:57</sys_created_on>
+            <sys_id>1fa512154fb323002f86b5e18110c75e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter display_value="dynamic diagram formatter">4a591e094f7723002f86b5e18110c74d</sys_ui_formatter>
+            <sys_ui_section caption="NULL" display_value="" name="x_305439_digital_m_flow_settings" sys_domain="global" view="6eefcadd4f7323002f86b5e18110c70f">2eef0edd4f7323002f86b5e18110c7c6</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-02-22 12:37:57</sys_updated_on>
+            <sys_user/>
+            <type>formatter</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_destination_file</element>
+            <position>1</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-02-22 12:37:57</sys_created_on>
+            <sys_id>93a512154fb323002f86b5e18110c75f</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_305439_digital_m_flow_settings" sys_domain="global" view="6eefcadd4f7323002f86b5e18110c70f">2eef0edd4f7323002f86b5e18110c7c6</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-02-22 12:37:57</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_destination_folder</element>
+            <position>2</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-02-22 12:37:57</sys_created_on>
+            <sys_id>17a512154fb323002f86b5e18110c75f</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_305439_digital_m_flow_settings" sys_domain="global" view="6eefcadd4f7323002f86b5e18110c70f">2eef0edd4f7323002f86b5e18110c7c6</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-02-22 12:37:57</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_type</element>
+            <position>3</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-02-22 12:37:57</sys_created_on>
+            <sys_id>97a512154fb323002f86b5e18110c75f</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_305439_digital_m_flow_settings" sys_domain="global" view="6eefcadd4f7323002f86b5e18110c70f">2eef0edd4f7323002f86b5e18110c7c6</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-02-22 12:37:57</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_comments</element>
+            <position>4</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-02-22 12:37:57</sys_created_on>
+            <sys_id>1ba512154fb323002f86b5e18110c75f</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_305439_digital_m_flow_settings" sys_domain="global" view="6eefcadd4f7323002f86b5e18110c70f">2eef0edd4f7323002f86b5e18110c7c6</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-02-22 12:37:57</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_section action="INSERT_OR_UPDATE">
+            <caption/>
+            <header>false</header>
+            <name>x_305439_digital_m_flow_settings</name>
+            <roles/>
+            <sys_class_name>sys_ui_section</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-02-22 12:12:47</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>2eef0edd4f7323002f86b5e18110c7c6</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_305439_digital_m_flow_settings</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+            <sys_update_name>sys_ui_section_2eef0edd4f7323002f86b5e18110c7c6</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-02-22 12:12:47</sys_updated_on>
+            <sys_user/>
+            <title>false</title>
+            <view display_value="settings" name="settings">6eefcadd4f7323002f86b5e18110c70f</view>
+            <view_name/>
+        </sys_ui_section>
+    </sys_ui_section>
+</record_update>

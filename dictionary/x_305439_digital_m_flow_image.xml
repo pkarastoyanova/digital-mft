@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><database>
-    <element label="Flow Image" max_length="40" name="x_305439_digital_m_flow_image" type="collection">
-        <element label="Image" max_length="5000" name="image" type="string"/>
-        <element label="Image Attachment" max_length="40" name="image_attachment" type="user_image"/>
-        <element label="Name" max_length="64" name="name" type="string"/>
-    </element>
-</database>
