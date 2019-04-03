@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_form_sections form_id="7af461374fc033002f86b5e18110c7ac" sys_domain="global" table="x_305439_digital_m_flow_settings" version="3">
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>0</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-03-14 13:45:42</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>fef461374fc033002f86b5e18110c7ae</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_305439_digital_m_flow_settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">7af461374fc033002f86b5e18110c7ac</sys_ui_form>
+            <sys_ui_section caption="NULL" display_value="" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">348e96b14f2723002f86b5e18110c701</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-03-14 13:45:42</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>1</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-03-14 13:45:42</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>faf461374fc033002f86b5e18110c7af</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_305439_digital_m_flow_settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">7af461374fc033002f86b5e18110c7ac</sys_ui_form>
+            <sys_ui_section caption="Client Settings" display_value="Client Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">f6f461374fc033002f86b5e18110c7ab</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-03-14 13:45:42</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>2</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-03-28 17:31:23</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>05ee929c4f6433002f86b5e18110c749</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_305439_digital_m_flow_settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">7af461374fc033002f86b5e18110c7ac</sys_ui_form>
+            <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-03-28 17:31:23</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form action="INSERT_OR_UPDATE">
+            <name>x_305439_digital_m_flow_settings</name>
+            <roles/>
+            <sys_class_name>sys_ui_form</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-03-14 13:45:42</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>7af461374fc033002f86b5e18110c7ac</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_305439_digital_m_flow_settings</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+            <sys_update_name>sys_ui_form_sections_7af461374fc033002f86b5e18110c7ac</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-03-14 13:45:42</sys_updated_on>
+            <sys_user/>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_form>
+    </sys_ui_form_sections>
+</record_update>

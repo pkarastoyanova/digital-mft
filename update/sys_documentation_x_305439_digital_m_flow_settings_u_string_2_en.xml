@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="u_string_2" label="Key Allias" language="en" table="x_305439_digital_m_flow_settings">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>u_string_2</element>
+            <help/>
+            <hint/>
+            <label>Key Allias</label>
+            <language>en</language>
+            <name>x_305439_digital_m_flow_settings</name>
+            <plural>Key Allias</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-03-25 14:41:24</sys_created_on>
+            <sys_id>f13b5a974f1433002f86b5e18110c789</sys_id>
+            <sys_mod_count>2</sys_mod_count>
+            <sys_name>Key Allias</sys_name>
+            <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+            <sys_update_name>sys_documentation_x_305439_digital_m_flow_settings_u_string_2_en</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-03-26 15:27:30</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

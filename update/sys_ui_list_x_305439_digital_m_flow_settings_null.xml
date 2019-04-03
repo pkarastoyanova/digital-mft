@@ -3,77 +3,107 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>flow_name</element>
-            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f0f7c1cd4f7323002f86b5e18110c708</list_id>
+            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">06495a254f2433002f86b5e18110c759</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>0</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-02-21 12:19:53</sys_created_on>
-            <sys_id>b8f7c1cd4f7323002f86b5e18110c708</sys_id>
+            <sys_created_on>2019-04-01 14:19:17</sys_created_on>
+            <sys_id>42495a254f2433002f86b5e18110c75a</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-02-21 12:19:53</sys_updated_on>
+            <sys_updated_on>2019-04-01 14:19:17</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>source</element>
-            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f0f7c1cd4f7323002f86b5e18110c708</list_id>
+            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">06495a254f2433002f86b5e18110c759</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>1</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-02-21 12:19:53</sys_created_on>
-            <sys_id>3cf7c1cd4f7323002f86b5e18110c708</sys_id>
+            <sys_created_on>2019-04-01 14:19:17</sys_created_on>
+            <sys_id>0a495a254f2433002f86b5e18110c75a</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-02-21 12:19:53</sys_updated_on>
+            <sys_updated_on>2019-04-01 14:19:17</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>destination</element>
-            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f0f7c1cd4f7323002f86b5e18110c708</list_id>
+            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">06495a254f2433002f86b5e18110c759</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>2</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-02-21 12:19:53</sys_created_on>
-            <sys_id>bcf7c1cd4f7323002f86b5e18110c708</sys_id>
+            <sys_created_on>2019-04-01 14:19:17</sys_created_on>
+            <sys_id>8a495a254f2433002f86b5e18110c75a</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-02-21 12:19:53</sys_updated_on>
+            <sys_updated_on>2019-04-01 14:19:17</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
-            <element>flow_image</element>
-            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f0f7c1cd4f7323002f86b5e18110c708</list_id>
+            <element>cg_status</element>
+            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">06495a254f2433002f86b5e18110c759</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>3</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-02-21 12:19:53</sys_created_on>
-            <sys_id>30f7c1cd4f7323002f86b5e18110c709</sys_id>
+            <sys_created_on>2019-04-01 14:19:17</sys_created_on>
+            <sys_id>0e495a254f2433002f86b5e18110c75a</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-02-21 12:19:53</sys_updated_on>
+            <sys_updated_on>2019-04-01 14:19:17</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
-            <element>sys_created_on</element>
-            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">f0f7c1cd4f7323002f86b5e18110c708</list_id>
+            <element>status</element>
+            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">06495a254f2433002f86b5e18110c759</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>4</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-02-21 12:19:53</sys_created_on>
-            <sys_id>b0f7c1cd4f7323002f86b5e18110c709</sys_id>
+            <sys_created_on>2019-04-01 14:19:17</sys_created_on>
+            <sys_id>8e495a254f2433002f86b5e18110c75a</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-02-21 12:19:53</sys_updated_on>
+            <sys_updated_on>2019-04-01 14:19:17</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>sys_created_on</element>
+            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">06495a254f2433002f86b5e18110c759</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>5</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-04-01 14:19:17</sys_created_on>
+            <sys_id>02495a254f2433002f86b5e18110c75b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-04-01 14:19:17</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>sys_updated_on</element>
+            <list_id display_value="x_305439_digital_m_flow_settings" element="NULL" name="x_305439_digital_m_flow_settings" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">06495a254f2433002f86b5e18110c759</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>6</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-04-01 14:19:17</sys_created_on>
+            <sys_id>82495a254f2433002f86b5e18110c75b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-04-01 14:19:17</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
@@ -87,10 +117,10 @@
             <sum>false</sum>
             <sys_class_name>sys_ui_list</sys_class_name>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-02-21 12:19:53</sys_created_on>
+            <sys_created_on>2019-04-01 14:19:17</sys_created_on>
             <sys_domain>global</sys_domain>
             <sys_domain_path>/</sys_domain_path>
-            <sys_id>f0f7c1cd4f7323002f86b5e18110c708</sys_id>
+            <sys_id>06495a254f2433002f86b5e18110c759</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_name>x_305439_digital_m_flow_settings</sys_name>
             <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -98,7 +128,7 @@
             <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
             <sys_update_name>sys_ui_list_x_305439_digital_m_flow_settings_null</sys_update_name>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-02-21 12:19:53</sys_updated_on>
+            <sys_updated_on>2019-04-01 14:19:17</sys_updated_on>
             <sys_user/>
             <view display_value="Default view" name="NULL">Default view</view>
             <view_name/>

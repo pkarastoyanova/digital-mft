@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_305439_digital_m.ParticipantsUtil</api_name>
+        <client_callable>false</client_callable>
+        <description>Get the count of expired participanants.&#13;
+Get the count of records from specific type.</description>
+        <name>ParticipantsUtil</name>
+        <script><![CDATA[var ParticipantsUtil = Class.create();
+ParticipantsUtil.prototype = {
+    initialize: function() {
+		this.expireTimeInMin = 30;
+    },
+	getParticipantsCount: function (participantType){
+		var count = new GlideAggregate("x_305439_digital_m_participants");
+		count.addAggregate('COUNT');
+		count.addQuery('type', "=", participantType);
+		count.query();
+		var foundRecords = 0;
+		if (count.next()) {
+			foundRecords = count.getAggregate('COUNT');
+		}
+		gs.info("found participants records= " + foundRecords + ", type=" + participantType);
+		return foundRecords;
+	},
+	getExpiredParticipants: function (participantType){
+		var g_record = new GlideRecord("x_305439_digital_m_participants");
+// 		g_record.addQuery('sys_updated_on', "<", gs.minutesAgo(this.expireTimeInMin));
+		g_record.addQuery('type', "=", participantType);
+		g_record.query();
+		var partInfo = {};
+		while(g_record.next()){
+			partInfo[g_record.cg_id] = g_record.participant_name;
+		}
+		return partInfo;
+	},
+	plural: function (participantType){
+		return participantType + "s";
+	}, 
+    type: 'ParticipantsUtil'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-03-21 12:58:39</sys_created_on>
+        <sys_id>2bcbd9ca4f1073002f86b5e18110c7d4</sys_id>
+        <sys_mod_count>12</sys_mod_count>
+        <sys_name>ParticipantsUtil</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_include_2bcbd9ca4f1073002f86b5e18110c7d4</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-21 18:17:09</sys_updated_on>
+    </sys_script_include>
+</record_update>

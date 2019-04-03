@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_policy">
+    <sys_ui_policy action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <conditions table="x_305439_digital_m_flow_settings">flow_model_nameISNOTEMPTY^ORflow_model_nameISEMPTY^EQ<item endquery="false" field="flow_model_name" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="false" field="flow_model_name" goto="false" newquery="false" operator="ISEMPTY" or="true" value=""/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </conditions>
+        <description/>
+        <global>false</global>
+        <inherit>false</inherit>
+        <isolate_script>true</isolate_script>
+        <model_id/>
+        <model_table/>
+        <on_load>true</on_load>
+        <order>100</order>
+        <reverse_if_false>true</reverse_if_false>
+        <run_scripts>false</run_scripts>
+        <script_false><![CDATA[function onCondition() {
+	
+}]]></script_false>
+        <script_true><![CDATA[function onCondition() {
+	
+}]]></script_true>
+        <set_values/>
+        <short_description>Hide model flow name from settings view</short_description>
+        <sys_class_name>sys_ui_policy</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-04-02 12:14:23</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>cdc403714fe033002f86b5e18110c7f6</sys_id>
+        <sys_mod_count>3</sys_mod_count>
+        <sys_name>Hide model flow name from settings view</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_ui_policy_cdc403714fe033002f86b5e18110c7f6</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-04-03 09:45:20</sys_updated_on>
+        <table>x_305439_digital_m_flow_settings</table>
+        <ui_type>0</ui_type>
+        <view display_value="settings" name="settings">settings</view>
+    </sys_ui_policy>
+</record_update>

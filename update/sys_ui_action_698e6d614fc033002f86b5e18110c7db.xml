@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_action">
+    <sys_ui_action action="INSERT_OR_UPDATE">
+        <action_name>dmft_dest</action_name>
+        <active>false</active>
+        <client>true</client>
+        <client_script_v2/>
+        <comments/>
+        <condition/>
+        <form_action>true</form_action>
+        <form_button>true</form_button>
+        <form_button_v2>false</form_button_v2>
+        <form_context_menu>false</form_context_menu>
+        <form_link>false</form_link>
+        <form_menu_button_v2>false</form_menu_button_v2>
+        <form_style/>
+        <hint/>
+        <isolate_script>false</isolate_script>
+        <list_action>false</list_action>
+        <list_banner_button>false</list_banner_button>
+        <list_button>false</list_button>
+        <list_choice>false</list_choice>
+        <list_context_menu>false</list_context_menu>
+        <list_link>false</list_link>
+        <list_save_with_form_button>false</list_save_with_form_button>
+        <list_style/>
+        <name>Call backend script</name>
+        <onclick>test_dmft()</onclick>
+        <order>100</order>
+        <script><![CDATA[function test_dmft(){
+	
+	var view = getView();
+	console.log("current view: " + view);
+	if(view === 'destsettings'){
+		console.log("flow name: " + g_form.getValue('flow_name'));
+		var gAjax = new GlideAjax("CreateFlow");
+		gAjax.addParam('sysparm_name', "create");
+		gAjax.addParam("sysparm_flow_name", g_form.getValue('flow_name'));
+		gAjax.addParam("sysparm_destination_name", g_form.getValue('destination'));
+		gAjax.getXML(createFlowCallBack);
+		
+	} else if (view === "sourcesettings"){
+		console.log("flow source: " + g_form.getValue('source'));
+		var id = g_form.getUniqueValue();
+		g_form.save();
+		switchToView('preview', id);
+	}
+}
+
+function createFlowCallBack(response){
+	var id = response.responseXML.documentElement.getAttribute("answer");
+	if(id != null) {
+		switchToView('sourcesettings', id);
+	}
+}
+
+function switchToView(viewName, recordId){
+	var gu = new GlideURL('x_305439_digital_m_flow_settings.do');
+		var url = gu.addParam('sys_id', recordId);
+		url = gu.addParam('sysparm_view', viewName);
+		g_navigation.open(url.getURL()); 
+}]]></script>
+        <show_insert>true</show_insert>
+        <show_multiple_update>false</show_multiple_update>
+        <show_query>false</show_query>
+        <show_update>true</show_update>
+        <sys_class_name>sys_ui_action</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-03-07 14:42:20</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>698e6d614fc033002f86b5e18110c7db</sys_id>
+        <sys_mod_count>16</sys_mod_count>
+        <sys_name>Call backend script</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_ui_action_698e6d614fc033002f86b5e18110c7db</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-12 11:43:56</sys_updated_on>
+        <table>x_305439_digital_m_flow_settings</table>
+        <ui11_compatible>true</ui11_compatible>
+        <ui16_compatible>false</ui16_compatible>
+    </sys_ui_action>
+</record_update>

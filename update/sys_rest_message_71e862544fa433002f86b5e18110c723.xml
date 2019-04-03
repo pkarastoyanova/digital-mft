@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message">
+    <sys_rest_message action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <authentication_type>no_authentication</authentication_type>
+        <basic_auth_password/>
+        <basic_auth_profile/>
+        <basic_auth_user/>
+        <description/>
+        <name>AMFT-Communication Servers</name>
+        <oauth2_profile/>
+        <protocol_name/>
+        <rest_endpoint>https://10.232.15.90:8443/servicenow/v1.0/products/${server_id}/server_communication_profiles/CP_SERVER_ST_PESIT_SSL</rest_endpoint>
+        <sys_class_name>sys_rest_message</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-03-28 18:16:04</sys_created_on>
+        <sys_id>71e862544fa433002f86b5e18110c723</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>AMFT-Communication Servers</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_rest_message_71e862544fa433002f86b5e18110c723</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-28 18:16:04</sys_updated_on>
+        <use_basic_auth>false</use_basic_auth>
+        <use_mutual_auth>false</use_mutual_auth>
+    </sys_rest_message>
+</record_update>
