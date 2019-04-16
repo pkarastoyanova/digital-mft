@@ -28,8 +28,50 @@
         <order>50</order>
         <script><![CDATA[// gs.action.getGlideURI().getMap().get('URL Parameter Name');
 //gs.info("action.URI: " + gs.action.getGlideURI().getMap());
-createServerProfile();
-current.update();
+//createServerProfile();
+
+updateFlow();
+
+function updateFlow(){	
+	 try { 
+		 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Update a flow');
+		 r.setStringParameterNoEscape('businessId', current.cg_id);
+		 r.setStringParameterNoEscape('flow_model_name', current.flow_model_name);
+		 r.setRequestBody(getRequestBody());
+
+		 var response = r.execute();
+		 var responseBody = response.getBody();
+		 var httpStatus = response.getStatusCode();
+		 if (httpStatus == 200){
+			 var responseBodyObj = JSON.parse(responseBody);
+			 current.setValue("cg_status", responseBodyObj.data.statusFlow.code);
+			 current.update();
+			 gs.addInfoMessage("Successfully updated '" + current.flow_name + "'.");
+		 } else {
+			 gs.addErrorMessage("Failed update '" + current.flow_name + "' on CG site.");
+		 }
+		}
+		catch(ex) {
+			var message = ex.message;
+			gs.error(message);
+			gs.addErrorMessage("Failed update '" + current.flow_name + "' on CG site.");
+		}
+}
+
+function getRequestBody(){
+	var flowRequest = {};
+	flowRequest.flow_name = current.flow_name + "";
+	flowRequest.flow_description = current.u_comments + "";
+	flowRequest.flow_tags = ["servicenow"] + "";
+	flowRequest.source_partner_id = current.source.cg_id + "";
+	flowRequest.target_partner_id = current.destination.cg_id + "";
+	flowRequest.publish_folder = current.u_destination_folder + "";
+	flowRequest.publish_file_as = current.u_destination_file + "";
+	flowRequest.source_protocol_sftp_transfer_mode = current.src_transfer_type + "";
+	flowRequest.target_protocol_sftp_transfer_mode = current.dest_transfer_type + "";
+	
+	return JSON.stringify(flowRequest);
+}
 
 function createServerProfile(){
 	try{
@@ -80,7 +122,7 @@ function createServerProfile(){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>431a27034f0433002f86b5e18110c797</sys_id>
-        <sys_mod_count>35</sys_mod_count>
+        <sys_mod_count>44</sys_mod_count>
         <sys_name>Save</sys_name>
         <sys_overrides display_value="Save">42e780d40a0a0b34007e0d4a52d33405</sys_overrides>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -88,7 +130,7 @@ function createServerProfile(){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_431a27034f0433002f86b5e18110c797</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-01 08:41:48</sys_updated_on>
+        <sys_updated_on>2019-04-16 15:13:24</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>false</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

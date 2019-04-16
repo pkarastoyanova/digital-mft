@@ -26,68 +26,36 @@
         <name>Deploy</name>
         <onclick/>
         <order>100</order>
-        <script><![CDATA[gs.info("creating flow with name: " + current.flow_name);
-var decrypted = current.password.getDecryptedValue();
+        <script><![CDATA[deploy();
 
-current.update();
-createClientProfile();
-sendRequest();
-
-function createClientProfile(){
-	
-}
-
-function createServerProfile(){
-	
-}
-
-function uploadKey(){
-	
-}
-
-function uploadCertificate(){
-	
-}
-
-function sendRequest(){
-	try {
-		gs.info("sending flow create request to CG.");
-		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Create a Flow');
-		r.setStringParameterNoEscape('flow_name', current.flow_model_name);
+function deploy(){
+	try { 
+		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Deploy');
 		r.setRequestBody(getRequestBody());
-
+	    
 		var response = r.execute();
 		var responseBody = response.getBody();
 		var httpStatus = response.getStatusCode();
-		
-		gs.info("http status: " + httpStatus);
-		
-		var responseBodyObj = JSON.parse(responseBody);
-		if(httpStatus != 201){
-			action.setRedirectURL(current);
-			gs.addErrorMessage(responseBodyObj.errors);
+		gs.info("deploy http status: " + httpStatus);
+		action.setRedirectURL(current);
+		if(httpStatus == 202){
+			gs.addInfoMessage("Flow with name '" + current.flow_name + "' request has been accepted for processing, but the processing has not been completed.");
+		} else if (httpStatus == 400){
+			gs.error("Business ids is empty or invalid.");
+		} else if (httpStatus == 412){
+			gs.addErrorMessage("The deploy request has been triggered, but some products require restart or generates conflict with legacy flows.");
 		} else {
-			action.setRedirectURL(current);
-			gs.info("responseBodyObj.data.statusFlow: " + responseBodyObj.data.statusFlow);
-			current.setValue("cg_status", responseBodyObj.data.statusFlow);
-
-			current.update();
-			gs.addInfoMessage("Flow with name '" + current.flow_name + "' successfully created.");
+			gs.addErrorMessage("General error. Deployment procedure has failed.");
 		}
-	}
-	catch(ex) {
-		var message = ex.message;
-		gs.error(message);
+		
+	} catch(ex) {
+		 var message = ex.message;
 	}
 }
 
 function getRequestBody(){
-	var flowRequest = {};
-	flowRequest.flow_name = current.flow_name + "";
-	flowRequest.flow_description = current.u_comments + "";
-	flowRequest.flow_tags = ["servicenow"] + "";
-	flowRequest.source_partner_id = current.source.cg_id + "";
-	flowRequest.target_partner_id = current.destination.cg_id + "";
+	var flowRequest = [];
+	flowRequest.push(current.cg_id);
 	return JSON.stringify(flowRequest);
 }]]></script>
         <show_insert>false</show_insert>
@@ -100,7 +68,7 @@ function getRequestBody(){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>4a04334b4f0433002f86b5e18110c7f0</sys_id>
-        <sys_mod_count>51</sys_mod_count>
+        <sys_mod_count>53</sys_mod_count>
         <sys_name>Deploy</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -108,7 +76,7 @@ function getRequestBody(){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_4a04334b4f0433002f86b5e18110c7f0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-01 14:15:46</sys_updated_on>
+        <sys_updated_on>2019-04-11 14:35:56</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

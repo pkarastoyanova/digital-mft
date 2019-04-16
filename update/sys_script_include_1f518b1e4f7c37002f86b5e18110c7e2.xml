@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_305439_digital_m.GetStRelay</api_name>
+        <client_callable>false</client_callable>
+        <description>Retrive the SecureTransport product which will be used as a relay server for every created flow in this application.</description>
+        <name>GetStRelay</name>
+        <script><![CDATA[var GetStRelay = Class.create();
+GetStRelay.prototype = {
+    initialize: function() {
+    },
+	getStRelayId: function(){
+		var relayName = gs.getProperty("x_305439_digital_m.stRelayName");
+		if( relayName == ''){
+			gs.error("SecureTransport product name is not set up");
+			return '';
+		}
+		
+		try {
+			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Participants', 'Get ST relay');
+			r.setStringParameterNoEscape('st_relay_name', relayName);
+			
+			var response = r.execute();
+			var responseBody = response.getBody();
+			var httpStatus = response.getStatusCode();
+			if(httpStatus == 200){
+				var jsonObj = JSON.parse(responseBody);
+				return jsonObj.data[0].businessId;
+			} else {
+				gs.error("Failed to get SecureTransport product from CG. Http status is [" + httpStatus + "]. Response body: " + responseBody);
+			}
+		} catch (ex){
+			gs.error(ex.message);
+		}
+		return '';
+	},
+    type: 'GetStRelay'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-04-16 11:27:07</sys_created_on>
+        <sys_id>1f518b1e4f7c37002f86b5e18110c7e2</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>GetStRelay</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_include_1f518b1e4f7c37002f86b5e18110c7e2</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-04-16 12:15:34</sys_updated_on>
+    </sys_script_include>
+</record_update>
