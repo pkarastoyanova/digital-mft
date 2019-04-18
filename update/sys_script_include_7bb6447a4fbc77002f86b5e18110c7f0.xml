@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_305439_digital_m.FlowUtils</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>FlowUtils</name>
+        <script><![CDATA[var FlowUtils = Class.create();
+FlowUtils.prototype = {
+    initialize: function() {
+    },
+	
+	getRequestBody: function(record){
+		try{
+			var flowRequest = {};
+			var userData = getUserData();
+			var stRelayId = new GetStRelay().getStRelayId();
+
+			// general information
+			flowRequest.flow_name = record.flow_name + "";
+			flowRequest.flow_description = record.u_comments + "";
+			flowRequest.flow_tags = ["servicenow"];
+			flowRequest.contact_email = userData.email + "";
+			flowRequest.contact_firstname = userData.firstName + "";
+			flowRequest.contact_lastname = userData.lastName + "";
+			flowRequest.contact_jobtitle = userData.title + "";
+			flowRequest.contact_phone = userData.phone + "";
+
+			if(record.flow_model_name == 'PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER'){
+				// Participants information
+				flowRequest.source_partner_id = record.source.cg_id + "";
+				flowRequest.st_relay_id = stRelayId + "";
+				flowRequest.target_partner_id = record.destination.cg_id + "";
+
+				// Specific flow settings
+				flowRequest.publish_folder = record.model_0043.destination_folder + "";
+				flowRequest.publish_file_as = record.model_0043.destination_file + "";
+				flowRequest.source_protocol_sftp_transfer_mode = record.model_0043.src_transfer_mode + "";
+				flowRequest.target_protocol_sftp_transfer_mode = record.model_0043.target_transfer_mode + "";
+
+				// communication settings
+				flowRequest.source_to_relay_sender_profile_id = "";
+				flowRequest.source_to_relay_receiver_profile_id = "";
+				flowRequest.relay_to_target_sender_profile_id = "";
+				flowRequest.relay_to_target_receiver_profile_id = "";
+
+				// authentication settings
+				flowRequest.source_protocol_sftp_auth_mode = "";
+				flowRequest.target_protocol_sftp_auth_mode = "";
+
+			} else if (record.flow_model_name == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER'){
+				// Participants information
+				flowRequest.st_relay_id = stRelayId + "";
+				flowRequest.source_partner_id = record.source.cg_id + "";
+				flowRequest.st_relay_id = stRelayId + "";
+				flowRequest.target_partner_id = record.destination.cg_id + "";
+
+				// Specific flow settings
+				flowRequest.pesit_flow_idf = record.model_0023.pesit_flow_idf + "";
+				flowRequest.source_file_type = record.model_0023.source_file_type + "";
+				flowRequest.source_record_format = record.model_0023.file_record_format + "";
+				flowRequest.source_max_record_length = record.model_0023.maximum_record_length + "";
+				flowRequest.relay_receive_file_as = record.model_0023.relay_receive_file_as + "";
+				flowRequest.target_protocol_sftp_transfer_mode = record.model_0023.sftp_transfer_mode + "";
+				flowRequest.publish_folder = record.model_0023.destination_folder + "";
+				flowRequest.publish_file_as = record.model_0023.destination_file + "";
+
+				// communication settings
+				flowRequest.source_to_relay_sender_profile_id = "";
+				flowRequest.source_to_relay_receiver_profile_id = "";
+				flowRequest.relay_to_target_sender_profile_id = "";
+				flowRequest.relay_to_target_receiver_profile_id = "";
+
+				// authentication settings
+				flowRequest.target_protocol_sftp_auth_mode = "";
+			}
+			return JSON.stringify(flowRequest);
+		} catch (err){
+			gs.error("Error during generating the flow request: " + err.message);
+		}
+		
+	},
+
+    type: 'FlowUtils'
+};
+
+function getUserData(){
+	var userRecord = new GlideRecord("sys_user");
+	var foundRecord = userRecord.get(gs.getUser().getID());
+	var userData = {};
+	if (foundRecord){
+		userData.firstName = userRecord.first_name;
+		userData.lastName = userRecord.last_name;
+		userData.email = userRecord.email;
+		userData.title = userRecord.title;
+		userData.phone = userRecord.phone;
+	} else {
+		userData.firstName = "";
+		userData.lastName = "";
+		userData.email = "";
+		userData.title = "";
+		userData.phone = "";
+	}
+	return userData;
+}]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-04-17 11:36:19</sys_created_on>
+        <sys_id>7bb6447a4fbc77002f86b5e18110c7f0</sys_id>
+        <sys_mod_count>12</sys_mod_count>
+        <sys_name>FlowUtils</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_include_7bb6447a4fbc77002f86b5e18110c7f0</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-04-18 11:23:58</sys_updated_on>
+    </sys_script_include>
+</record_update>

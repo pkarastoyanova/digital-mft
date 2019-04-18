@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element label="PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER" max_length="40" name="x_305439_digital_m_partner_sftp_push_st_sftp_pull_partner" type="collection">
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Destination file" max_length="64" name="destination_file" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Destination folder" max_length="64" name="destination_folder" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="3" default="Text" label="Source transfer mode" max_length="40" name="src_transfer_mode" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Text" sequence="1" value="ASCII"/>
+                <element inactive_on_update="false" label="Binary" sequence="2" value="BINARY"/>
+            </choice>
+        </element>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="3" default="Text" label="Target transfer mode" max_length="40" name="target_transfer_mode" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Text" sequence="1" value="ASCII"/>
+                <element inactive_on_update="false" label="Binary" sequence="2" value="BINARY"/>
+            </choice>
+        </element>
+    </element>
+</database>

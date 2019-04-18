@@ -30,14 +30,77 @@
 //gs.info("action.URI: " + gs.action.getGlideURI().getMap());
 //createServerProfile();
 
-updateFlow();
+var scope = gs.getCurrentScopeName();
+var table_prefix = current.getTableName();
+
+try{
+	createFlowSpecificSettings();
+	current.update();
+	
+	var flowHelper = new FlowUtils();
+	var body = flowHelper.getRequestBody(current);
+	gs.info("Update request body: " + JSON.stringify(body));
+	//updateFlow();
+} catch (ex){
+	gs.error(ex.message);
+}
+
+function createFlowSpecificSettings(){
+	
+	if(current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
+		var sftp_transfer_mode_field = table_prefix + ".model_0023.sftp_transfer_mode";
+		var relay_receive_file_as_field = table_prefix + ".model_0023.relay_receive_file_as";
+		var maximum_record_length_field = table_prefix + ".model_0023.maximum_record_length";
+		var flow_identifier_field = table_prefix + ".model_0023.flow_identifier";
+		var file_record_format_field = table_prefix + ".model_0023.file_record_format";
+		var source_file_type_field = table_prefix + ".model_0023.source_file_type";
+		var dest_folder_field = table_prefix + ".model_0023.destination_folder";
+		var dest_file_field = table_prefix + ".model_0023.destination_file";
+		var idf_field = table_prefix + ".model_0023.pesit_flow_idf";
+
+		if (current.model_0023.nil()){
+			var r = new GlideRecord(scope + '_app_cft_pesit_push_st_sftp_pull_partner');
+			r.initialize();
+			r.setValue("sftp_transfer_mode", RP.getParameterValue(transfer_type_field));
+			r.setValue("relay_receive_file_as", RP.getParameterValue(relay_receive_file_as_field));
+			r.setValue("maximum_record_length", RP.getParameterValue(maximum_record_length_field));
+			r.setValue("flow_identifier", RP.getParameterValue(flow_identifier_field));
+			r.setValue("file_record_format", RP.getParameterValue(file_record_format_field));
+			r.setValue("source_file_type", RP.getParameterValue(source_file_type_field));
+			r.setValue("destination_folder", RP.getParameterValue(dest_folder_field));
+			r.setValue("destination_file", RP.getParameterValue(dest_file_field));
+			r.setValue("destination_file", RP.getParameterValue(dest_file_field));
+			r.setValue("pesit_flow_idf", RP.getParameterValue(pesit_flow_idf));
+			
+			var _0023_id = r.insert();
+			current.setValue("model_0023", _0023_id);
+		}
+	} else if (current.flow_model_name == "PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER"){
+		var src_transfer_type_field = table_prefix + ".model_0043.src_transfer_type";
+		var target_transfer_type_field = table_prefix + ".model_0043.target_transfer_type";
+		var destination_folder_field = table_prefix + ".model_0043.destination_folder";
+		var destination_file_field = table_prefix + ".model_0043.destination_file";
+		
+		if(current.model_0043.nil()){
+			var gr = new GlideRecord(scope + '_partner_sftp_push_st_sftp_pull_partner');
+			gr.initialize();
+			gr.setValue("src_transfer_type", RP.getParameterValue(src_transfer_type_field));
+			gr.setValue("target_transfer_type", RP.getParameterValue(target_transfer_type_field));
+			gr.setValue("destination_folder", RP.getParameterValue(destination_folder_field));
+			gr.setValue("destination_file", RP.getParameterValue(destination_file_field));
+			var _0043_id = gr.insert();
+			current.setValue("model_0043", _0043_id);
+		}
+	}
+}
 
 function updateFlow(){	
-	 try { 
+	 try {
+		 var flowHelper = new FlowUtils();
 		 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Update a flow');
 		 r.setStringParameterNoEscape('businessId', current.cg_id);
 		 r.setStringParameterNoEscape('flow_model_name', current.flow_model_name);
-		 r.setRequestBody(getRequestBody());
+		 r.setRequestBody(flowHelper.getRequestBody(current));
 
 		 var response = r.execute();
 		 var responseBody = response.getBody();
@@ -58,21 +121,6 @@ function updateFlow(){
 		}
 }
 
-function getRequestBody(){
-	var flowRequest = {};
-	flowRequest.flow_name = current.flow_name + "";
-	flowRequest.flow_description = current.u_comments + "";
-	flowRequest.flow_tags = ["servicenow"] + "";
-	flowRequest.source_partner_id = current.source.cg_id + "";
-	flowRequest.target_partner_id = current.destination.cg_id + "";
-	flowRequest.publish_folder = current.u_destination_folder + "";
-	flowRequest.publish_file_as = current.u_destination_file + "";
-	flowRequest.source_protocol_sftp_transfer_mode = current.src_transfer_type + "";
-	flowRequest.target_protocol_sftp_transfer_mode = current.dest_transfer_type + "";
-	
-	return JSON.stringify(flowRequest);
-}
-
 function createServerProfile(){
 	try{
 	var table_prefix = current.getTableName();
@@ -85,8 +133,6 @@ function createServerProfile(){
 	var host = RP.getParameterValue(host_field);
 	var port = RP.getParameterValue(port_field);
 	var credentials = RP.getParameterValue(credentials_field);
-	
-	
 	
 	gs.info("reference host: " + RP.getParameterValue(host));
 	gs.info("reference: [" + current.server_profile + "]");
@@ -122,7 +168,7 @@ function createServerProfile(){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>431a27034f0433002f86b5e18110c797</sys_id>
-        <sys_mod_count>44</sys_mod_count>
+        <sys_mod_count>67</sys_mod_count>
         <sys_name>Save</sys_name>
         <sys_overrides display_value="Save">42e780d40a0a0b34007e0d4a52d33405</sys_overrides>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -130,7 +176,7 @@ function createServerProfile(){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_431a27034f0433002f86b5e18110c797</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-16 15:13:24</sys_updated_on>
+        <sys_updated_on>2019-04-18 08:27:30</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>false</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

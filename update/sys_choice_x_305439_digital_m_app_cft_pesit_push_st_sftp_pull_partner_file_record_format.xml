@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="file_record_format" table="x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner" version="3">
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>file_record_format</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Fixed</label>
+            <language>en</language>
+            <name>x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner</name>
+            <sequence/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-04-16 17:36:14</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>c72690ea4fb077002f86b5e18110c7d4</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-04-16 17:36:14</sys_updated_on>
+            <value>fixed</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>file_record_format</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Variable</label>
+            <language>en</language>
+            <name>x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner</name>
+            <sequence/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-04-16 17:35:55</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>4516d86e4fb077002f86b5e18110c7d7</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-04-16 17:35:55</sys_updated_on>
+            <value>variable</value>
+        </sys_choice>
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>file_record_format</element>
+            <name>x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-04-16 17:35:55</sys_created_on>
+            <sys_id>3026906e4fb077002f86b5e18110c7e5</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>file_record_format</sys_name>
+            <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+            <sys_update_name>sys_choice_x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner_file_record_format</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-04-16 17:35:55</sys_updated_on>
+        </sys_choice_set>
+    </sys_choice>
+</record_update>

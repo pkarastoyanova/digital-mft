@@ -27,28 +27,39 @@
         <onclick/>
         <order>100</order>
         <script><![CDATA[current.update();
-sendRequest();
+
+var flowHelper = new FlowUtils();
+
+//sendRequest();
 
 function sendRequest(){
 	try {
+		
 		gs.info("sending flow create request to CG.");
 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Create a Flow');
 		r.setStringParameterNoEscape('flow_name', current.flow_model_name);
-		r.setRequestBody(getRequestBody());
+		var body = flowHelper.getRequestBody(current);
+		gs.info("Create request body: " + body);
+		r.setRequestBody(flowHelper.getRequestBody(body));
 
 		var response = r.execute();
 		var responseBody = response.getBody();
 		var httpStatus = response.getStatusCode();
 		
-		gs.info("http status: " + httpStatus);
+		gs.info("create new flow [" + current.flow_model_name + "] http status: " + httpStatus);
 		
 		var responseBodyObj = JSON.parse(responseBody);
 		if(httpStatus != 201){
 			action.setRedirectURL(current);
-			gs.addErrorMessage(responseBodyObj.errors);
+			if(typeof responseBodyObj.errors === 'object' && responseBodyObj.errors !== null){
+				gs.addErrorMessage(JSON.stringify(responseBodyObj.errors));
+			} else if (responseBodyObj.errors !== null){
+				gs.addErrorMessage(responseBodyObj.errors);
+			} else {
+				gs.addErrorMessage("Failed to create new flow in CentralGovernance.");
+			}
 		} else {
 			action.setRedirectURL(current);
-			gs.info("responseBodyObj.data.statusFlow: " + responseBodyObj.data.statusFlow);
 			current.setValue("cg_status", responseBodyObj.data.statusFlow.code);
 			current.setValue("cg_id", responseBodyObj.data.businessId);
 
@@ -72,11 +83,13 @@ function getUserData(){
 		userData.lastName = userRecord.get("last_name");
 		userData.email = userRecord.get("email");
 		userData.title = userRecord.get("title");
+		userData.phone = userRecord.get("phone");
 	} else {
 		userData.firstName = "";
 		userData.lastName = "";
 		userData.email = "";
 		userData.title = "";
+		userData.phone = "";
 	}
 	return userData;
 }
@@ -93,6 +106,7 @@ function getRequestBody(stRelayId){
 		flowRequest.contact_firstname = userData.firstName;
 		flowRequest.contact_lastname = userData.lastName;
 		flowRequest.contact_jobtitle = userData.title;
+		flowRequest.contact_phone = userData.phone;
 		
 		// Participants information
 		flowRequest.source_partner_id = current.source.cg_id + "";
@@ -111,7 +125,6 @@ function getRequestBody(stRelayId){
 		flowRequest.relay_to_target_sender_profile_id = "";
 		flowRequest.relay_to_target_receiver_profile_id = "";
 		
-//		if(current.)
 		flowRequest.source_protocol_sftp_auth_mode = "";
 		flowRequest.target_protocol_sftp_auth_mode = "";
 	}
@@ -128,7 +141,7 @@ function getRequestBody(stRelayId){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>d956b6cb4f4033002f86b5e18110c751</sys_id>
-        <sys_mod_count>16</sys_mod_count>
+        <sys_mod_count>24</sys_mod_count>
         <sys_name>Finish</sys_name>
         <sys_overrides display_value="Next">98e5e6fa4f0433002f86b5e18110c71e</sys_overrides>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -136,7 +149,7 @@ function getRequestBody(stRelayId){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_d956b6cb4f4033002f86b5e18110c751</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-16 14:49:08</sys_updated_on>
+        <sys_updated_on>2019-04-18 11:31:57</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>
