@@ -4,16 +4,16 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-16 17:00:49</sys_created_on>
         <sys_id>ea1ecca64fb077002f86b5e18110c7f3</sys_id>
-        <sys_mod_count>0</sys_mod_count>
-        <sys_name>x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner.x_305439_digital_m.app_cft_pesit_push_st_sftp_pull_partner_user</sys_name>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner.x_305439_digital_m.dmft_app</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_security_acl display_value="x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner">ae1ecca64fb077002f86b5e18110c7f0</sys_security_acl>
         <sys_update_name>sys_security_acl_role_ea1ecca64fb077002f86b5e18110c7f3</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-16 17:00:49</sys_updated_on>
-        <sys_user_role display_value="x_305439_digital_m.app_cft_pesit_push_st_sftp_pull_partner_user" name="x_305439_digital_m.app_cft_pesit_push_st_sftp_pull_partner_user">a61ec8a64fb077002f86b5e18110c705</sys_user_role>
+        <sys_updated_on>2019-04-19 10:19:27</sys_updated_on>
+        <sys_user_role display_value="x_305439_digital_m.dmft_app" name="x_305439_digital_m.dmft_app">3fd94e5f4f7cf7002f86b5e18110c79e</sys_user_role>
         <transaction_id/>
     </sys_security_acl_role>
 </record_update>

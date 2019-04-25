@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element label="Server Comm Profiles" max_length="40" name="x_305439_digital_m_server_comm_profiles" type="collection">
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="1" label="Certificate Alias" max_length="40" name="certificate_alias" type="choice">
+            <choice/>
+        </element>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Certificate Password" max_length="255" name="certificate_password" type="password2"/>
         <element display="true" label="CG ID" max_length="64" name="cg_id" type="string" unique="true"/>
-        <element label="Host" mandatory="true" max_length="64" name="host" type="string"/>
+        <element label="Host" mandatory="true" max_length="64" name="host" read_only="true" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="1" label="Login key alias" max_length="4000" name="login_key_alias" type="choice">
+            <choice/>
+        </element>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Name" max_length="64" name="name" type="string"/>
         <element label="Port" max_length="6" name="port" type="string"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Srv credentials" max_length="40" name="srv_credentials" type="file_attachment"/>
+        <element default="javascript:current.getTableName();" label="Class" max_length="80" name="sys_class_name" type="sys_class_name"/>
         <index name="index">
             <element name="cg_id"/>
+        </index>
+        <index name="index2">
+            <element name="sys_class_name"/>
         </index>
     </element>
 </database>

@@ -5,9 +5,9 @@
         <alter_access>false</alter_access>
         <client_scripts_access>false</client_scripts_access>
         <configuration_access>false</configuration_access>
-        <create_access>false</create_access>
+        <create_access>true</create_access>
         <create_access_controls>true</create_access_controls>
-        <delete_access>false</delete_access>
+        <delete_access>true</delete_access>
         <extension_model/>
         <is_extendable>false</is_extendable>
         <label>Flow Settings</label>
@@ -23,16 +23,16 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-02-08 11:55:53</sys_created_on>
         <sys_id>50858e704fa323002f86b5e18110c794</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>4</sys_mod_count>
         <sys_name>Flow Settings</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_db_object_50858e704fa323002f86b5e18110c794</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-02-08 11:55:53</sys_updated_on>
-        <update_access>false</update_access>
-        <user_role display_value="x_305439_digital_m.flow_settings_user" name="x_305439_digital_m.flow_settings_user">e2c58a704fa323002f86b5e18110c7c7</user_role>
+        <sys_updated_on>2019-04-19 13:48:35</sys_updated_on>
+        <update_access>true</update_access>
+        <user_role display_value="x_305439_digital_m.dmft_app" name="x_305439_digital_m.dmft_app">3fd94e5f4f7cf7002f86b5e18110c79e</user_role>
         <ws_access>true</ws_access>
     </sys_db_object>
 </record_update>

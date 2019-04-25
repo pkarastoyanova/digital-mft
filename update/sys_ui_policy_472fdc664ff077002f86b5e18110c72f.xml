@@ -11,14 +11,31 @@
         <model_id/>
         <model_table/>
         <on_load>true</on_load>
-        <order>100</order>
+        <order>200</order>
         <reverse_if_false>false</reverse_if_false>
-        <run_scripts>false</run_scripts>
+        <run_scripts>true</run_scripts>
         <script_false><![CDATA[function onCondition() {
 
 }]]></script_false>
         <script_true><![CDATA[function onCondition() {
-
+	jslog("PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER");
+	jslog("has role app_sender: " + g_user.hasRole('x_305439_digital_m.app_sender'));
+	jslog("has role app_receiver: " + g_user.hasRole('x_305439_digital_m.app_receiver'));
+	if(g_user.hasRole('x_305439_digital_m.app_sender')){
+		g_form.setDisplay("client_profile_2.pesit_client.login_name", false);
+		g_form.setDisplay("client_profile_2.pesit_client.certificate_alias", false);
+		g_form.setDisplay("client_profile_2.sftp_client.login_name", false);
+		g_form.setDisplay("client_profile_2.sftp_client.login_type", false);
+		g_form.setDisplay("client_profile_2.sftp_client.password", false);
+		g_form.setDisplay("client_profile_2.sftp_client.ssh_key", false);
+	} else if (g_user.hasRole('x_305439_digital_m.app_receiver')){
+		g_form.setDisplay("client_profile_1.pesit_client.login_name", false);
+		g_form.setDisplay("client_profile_1.pesit_client.certificate_alias", false);
+		g_form.setDisplay("client_profile_1.sftp_client.login_name", false);
+		g_form.setDisplay("client_profile_1.sftp_client.login_type", false);
+		g_form.setDisplay("client_profile_1.sftp_client.password", false);
+		g_form.setDisplay("client_profile_1.sftp_client.ssh_key", false);
+	}
 }]]></script_true>
         <set_values/>
         <short_description>PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER</short_description>
@@ -28,7 +45,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>472fdc664ff077002f86b5e18110c72f</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>7</sys_mod_count>
         <sys_name>PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -36,7 +53,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_policy_472fdc664ff077002f86b5e18110c72f</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-16 18:18:45</sys_updated_on>
+        <sys_updated_on>2019-04-23 15:01:14</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui_type>0</ui_type>
         <view/>

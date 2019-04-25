@@ -35,14 +35,75 @@ var table_prefix = current.getTableName();
 
 try{
 	createFlowSpecificSettings();
+	createServerSpecificSettings();
+// 	createClientSpecificSettings();
 	current.update();
+	
+	gs.info("triggering update on communication profiles.");
+	gs.eventQueue("x_305439_digital_m.update_comprofiles", current, "hello", gs.getUserName());
 	
 	var flowHelper = new FlowUtils();
 	var body = flowHelper.getRequestBody(current);
-	gs.info("Update request body: " + JSON.stringify(body));
+	gs.info("Update request body: " + body);
+	
 	//updateFlow();
 } catch (ex){
 	gs.error(ex.message);
+}
+
+
+
+function createClientProfile(){
+	var utils = new CommProfilesUtils();
+	var profile = utils.getClientProfileSn(current);
+	var serverProfile = utils.getServerProfileSn(current);
+	
+	if(serverProfile.nil()){
+		gs.addErrorMessage("Please specify communication server settings.");
+	}
+	
+	if(profile.nil()){
+		// create new profile
+		
+// 		var commLink = new GlideRecord('x_305439_digital_m_communication_links');
+// 		commLink.initialize();
+// 		commLink.setValue("cg_client_profile_id", profiles[0].link.client.communication_profile_businessId);
+// 		commLink.setValue("cg_server_profile_id", profiles[0].link.server.communication_profile_businessId);
+// 		commLink.setValue("client", current.source);
+// 		commLink.setValue("server", current.destination);
+// 		commLink.setValue("name", profiles[0].pattern.pattern_data.name);
+// 		setNewClient(current, profiles[0].link.client.communication_profile, commLink);
+// 		var linkId = commLink.insert();
+// 		var client_profile = getClientProfile();
+// 		current.setValue(client_profile, linkId);
+// 		current.update();
+		
+// 		var profileSettings = utils.getClientProfileSettingsSn(profile, current.flow_model_name);
+	}
+	
+}
+
+function createServerSpecificSettings(){
+		
+	var server;
+	if(gs.getUser().hasRole("x_305439_digital_m.app_sender")){
+		server = "server_profile_1";
+	} else {
+		server = "server_profile_2";
+	}
+
+	var port_field = table_prefix + "." + server + ".port";
+	var srv_obj = current.getValue(server);
+	
+	if (gs.nil(srv_obj)){
+		var relay = new GetStRelay();
+		var r = new GlideRecord(scope + '_server_comm_profiles');
+		r.initialize();
+		r.setValue("host", relay.getStHost());
+		r.setValue("port", RP.getParameterValue(port_field));
+		var serverId = r.insert();
+		current.setValue(server, serverId);
+	}
 }
 
 function createFlowSpecificSettings(){
@@ -56,12 +117,12 @@ function createFlowSpecificSettings(){
 		var source_file_type_field = table_prefix + ".model_0023.source_file_type";
 		var dest_folder_field = table_prefix + ".model_0023.destination_folder";
 		var dest_file_field = table_prefix + ".model_0023.destination_file";
-		var idf_field = table_prefix + ".model_0023.pesit_flow_idf";
+		var pesit_flow_idf_field = table_prefix + ".model_0023.pesit_flow_idf";
 
 		if (current.model_0023.nil()){
 			var r = new GlideRecord(scope + '_app_cft_pesit_push_st_sftp_pull_partner');
 			r.initialize();
-			r.setValue("sftp_transfer_mode", RP.getParameterValue(transfer_type_field));
+			r.setValue("sftp_transfer_mode", RP.getParameterValue(sftp_transfer_mode_field));
 			r.setValue("relay_receive_file_as", RP.getParameterValue(relay_receive_file_as_field));
 			r.setValue("maximum_record_length", RP.getParameterValue(maximum_record_length_field));
 			r.setValue("flow_identifier", RP.getParameterValue(flow_identifier_field));
@@ -70,7 +131,7 @@ function createFlowSpecificSettings(){
 			r.setValue("destination_folder", RP.getParameterValue(dest_folder_field));
 			r.setValue("destination_file", RP.getParameterValue(dest_file_field));
 			r.setValue("destination_file", RP.getParameterValue(dest_file_field));
-			r.setValue("pesit_flow_idf", RP.getParameterValue(pesit_flow_idf));
+			r.setValue("pesit_flow_idf", RP.getParameterValue(pesit_flow_idf_field));
 			
 			var _0023_id = r.insert();
 			current.setValue("model_0023", _0023_id);
@@ -168,7 +229,7 @@ function createServerProfile(){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>431a27034f0433002f86b5e18110c797</sys_id>
-        <sys_mod_count>67</sys_mod_count>
+        <sys_mod_count>88</sys_mod_count>
         <sys_name>Save</sys_name>
         <sys_overrides display_value="Save">42e780d40a0a0b34007e0d4a52d33405</sys_overrides>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -176,7 +237,7 @@ function createServerProfile(){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_431a27034f0433002f86b5e18110c797</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-18 08:27:30</sys_updated_on>
+        <sys_updated_on>2019-04-24 13:29:35</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>false</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>true</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>true</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_305439_digital_m_flow_settings</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Refresh Comprofiles</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+	
+	gs.info("refresh profiles triggered");
+	
+	try {
+		var stRelayId = new GetStRelay().getStRelayId();
+		var utils = new CommProfilesUtils();
+		var profiles;
+		var clientId = utils.getClientBusinessId(current, gs.getUser());
+		
+		profiles = utils.getCommunicationLinks(clientId, stRelayId, current.flow_model_name);
+		
+		if(profiles.length == 0 ){
+			gs.info("There isn't any client communication profiles.");
+		} else {
+			gs.info("Client communication profiles: " + JSON.stringify(profiles));
+			
+			var searchLink = new GlideRecord("x_305439_digital_m_communication_links");
+			searchLink.addQuery("cg_client_profile_id", profiles[0].link.client.communication_profile_businessId);
+			
+			searchLink.query();
+			if(searchLink.next()){
+				// update
+				
+			} else {
+				// create
+				var commLink = new GlideRecord('x_305439_digital_m_communication_links');
+				commLink.initialize();
+				commLink.setValue("cg_client_profile_id", profiles[0].link.client.communication_profile_businessId);
+				commLink.setValue("cg_server_profile_id", profiles[0].link.server.communication_profile_businessId);
+				commLink.setValue("client", current.source);
+				commLink.setValue("server", current.destination);
+				commLink.setValue("name", profiles[0].pattern.pattern_data.name);
+				setNewClient(current, profiles[0].link.client.communication_profile, commLink);
+				var linkId = commLink.insert();
+				var client_profile = getClientProfile();
+				current.setValue(client_profile, linkId);
+				current.update();
+			}
+		}
+	}
+	catch(ex) {
+		var message = ex.message;
+		gs.error(message);
+	}
+
+})(current, previous);
+
+function getClientProfile(){
+	if(gs.getUser().hasRole("x_305439_digital_m.app_sender")){
+		return "client_profile_1";
+	} 
+	return "client_profile_2";
+}
+
+function setNewClient(current, client_profile, commLink){
+	var clientId;
+	
+	if(current.flow_model_name == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' 
+	   && gs.getUser().hasRole("x_305439_digital_m.app_sender")){
+		clientId = insertPesitClient(client_profile.pesitLogin, client_profile.certificateAlias);
+		commLink.setValue("pesit_client", clientId);
+	} else {
+		clientId = insertSFTPClient(client_profile.login, client_profile.keyAlias, client_profile.clientAuthentication);
+		commLink.setValue("sftp_client", clientId);
+	} 
+}
+
+function insertPesitClient(login, alias){
+	var client = new GlideRecord('x_305439_digital_m_cp_pesit');
+	client.initialize();
+	client.setValue("login_name", login);
+	client.setValue("certificate_alias", alias);
+	
+	return client.insert();
+}
+
+function insertSFTPClient(login, alias, authType){
+	var client = new GlideRecord('x_305439_digital_m_cp_sftp');
+	client.initialize();
+	client.setValue("login_name", login);
+
+	if(authType == "PUBLIC_KEY"){
+		client.setValue("login_type", "PUBLIC_KEY");
+		client.setValue("key_alias", alias);
+	} else {
+		client.setValue("login_type", "PASSWORD");
+	}
+	return client.insert();
+}]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-04-19 11:51:51</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>d304aa974ffcf7002f86b5e18110c7b7</sys_id>
+        <sys_mod_count>18</sys_mod_count>
+        <sys_name>Refresh Comprofiles</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_d304aa974ffcf7002f86b5e18110c7b7</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-04-23 17:37:17</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=d304aa974ffcf7002f86b5e18110c7b7"/>
+</record_update>

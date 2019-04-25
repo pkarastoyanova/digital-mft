@@ -52,10 +52,14 @@ FlowUtils.prototype = {
 			} else if (record.flow_model_name == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER'){
 				// Participants information
 				flowRequest.st_relay_id = stRelayId + "";
-				flowRequest.source_partner_id = record.source.cg_id + "";
+				flowRequest.application_id = record.source.cg_id + "";
+				flowRequest.application_product_id = record.source.cg_product_id + "";
 				flowRequest.st_relay_id = stRelayId + "";
 				flowRequest.target_partner_id = record.destination.cg_id + "";
 
+				var model_0023 = new GlideRecord("x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner");
+				model_0023.get(record.model_0023);
+				
 				// Specific flow settings
 				flowRequest.pesit_flow_idf = record.model_0023.pesit_flow_idf + "";
 				flowRequest.source_file_type = record.model_0023.source_file_type + "";
@@ -108,13 +112,13 @@ function getUserData(){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-17 11:36:19</sys_created_on>
         <sys_id>7bb6447a4fbc77002f86b5e18110c7f0</sys_id>
-        <sys_mod_count>12</sys_mod_count>
+        <sys_mod_count>18</sys_mod_count>
         <sys_name>FlowUtils</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_7bb6447a4fbc77002f86b5e18110c7f0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-18 11:23:58</sys_updated_on>
+        <sys_updated_on>2019-04-19 08:30:31</sys_updated_on>
     </sys_script_include>
 </record_update>

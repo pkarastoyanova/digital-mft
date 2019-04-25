@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>false</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_305439_digital_m_flow_settings</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>LoadAliases</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	// Add your code here
+	gs.info("before display");
+	
+	g_scratchpad.flow_model_name = current.flow_model_name;
+	
+	try{
+		var utils = new CommProfilesUtils();
+		var stRelayHelper = new GetStRelay();
+		var stRelayId = stRelayHelper.getStRelayId();
+
+		var clientId = utils.getClientBusinessId(current, gs.getUser());
+		var clientAliases = getProductCertificates(clientId, false, true);
+		var serverAliases = getProductCertificates(stRelayId, true, false);
+		var serverKeyAliases = getProductKeys(stRelayId);
+
+		g_scratchpad.cert_aliases = clientAliases;
+		g_scratchpad.server_cert_aliases = serverAliases;
+		g_scratchpad.server_key_aliases = serverKeyAliases;
+		
+		gs.info("cert aliases: " + clientAliases);
+		gs.info("server cert aliases: " + serverAliases);
+		gs.info("server key aliases: " + serverKeyAliases);
+	} catch (err){
+		gs.error("Failed to evaluate certificate and key aliases. " + err.message);
+	}
+	
+})(current, previous);
+
+function getProductKeys(participant_id){
+	try {
+		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', 'Get product ssh keys');
+			r.setStringParameterNoEscape('product_id', participant_id);
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
+		if (httpStatus == 200){
+			var body = JSON.parse(responseBody);
+			var aliases = [];
+			body.data.forEach(function(key){
+				if(!key.isPrivateKey){
+					aliases.push(key.name);
+				}
+			});
+			return aliases;
+		}
+	} catch (err){
+		gs.error("Failed to get product SSH Keys: " + err.message);
+	}
+}
+
+function getProductCertificates(participant_id, is_private, is_client){
+	if((current.flow_model_name == "PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER" ||
+	  gs.getUser().hasRole("x_305439_digital_m.app_receiver")) && is_client){
+		return [];
+	}
+	try {
+		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Certificates', 'Get product certificates');
+			r.setStringParameterNoEscape('participant_id', participant_id);
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
+		if (httpStatus == 200){
+			var body = JSON.parse(responseBody);
+			var aliases = [];
+			body.data.forEach(function(certificate){
+				if(!certificate.isPrivateCertificate){
+					aliases.push(certificate.name);
+				}
+			});
+			return aliases;
+		}
+	} catch (err){
+		gs.error("Failed to get product Certificates: " + err.message);
+	}
+}]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-04-23 16:26:50</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>205984704f013f002f86b5e18110c705</sys_id>
+        <sys_mod_count>18</sys_mod_count>
+        <sys_name>LoadAliases</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_205984704f013f002f86b5e18110c705</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-04-24 13:18:31</sys_updated_on>
+        <template/>
+        <when>before_display</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=205984704f013f002f86b5e18110c705"/>
+</record_update>

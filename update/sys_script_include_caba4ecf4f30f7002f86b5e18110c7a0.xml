@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_305439_digital_m.CommProfilesUtils</api_name>
+        <client_callable>true</client_callable>
+        <description/>
+        <name>CommProfilesUtils</name>
+        <script><![CDATA[var CommProfilesUtils = Class.create();
+CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
+	
+	getProductServerProfiles: function (serverId){
+		try { 
+			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', 'Get Product Server Profiles');
+			r.setStringParameterNoEscape('server_id', serverId);
+			r.setQueryParameter("protocol", "SFTP");
+
+			var response = r.execute();
+			var responseBody = response.getBody();
+			var httpStatus = response.getStatusCode();
+			if(httpStatus == 200){
+				// update local DB
+			}
+		} catch(ex) {
+			 var message = ex.message;
+		}
+	},
+	getCommunicationLinks: function (client_id, server_id, flow_model, record){
+		try { 
+			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', 'GET communication links');
+			r.setStringParameterNoEscape('server_id', server_id);
+			r.setStringParameterNoEscape('client_id', client_id);
+			
+			if(flow_model == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
+				r.setQueryParameter("sslTls", "Mutual_Authentication");
+				r.setQueryParameter("protocol", "PESIT");
+			} else if (flow_model == "PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER"){
+// 				r.setQueryParameter("clientAuthentication", "PASSWORD_OR_PUBLIC_KEY");
+				r.setQueryParameter("protocol", "SFTP");
+			}
+
+			var response = r.execute();
+			var responseBody = response.getBody();
+			var httpStatus = response.getStatusCode();
+			if(httpStatus == 200){
+				var body = JSON.parse(responseBody);
+				return body.data;
+			} else {
+				gs.error("Failed to retrieve client profiles");
+			}
+			return [];
+		}
+		catch(ex) {
+			var message = ex.message;
+			gs.error(message);
+		}
+	},
+	getClientBusinessId: function(current, user){
+		var clientId;
+		if(current.flow_model_name == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' 
+		    && user.hasRole("x_305439_digital_m.app_sender")){
+			clientId = current.source.cg_product_id;
+		} else if (current.flow_model_name == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' 
+				  && user.hasRole("x_305439_digital_m.app_receiver")){
+			clientId = current.destination.cg_id;
+		} else if (current.flow_model_name == 'PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER'
+				  && user.hasRole("x_305439_digital_m.app_sender")){
+			clientId = current.source.cg_id;
+		} else if (current.flow_model_name == 'PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER'
+				  && user.hasRole("x_305439_digital_m.app_receiver")){
+			clientId = current.destination.cg_id;
+		}
+		return clientId;
+	},
+	getClientProfileSn: function(record){
+		var profile;
+		if(user.hasRole("x_305439_digital_m.app_sender")){
+			profile = record.client_profile_1;
+		} else {
+			profile = record.client_profile_2;
+		}
+		return profile;
+	},
+	getServerProfileSn: function(record){
+		var profile;
+		if(user.hasRole("x_305439_digital_m.app_sender")){
+			profile = record.server_profile_1;
+		} else {
+			profile = record.server_profile_2;
+		}
+		return profile;
+	},
+	
+	getClientProfileSettingsSn: function (profile, flow_model){
+		if(flow_model == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER'){
+			if(profile.getName() == 'client_profile_1'){
+				return profile.client_profile_1.pesit_client;
+			} else {
+				return profile.client_profile_2.sftp_client;
+			}
+		} else {
+			if(profile.getName() == 'client_profile_1'){
+				return profile.client_profile_1.sftp_client;
+			} else {
+				return profile.client_profile_2.sftp_client;
+			}
+		}
+	},
+	
+    type: 'CommProfilesUtils'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-04-18 15:35:52</sys_created_on>
+        <sys_id>caba4ecf4f30f7002f86b5e18110c7a0</sys_id>
+        <sys_mod_count>8</sys_mod_count>
+        <sys_name>CommProfilesUtils</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_include_caba4ecf4f30f7002f86b5e18110c7a0</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-04-24 10:31:39</sys_updated_on>
+    </sys_script_include>
+</record_update>

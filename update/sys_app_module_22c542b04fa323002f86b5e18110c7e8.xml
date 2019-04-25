@@ -18,14 +18,14 @@
         <override_menu_roles>false</override_menu_roles>
         <query/>
         <report/>
-        <roles>x_305439_digital_m.flow_settings_user</roles>
+        <roles>x_305439_digital_m.dmft_app</roles>
         <sys_class_name>sys_app_module</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-02-08 11:55:53</sys_created_on>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>22c542b04fa323002f86b5e18110c7e8</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>5</sys_mod_count>
         <sys_name>Flows</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -33,7 +33,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_app_module_22c542b04fa323002f86b5e18110c7e8</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-03-28 18:26:43</sys_updated_on>
+        <sys_updated_on>2019-04-19 10:17:05</sys_updated_on>
         <timeline_page/>
         <title>Flows</title>
         <uncancelable>false</uncancelable>

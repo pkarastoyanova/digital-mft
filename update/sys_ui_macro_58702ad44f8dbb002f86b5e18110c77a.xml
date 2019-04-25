@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_macro">
+    <sys_ui_macro action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category>general</category>
+        <description/>
+        <media_type/>
+        <name>server_login_details</name>
+        <scoped_name>x_305439_digital_m_server_login_details</scoped_name>
+        <sys_class_name>sys_ui_macro</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-04-22 14:11:28</sys_created_on>
+        <sys_id>58702ad44f8dbb002f86b5e18110c77a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>server_login_details</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_ui_macro_58702ad44f8dbb002f86b5e18110c77a</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-04-22 14:11:28</sys_updated_on>
+        <xml><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	
+	<!-- ADD CSS FILE -->
+	<g:evaluate>
+	  var css = new GlideRecord("content_css");
+	  css.addQuery("name", "login-details");
+	  css.query()
+	  css.next();
+	  var cssid = ""+css.sys_id;
+	</g:evaluate>
+	<link href="${cssid}.cssdbx?" rel="stylesheet" type="text/css"/>
+	
+	<g2:evaluate>
+           var src_name = current.source.participant_name;
+	</g2:evaluate>
+	
+	<g2:evaluate>
+           var is_sender = gs.getUser().hasRole('x_305439_digital_m.app_sender');
+		   var is_receiver = gs.getUser().hasRole('x_305439_digital_m.app_receiver');
+		
+		var src_name;
+		var details;
+		if(is_sender){
+			src_name = current.source.participant_name;
+			details = "(" + src_name + " sends files to ST Relay)";
+		} else if (is_receiver){
+			src_name = current.destination.participant_name;
+			details = "(" + src_name + " pulls files from ST Relay)";
+		}
+		
+	</g2:evaluate>
+	
+	<!-- MAIN CONTENT -->
+	<pre class="login-details">Configure server login details for&#160;<span class="bold-part"> ST Relay</span>.&#160;$[details].</pre>
+</j:jelly>]]></xml>
+    </sys_ui_macro>
+</record_update>

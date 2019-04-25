@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message_fn">
+    <sys_rest_message_fn action="INSERT_OR_UPDATE">
+        <authentication_type>inherit_from_parent</authentication_type>
+        <basic_auth_password/>
+        <basic_auth_profile/>
+        <basic_auth_user/>
+        <content/>
+        <function_name>Get product certificates</function_name>
+        <http_method>get</http_method>
+        <lock>false</lock>
+        <oauth2_profile/>
+        <protocol_name/>
+        <qualified_name>AMFT-Certificates [ Get product certificates ]</qualified_name>
+        <rest_endpoint>https://10.232.15.90:8443/PatternAPI/v3/products/${participant_id}/certificates</rest_endpoint>
+        <rest_message display_value="AMFT-Certificates">3cb7ea144fa433002f86b5e18110c714</rest_message>
+        <sys_class_name>sys_rest_message_fn</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-04-23 16:58:49</sys_created_on>
+        <sys_id>f1a05cf44f013f002f86b5e18110c7a4</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Get product certificates</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_rest_message_fn_f1a05cf44f013f002f86b5e18110c7a4</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-04-23 16:58:49</sys_updated_on>
+        <use_basic_auth>false</use_basic_auth>
+        <use_mid_server display_value="vm15-39-mid-server">c82e1a854f8323002f86b5e18110c724</use_mid_server>
+        <use_mutual_auth>false</use_mutual_auth>
+    </sys_rest_message_fn>
+</record_update>
