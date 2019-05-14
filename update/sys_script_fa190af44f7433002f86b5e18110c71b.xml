@@ -31,13 +31,16 @@
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
 
+	gs.info("Deleting flows from CG...");
 	try { 
-	 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Delete a flow');
-	 r.setStringParameterNoEscape('businessId', current.cg_id);
+		var connHelper = new ConnectionSettings();
+		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Delete a flow');
+		connHelper.setMandatoryProps(r);
+		r.setStringParameterNoEscape('businessId', current.cg_id);
 
-	 var response = r.execute();
-	 var responseBody = response.getBody();
-	 var httpStatus = response.getStatusCode();
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
 		if(httpStatus != 202){
 			current.isActionAborted(true);
 			gs.addErrorMessage("Failed to remove the flow.");
@@ -51,7 +54,6 @@
 		var message = ex.message;
 		gs.error(message);
 	}
-
 })(current, previous);]]></script>
         <sys_class_name>sys_script</sys_class_name>
         <sys_created_by>admin</sys_created_by>
@@ -59,7 +61,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>fa190af44f7433002f86b5e18110c71b</sys_id>
-        <sys_mod_count>3</sys_mod_count>
+        <sys_mod_count>7</sys_mod_count>
         <sys_name>Delete flow from CG</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -67,7 +69,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_fa190af44f7433002f86b5e18110c71b</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-11 16:06:53</sys_updated_on>
+        <sys_updated_on>2019-05-10 09:05:41</sys_updated_on>
         <template/>
         <when>before</when>
     </sys_script>

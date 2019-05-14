@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>sys_properties</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="sys_properties">sys_scope.name=digital-mft^EQ<item endquery="false" field="sys_scope.name" goto="false" newquery="false" operator="=" or="false" value="digital-mft"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message><![CDATA[<p>AMFT host must be set.</p>]]></message>
+        <name>SysProp Validate</name>
+        <order>90</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	gs.info("Validating system properties...");
+	
+	try {
+		if(current.name == "x_305439_digital_m.st.relay.name" && gs.nil(current.value)){
+			current.setAbortAction(true);
+			var element = current.getElement("name");
+			element.setError("Errrrrr");
+			
+			gs.info(current.getElement('name'));
+			gs.info(current.getElement('value'));
+			var val = current.getElement('value');
+			val.setError("dddf");
+			gs.addErrorMessage("st.relay.name cannot be empty.");
+		}
+		
+		if(current.name == "x_305439_digital_m.amft.host" && gs.nil(current.value)){
+			current.setAbortAction(true);
+			gs.addErrorMessage("amft.host cannot be empty.");
+		}
+
+		if(current.name == "x_305439_digital_m.amft.port"){
+			if(gs.nil(current.value)){
+				current.setAbortAction(true);
+				gs.addErrorMessage("amft.port cannot be empty.");
+			} else if (!isInt(current.value)){
+				current.setAbortAction(true);
+				gs.addErrorMessage("amft.port must be integer value.");
+			}
+		}
+
+		if(current.name == "x_305439_digital_m.http.timeout"){
+			if(gs.nil(current.value)){
+				current.setAbortAction(true);
+				gs.addErrorMessage("http.timeout cannot be empty.");
+			} else if (!isInt(current.value)) {
+				current.setAbortAction(true);
+				gs.addErrorMessage("http.timeout must be integer value");
+			}
+		} 
+	} catch (ex){
+		gs.error(ex.message);
+		current.setAbortAction(true);
+		gs.addErrorMessage(ex.message);
+	}
+})(current, previous);
+
+function isInt(value){
+	return !isNaN(value) && parseInt(Number(value)) == value;
+}]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-05-09 16:47:46</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>3637a6bd4f55f3002f86b5e18110c7f2</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>SysProp Validate</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_3637a6bd4f55f3002f86b5e18110c7f2</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-05-10 08:21:19</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=3637a6bd4f55f3002f86b5e18110c7f2"/>
+</record_update>

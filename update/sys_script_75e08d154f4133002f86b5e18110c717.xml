@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>true</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>false</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_305439_digital_m_communication_links</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>OnDelete comlinks</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	gs.info("Trying to clean up communication profile clients.");
+	
+	var pesit_client_sys_id = current.pesit_client;
+	if(!gs.nil(pesit_client_sys_id)){
+		var pesit_client = new GlideRecord("x_305439_digital_m_cp_pesit");
+		if(pesit_client.get(pesit_client_sys_id)){
+			var isPesitClientDel = pesit_client.deleteRecord();
+			gs.info("Removed pesit client [" + isPesitClientDel + "]");
+		}
+	}
+	
+	var sftp_client_sys_id = current.sftp_client;
+	if(!gs.nil(sftp_client_sys_id)){
+		var sftp_client = new GlideRecord("x_305439_digital_m_cp_sftp");
+		if(sftp_client.get(sftp_client_sys_id)){
+			var isSftpClientDel = sftp_client.deleteRecord();
+			gs.info("Removed sftp client [" + isSftpClientDel + "]");
+		}
+	}
+})(current, previous);
+
+/**
+ * Get the GlideRecord object for an attachment on a given record.
+ * @param {string} recordTable - The table name for the record that has the attachment. Example: "incident".
+ * @param {string} idOfRecord - The sys_id of the record that has the attachment.
+ * @param {string} [nameOfFile] - The name of the attachment file to retrieve.
+ * @param {boolean} [exactMatch] - Whether to look for an exact match on the file-name provided. If false (or unspecified), a "starts with..." query will be done.
+ * This param only applies if a valid file name is provided.
+ * @returns {GlideRecord|boolean} - The GlideRecord for the related sys_attachment record.
+ */
+function getAttachmentRecord(recordTable, idOfRecord, nameOfFile, exactMatch) {
+	var grAttachment = new GlideRecord('sys_attachment');
+	
+	grAttachment.addQuery('table_name', recordTable);
+	grAttachment.addQuery('table_sys_id', idOfRecord);
+	
+	if (nameOfFile && exactMatch) {
+		//If the file name is provided, and exactMatch is true
+		grAttachment.addQuery('file_name', nameOfFile);
+	} else if (nameOfFile) {
+		//If the file name is provided, but exactMatch is not, or is false
+		grAttachment.addQuery('file_name', 'STARTSWITH', nameOfFile);
+	}
+	
+	//If multiple attachments match, get newest one
+	grAttachment.orderByDesc('sys_created_on');
+	grAttachment.setLimit(1); //Be more efficient
+	grAttachment.query();
+	
+	if (grAttachment.next()) {
+		return grAttachment;
+	}
+	
+	gs.debug('Attachment for record on table ' +
+		recordTable + ' with sys_id ' + idOfRecord +
+		' not found with the specified arguments.');
+	
+	return false; //If attachment is not found, return false
+}]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-04-25 10:18:12</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>75e08d154f4133002f86b5e18110c717</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>OnDelete comlinks</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_75e08d154f4133002f86b5e18110c717</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-05-06 13:54:50</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=75e08d154f4133002f86b5e18110c717"/>
+</record_update>

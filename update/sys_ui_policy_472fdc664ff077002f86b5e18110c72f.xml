@@ -22,19 +22,65 @@
 	jslog("has role app_sender: " + g_user.hasRole('x_305439_digital_m.app_sender'));
 	jslog("has role app_receiver: " + g_user.hasRole('x_305439_digital_m.app_receiver'));
 	if(g_user.hasRole('x_305439_digital_m.app_sender')){
-		g_form.setDisplay("client_profile_2.pesit_client.login_name", false);
-		g_form.setDisplay("client_profile_2.pesit_client.certificate_alias", false);
+		// show sftp client 1
+		g_form.setDisplay("client_profile_1.sftp_client.login_name", true);
+		g_form.setDisplay("client_profile_1.sftp_client.login_type", true);
+		g_form.setDisplay("client_profile_1.sftp_client.password", true);
+		g_form.setDisplay("client_profile_1.sftp_client.ssh_key", true);
+		g_form.setDisplay("client_profile_1.sftp_client.key_alias", true);
+		
+		// hide pesit client 1
+		g_form.setDisplay("client_profile_1.pesit_client.login_name", false);
+		g_form.setDisplay("client_profile_1.pesit_client.certificate_alias", false);
+		
+		// hide sftp and pesit client 2
 		g_form.setDisplay("client_profile_2.sftp_client.login_name", false);
 		g_form.setDisplay("client_profile_2.sftp_client.login_type", false);
 		g_form.setDisplay("client_profile_2.sftp_client.password", false);
 		g_form.setDisplay("client_profile_2.sftp_client.ssh_key", false);
+		g_form.setDisplay("client_profile_2.sftp_client.key_alias", false);
+		g_form.setDisplay("client_profile_2.pesit_client.certificate_alias", false);
+		g_form.setDisplay("client_profile_2.pesit_client.login_name", false);
+		
+		// hide sftp settings
+		g_form.setDisplay("model_0023.destination_file", false);
+		g_form.setDisplay("model_0023.destination_folder", false);
+		g_form.setDisplay("model_0023.file_record_format", false);
+		g_form.setDisplay("model_0023.maximum_record_length", false);
+		g_form.setDisplay("model_0023.pesit_flow_idf", false);
+		g_form.setDisplay("model_0023.relay_receive_file_as", false);
+		g_form.setDisplay("model_0023.sftp_transfer_mode", false);
+		g_form.setDisplay("model_0023.source_file_type", false);
 	} else if (g_user.hasRole('x_305439_digital_m.app_receiver')){
-		g_form.setDisplay("client_profile_1.pesit_client.login_name", false);
-		g_form.setDisplay("client_profile_1.pesit_client.certificate_alias", false);
+		// hide client 1
 		g_form.setDisplay("client_profile_1.sftp_client.login_name", false);
 		g_form.setDisplay("client_profile_1.sftp_client.login_type", false);
 		g_form.setDisplay("client_profile_1.sftp_client.password", false);
 		g_form.setDisplay("client_profile_1.sftp_client.ssh_key", false);
+		g_form.setDisplay("client_profile_1.sftp_client.key_alias", false);
+		g_form.setDisplay("client_profile_1.pesit_client.login_name", false);
+		g_form.setDisplay("client_profile_1.pesit_client.certificate_alias", false);
+		
+		// show sftp client 2
+		g_form.setDisplay("client_profile_2.sftp_client.login_name", true);
+		g_form.setDisplay("client_profile_2.sftp_client.login_type", true);
+		g_form.setDisplay("client_profile_2.sftp_client.password", true);
+		g_form.setDisplay("client_profile_2.sftp_client.ssh_key", false);
+		g_form.setDisplay("client_profile_2.sftp_client.key_alias", true);
+		
+		// hide pesit client 2
+		g_form.setDisplay("client_profile_2.pesit_client.certificate_alias", false);
+		g_form.setDisplay("client_profile_2.pesit_client.login_name", false);
+		
+		// hide pesit settings
+		g_form.setDisplay("model_0023.destination_file", false);
+		g_form.setDisplay("model_0023.destination_folder", false);
+		g_form.setDisplay("model_0023.file_record_format", false);
+		g_form.setDisplay("model_0023.maximum_record_length", false);
+		g_form.setDisplay("model_0023.pesit_flow_idf", false);
+		g_form.setDisplay("model_0023.relay_receive_file_as", false);
+		g_form.setDisplay("model_0023.sftp_transfer_mode", false);
+		g_form.setDisplay("model_0023.source_file_type", false);
 	}
 }]]></script_true>
         <set_values/>
@@ -45,7 +91,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>472fdc664ff077002f86b5e18110c72f</sys_id>
-        <sys_mod_count>7</sys_mod_count>
+        <sys_mod_count>20</sys_mod_count>
         <sys_name>PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -53,7 +99,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_policy_472fdc664ff077002f86b5e18110c72f</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-23 15:01:14</sys_updated_on>
+        <sys_updated_on>2019-05-13 10:20:38</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui_type>0</ui_type>
         <view/>

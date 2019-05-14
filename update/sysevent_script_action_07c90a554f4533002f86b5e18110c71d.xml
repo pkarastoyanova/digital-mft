@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sysevent_script_action">
+    <sysevent_script_action action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition_script/>
+        <description/>
+        <event_name>x_305439_digital_m.update_comprofiles</event_name>
+        <name>handle comprofiles update</name>
+        <order>100</order>
+        <script><![CDATA[(function executeRule(current, event /*null when async*/) {
+	gs.info("[{0}] x_305439_digital_m.update_comprofiles has been triggered ...", "update_comprofiles");
+	
+	try {
+		var cgStRelayId = new GetStRelay().getStRelayId();
+		var utils = new CommProfilesUtils();
+		var cgClientId = utils.getClientBusinessId(current, gs.getUser());
+		
+		var cgCommLinksProfiles = utils.getCommunicationLinks(cgClientId, cgStRelayId, current.flow_model_name);
+		gs.info("[{0}] communication profile links: {1}","update_comprofiles", JSON.stringify(cgCommLinksProfiles));
+		
+		var client_profile_field = utils.getClientProfileFieldSn(current, gs.getUser());
+		var server_profile_field = utils.getServerProfileFieldSn(current, gs.getUser());
+		
+		if(cgCommLinksProfiles.length == 0){
+			// clean up existing records if there is any
+			if(!gs.nil(client_profile_field)){
+				gs.info("[{0}] CG did not return any client communication link. Clean up existing records.", "update_comprofiles");
+				var client_record = new GlideRecord("x_305439_digital_m_communication_links");
+				if(client_record.get(client_profile_field)){
+					client_record.deleteRecord();
+				}
+			}
+		} else {
+			var client_id = cgCommLinksProfiles[0].link.client.communication_profile_businessId;
+			var server_id = cgCommLinksProfiles[0].link.server.communication_profile_businessId;
+			var source_id = current.source;
+			var destination_id = current.destination;
+			var name = cgCommLinksProfiles[0].pattern.pattern_data.name;
+			var client_profile = cgCommLinksProfiles[0].link.client.communication_profile;
+			var server_profile = cgCommLinksProfiles[0].link.server.communication_profile;
+			
+			if(gs.nil(client_profile_field)){
+				// create client
+				gs.debug("[update_comprofiles] creating new object: clientId={0}, serverId={1}, sourceId={2}, destinationId={3}, name={4}, clientProfile=" + JSON.stringify(client_profile), client_id, server_id, source_id, destination_id, name);
+				linkId = utils.createNewClientCommunication(client_id,
+															server_id,
+															source_id,
+															destination_id,
+															name,
+															client_profile,
+														    current.flow_model_name);
+				current.setValue(client_profile_field.getName(), linkId);
+				
+				// create server 
+				var serverId = utils.createNewServerCommunication(server_id, server_profile, current.flow_model_name);
+				current.setValue(server_profile_field.getName(), serverId);
+				current.update();
+			} else {
+				// update
+				utils.updateServerCommunication(server_profile_field, server_profile, current.flow_model_name);
+				
+				gs.debug("[update_comprofiles] updating client comm profile: clientId={0}, serverId={1}, sourceId={2}, destinationId={3}, name={4}, clientProfile=" + JSON.stringify(client_profile), client_id, server_id, source_id, destination_id, name);
+				utils.updateClientProfile(client_profile_field,
+										client_id,
+										server_id,
+										source_id,
+										destination_id,
+										name,
+										client_profile,
+										current.flow_model_name);
+				
+			}
+		}
+	} catch (ex){
+		gs.error("[update_comprofiles]: {0}", ex.message);
+	}
+})(current, event);
+
+]]></script>
+        <synchronous>false</synchronous>
+        <sys_class_name>sysevent_script_action</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-04-25 15:05:58</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>07c90a554f4533002f86b5e18110c71d</sys_id>
+        <sys_mod_count>31</sys_mod_count>
+        <sys_name>handle comprofiles update</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sysevent_script_action_07c90a554f4533002f86b5e18110c71d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-05-07 09:34:27</sys_updated_on>
+    </sysevent_script_action>
+</record_update>

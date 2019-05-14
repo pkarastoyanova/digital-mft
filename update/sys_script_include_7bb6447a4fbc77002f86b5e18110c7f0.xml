@@ -3,7 +3,7 @@
         <access>package_private</access>
         <active>true</active>
         <api_name>x_305439_digital_m.FlowUtils</api_name>
-        <client_callable>false</client_callable>
+        <client_callable>true</client_callable>
         <description/>
         <name>FlowUtils</name>
         <script><![CDATA[var FlowUtils = Class.create();
@@ -86,6 +86,57 @@ FlowUtils.prototype = {
 		
 	},
 
+	createFlowSpecificSettings: function (current){
+		var scope = gs.getCurrentScopeName();
+		var table_prefix = current.getTableName();
+		
+		if(current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
+			var sftp_transfer_mode_field = table_prefix + ".model_0023.sftp_transfer_mode";
+			var relay_receive_file_as_field = table_prefix + ".model_0023.relay_receive_file_as";
+			var maximum_record_length_field = table_prefix + ".model_0023.maximum_record_length";
+			var flow_identifier_field = table_prefix + ".model_0023.flow_identifier";
+			var file_record_format_field = table_prefix + ".model_0023.file_record_format";
+			var source_file_type_field = table_prefix + ".model_0023.source_file_type";
+			var dest_folder_field = table_prefix + ".model_0023.destination_folder";
+			var dest_file_field = table_prefix + ".model_0023.destination_file";
+			var pesit_flow_idf_field = table_prefix + ".model_0023.pesit_flow_idf";
+
+			if (current.model_0023.nil()){
+				var r = new GlideRecord(scope + '_app_cft_pesit_push_st_sftp_pull_partner');
+				r.initialize();
+				r.setValue("sftp_transfer_mode", RP.getParameterValue(sftp_transfer_mode_field));
+				r.setValue("relay_receive_file_as", RP.getParameterValue(relay_receive_file_as_field));
+				r.setValue("maximum_record_length", RP.getParameterValue(maximum_record_length_field));
+				r.setValue("flow_identifier", RP.getParameterValue(flow_identifier_field));
+				r.setValue("file_record_format", RP.getParameterValue(file_record_format_field));
+				r.setValue("source_file_type", RP.getParameterValue(source_file_type_field));
+				r.setValue("destination_folder", RP.getParameterValue(dest_folder_field));
+				r.setValue("destination_file", RP.getParameterValue(dest_file_field));
+				r.setValue("destination_file", RP.getParameterValue(dest_file_field));
+				r.setValue("pesit_flow_idf", RP.getParameterValue(pesit_flow_idf_field));
+
+				var _0023_id = r.insert();
+				current.setValue("model_0023", _0023_id);
+			}
+		} else if (current.flow_model_name == "PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER"){
+			var src_transfer_type_field = table_prefix + ".model_0043.src_transfer_type";
+			var target_transfer_type_field = table_prefix + ".model_0043.target_transfer_type";
+			var destination_folder_field = table_prefix + ".model_0043.destination_folder";
+			var destination_file_field = table_prefix + ".model_0043.destination_file";
+
+			if(current.model_0043.nil()){
+				var gr = new GlideRecord(scope + '_partner_sftp_push_st_sftp_pull_partner');
+				gr.initialize();
+				gr.setValue("src_transfer_type", RP.getParameterValue(src_transfer_type_field));
+				gr.setValue("target_transfer_type", RP.getParameterValue(target_transfer_type_field));
+				gr.setValue("destination_folder", RP.getParameterValue(destination_folder_field));
+				gr.setValue("destination_file", RP.getParameterValue(destination_file_field));
+				var _0043_id = gr.insert();
+				current.setValue("model_0043", _0043_id);
+			}
+		}
+	},
+	
     type: 'FlowUtils'
 };
 
@@ -112,13 +163,13 @@ function getUserData(){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-17 11:36:19</sys_created_on>
         <sys_id>7bb6447a4fbc77002f86b5e18110c7f0</sys_id>
-        <sys_mod_count>18</sys_mod_count>
+        <sys_mod_count>19</sys_mod_count>
         <sys_name>FlowUtils</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_7bb6447a4fbc77002f86b5e18110c7f0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-19 08:30:31</sys_updated_on>
+        <sys_updated_on>2019-05-09 15:32:10</sys_updated_on>
     </sys_script_include>
 </record_update>

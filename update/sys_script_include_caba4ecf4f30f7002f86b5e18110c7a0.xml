@@ -9,33 +9,50 @@
         <script><![CDATA[var CommProfilesUtils = Class.create();
 CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	
-	getProductServerProfiles: function (serverId){
+	getProductServerProfiles: function (serverId, flow_model, pesitQuery){
+		gs.info("getProductServerProfiles serverId={0}, model={1}, pesitQuery={2}", serverId, flow_model, pesitQuery);
 		try { 
 			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', 'Get Product Server Profiles');
+			new ConnectionSettings().setMandatoryProps(r);
 			r.setStringParameterNoEscape('server_id', serverId);
-			r.setQueryParameter("protocol", "SFTP");
+			
+			var isPesitQuery;
+			if(gs.nil(pesitQuery)){
+				isPesitQuery = (flow_model == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER" && gs.getUser().hasRole("x_305439_digital_m.app_sender"));
+			} else {
+				isPesitQuery = pesitQuery;
+			}
+			
+			setQueryServerProfilesParameters(r, isPesitQuery);
 
 			var response = r.execute();
 			var responseBody = response.getBody();
 			var httpStatus = response.getStatusCode();
 			if(httpStatus == 200){
-				// update local DB
+				var body = JSON.parse(responseBody);
+				return body.data;
+			} else {
+				gs.error("Failed to retrieve server profiles, status code={0}", httpStatus);
 			}
 		} catch(ex) {
 			 var message = ex.message;
+			 gs.error(message);
 		}
 	},
+	
 	getCommunicationLinks: function (client_id, server_id, flow_model, record){
 		try { 
 			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', 'GET communication links');
+			new ConnectionSettings().setMandatoryProps(r);
 			r.setStringParameterNoEscape('server_id', server_id);
 			r.setStringParameterNoEscape('client_id', client_id);
 			
-			if(flow_model == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
+			if(flow_model == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER" 
+			   && gs.getUser().hasRole("x_305439_digital_m.app_sender")){
 				r.setQueryParameter("sslTls", "Mutual_Authentication");
 				r.setQueryParameter("protocol", "PESIT");
-			} else if (flow_model == "PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER"){
-// 				r.setQueryParameter("clientAuthentication", "PASSWORD_OR_PUBLIC_KEY");
+			} else {
+ 				r.setQueryParameter("clientAuthentication", "PASSWORD_OR_PUBLIC_KEY");
 				r.setQueryParameter("protocol", "SFTP");
 			}
 
@@ -55,71 +72,503 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 			gs.error(message);
 		}
 	},
+	
+	/**
+		Get the client partner of application business id. The client id is evaluated based on the 
+		flow and the user role.
+		@param {current} - the current record for which the client id is returned.
+		@param {user} - the user which requests the operation.
+		@return the client id extracted from the 'current' record.
+	*/
 	getClientBusinessId: function(current, user){
 		var clientId;
 		if(current.flow_model_name == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' 
 		    && user.hasRole("x_305439_digital_m.app_sender")){
-			clientId = current.source.cg_product_id;
+			if(!gs.nil(current.source)){
+					clientId = current.source.cg_product_id;
+			}
 		} else if (current.flow_model_name == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' 
 				  && user.hasRole("x_305439_digital_m.app_receiver")){
-			clientId = current.destination.cg_id;
+			if(!gs.nil(current.destination)){
+				clientId = current.destination.cg_id;
+			}
 		} else if (current.flow_model_name == 'PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER'
 				  && user.hasRole("x_305439_digital_m.app_sender")){
-			clientId = current.source.cg_id;
+			if(!gs.nil(current.source)){
+				clientId = current.source.cg_id;
+			}
 		} else if (current.flow_model_name == 'PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER'
 				  && user.hasRole("x_305439_digital_m.app_receiver")){
-			clientId = current.destination.cg_id;
+			if(!gs.nil(current.destination)){
+				clientId = current.destination.cg_id;
+			}
 		}
 		return clientId;
 	},
-	getClientProfileSn: function(record){
-		var profile;
+	
+	/**
+		Get service now client communication profile field.
+		 @param {GlideRecord} record - the record for which the comm profile should be returned
+		 @param {GlideUser} user - the current user requesting the data
+	*/
+	getClientProfileFieldSn: function(record, user){
+		var profile = {};
 		if(user.hasRole("x_305439_digital_m.app_sender")){
-			profile = record.client_profile_1;
+			profile.profile = record.client_profile_1.getRefRecord(); 
+			profile.field_name = "client_profile_1";
 		} else {
-			profile = record.client_profile_2;
-		}
-		return profile;
-	},
-	getServerProfileSn: function(record){
-		var profile;
-		if(user.hasRole("x_305439_digital_m.app_sender")){
-			profile = record.server_profile_1;
-		} else {
-			profile = record.server_profile_2;
+			profile.profile = record.client_profile_2.getRefRecord(); 
+			profile.field_name = "client_profile_2";
 		}
 		return profile;
 	},
 	
-	getClientProfileSettingsSn: function (profile, flow_model){
-		if(flow_model == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER'){
-			if(profile.getName() == 'client_profile_1'){
-				return profile.client_profile_1.pesit_client;
-			} else {
-				return profile.client_profile_2.sftp_client;
-			}
+	/**
+		Get service now server communication profile field.
+		 @param {GlideRecord} record - the record for which the comm profile should be returned
+		 @param {GlideUser} user - the current user requesting the data
+	*/
+	getServerProfileFieldSn: function(record, user, returnFirstServerProfile){
+		var profile = {};
+		
+		if(!gs.nil(returnFirstServerProfile) && returnFirstServerProfile){
+			profile.profile = record.server_profile_1.getRefRecord();
+			profile.field_name = "server_profile_1";
+			
+			return profile;
+		}
+		
+		if(!gs.nil(returnFirstServerProfile) && !returnFirstServerProfile){
+			profile.profile = record.server_profile_2.getRefRecord();
+			profile.field_name = "server_profile_2";
+			
+			return profile;
+		}
+		
+		if(user.hasRole("x_305439_digital_m.app_sender")){
+			profile.profile = record.server_profile_1.getRefRecord();
+			profile.field_name = "server_profile_1";
 		} else {
-			if(profile.getName() == 'client_profile_1'){
-				return profile.client_profile_1.sftp_client;
+			profile.profile = record.server_profile_2.getRefRecord();
+			profile.field_name = "server_profile_2";
+		}
+		return profile;
+	},
+	
+	getClientProfileSettingsSn: function (client_profile, flow_model){
+		try{
+			if(flow_model == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' 
+			   && gs.getUser().hasRole("x_305439_digital_m.app_sender")){
+					return client_profile.pesit_client;
+			   } else {
+					return client_profile.sftp_client;
+			   }
+		} catch (ex){
+			gs.error("failed to get client profile settings. " + ex.message);
+		}
+	},
+	
+	isPesitClient: function (flow_model){
+		if(flow_model == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' && gs.getUser().hasRole("x_305439_digital_m.app_sender")){
+			return true;
+		} 
+		return false;
+	}, 
+	
+	// Create empty client profile objects into the database
+	createEmptyClientProfile: function (type){
+		var emptyCommLink = new GlideRecord('x_305439_digital_m_communication_links');
+		emptyCommLink.initialize();
+		
+		setEmptyClient(type, emptyCommLink);
+		
+		var linkId = emptyCommLink.insert();
+		return linkId;
+	},
+	
+	createNewServerCommunication: function (product_id, profile, flow_model){
+		var serverProfile = new GlideRecord("x_305439_digital_m_server_comm_profiles");
+		serverProfile.initialize();
+		gs.info("Creating new server communication profile: host={0}, port={1}, name={2}, certificate_alias={3}, login_key_alias={4}",  profile.hosts[0], profile.port, profile.name, profile.certificateAlias, profile.keyAlias);
+		
+		serverProfile.setValue("host", profile.hosts[0] + "");
+		serverProfile.setValue("port", profile.port + "");
+		serverProfile.setValue("name", profile.name + "");
+		serverProfile.setValue("cg_id", profile.businessId + "");
+		serverProfile.setValue("cg_product_id", product_id + "");
+		serverProfile.setValue("protocol", profile.protocol + "");
+		
+		if(flow_model == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' && !gs.nil(profile.certificateAlias)){
+			serverProfile.setValue("certificate_alias", profile.certificateAlias + "");
+		} else if (!gs.nil(profile.keyAlias)){
+			serverProfile.setValue("login_key_alias", profile.keyAlias + "");
+		}
+		
+		var id = serverProfile.insert();
+		return id;
+	},
+	
+	updateServerCommunication: function (sn_server_profile, cg_profile){
+		sn_server_profile.setValue("host", cg_profile.hosts[0] + "");
+		sn_server_profile.setValue("port", cg_profile.port + "");
+		sn_server_profile.setValue("name", cg_profile.name + "");
+		sn_server_profile.setValue("protocol", cg_profile.protocol + "");
+		
+		if(cg_profile.protocol == "PESIT"){
+			sn_server_profile.certificate_alias = cg_profile.certificateAlias + "";
+		} else {
+			sn_server_profile.login_key_alias = cg_profile.keyAlias + "";
+		}
+		sn_server_profile.update();
+	},
+	
+	createNewClientCommunication: function(cg_client_profile_id, cg_server_profile_id, client, server, name, profile, flow_model){
+		var commLink = new GlideRecord('x_305439_digital_m_communication_links');
+		commLink.initialize();
+		commLink.setValue("cg_client_profile_id", cg_client_profile_id + "");
+		commLink.setValue("cg_server_profile_id", cg_server_profile_id + "");
+		commLink.setValue("client", client + "");
+		commLink.setValue("server", server + "");
+		commLink.setValue("name", name + "");
+		setNewClient(flow_model, profile, commLink);
+		var linkId = commLink.insert();
+		return linkId;
+	},
+	
+	updateClientProfile: function(commLink, cg_client_profile_id, cg_server_profile_id, client, server, name, profile, flow_model){
+		commLink.setValue("cg_client_profile_id", cg_client_profile_id);
+		commLink.setValue("cg_server_profile_id", cg_server_profile_id);
+		commLink.setValue("client", client);
+		commLink.setValue("server", server);
+		commLink.setValue("name", name);
+		updateClient(flow_model, profile, commLink);
+		commLink.update();
+	},
+	
+	/**
+		Set existing server profile (if the profile is already created) to the current record. 
+	*/
+	populateServerProfiles: function (current){
+		gs.info("populateServerProfiles");
+		try {
+			var server_profile_field_1 = this.getServerProfileFieldSn(current, gs.getUser(), true);
+			var server_profile_field_2 = this.getServerProfileFieldSn(current, gs.getUser(), false);
+			
+			if(current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
+				setServerProfile(current, server_profile_field_1, true);
+				setServerProfile(current, server_profile_field_2, false);
 			} else {
-				return profile.client_profile_2.sftp_client;
+				setServerProfile(current, server_profile_field_1, false);
+				setServerProfile(current, server_profile_field_2, false);
 			}
+		} catch (ex){
+			gs.error("CommProfilesUtils.setServerProfile() {0}", ex.message);
+		}
+	},
+	
+	populateCommProfiles: function (current){
+		gs.info("populateCommProfiles");
+		try {
+			var client_profile_field = this.getClientProfileFieldSn(current, gs.getUser());
+			if(current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
+				current.client_profile_1 = createEmptyClientProfile("PESIT");
+				current.client_profile_2 = createEmptyClientProfile("SFTP");
+				current.server_profile_1 = createNewDefaultServerCommProfile();
+				current.server_profile_2 = createNewDefaultServerCommProfile();
+			} else {
+				current.client_profile_1 = createEmptyClientProfile("SFTP");
+				current.client_profile_2 = createEmptyClientProfile("SFTP");
+				current.server_profile_1 = createNewDefaultServerCommProfile();
+				current.server_profile_2 = createNewDefaultServerCommProfile();
+			}
+		} catch (ex){
+			gs.error("CommProfilesUtils.setServerProfile() {0}", ex.message);
+		}
+	},
+	
+	syncServerProfiles: function(){
+		gs.info("syncServerProfiles");
+		var stRelay = new GetStRelay().getStRelayId();
+		var server_record = new GlideRecord("x_305439_digital_m_server_comm_profiles");
+		server_record.query();
+		while(server_record.next()){
+			// update existing records
+			var cg_profile = getCGServerCommunicationProfileById(stRelay, server_record.cg_id);
+			if(!gs.nil(cg_profile)){
+				this.updateServerCommunication(server_record, cg_profile.communication_profile);
+			} else {
+				server_record.deleteRecord();
+			}
+		} 
+		
+		// there is no existing records in the database
+		// search CG if it has corresponding profiles
+		var pesitProfiles = this.getProductServerProfiles(stRelay, "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER", true);
+		var sftpProfiles = this.getProductServerProfiles(stRelay, "PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER", false);
+		if(pesitProfiles.length > 0){
+			if(!existsServerProfile(pesitProfiles[0].businessId)){
+				this.createNewServerCommunication(stRelay, pesitProfiles[0].communication_profile, "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER");
+			}
+		}
+
+		if(sftpProfiles.length > 0){
+			if(!existsServerProfile(sftpProfiles[0].businessId)){
+				this.createNewServerCommunication(stRelay, sftpProfiles[0].communication_profile, "PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER");
+			}
+		}
+	},
+	
+	syncProfilesWithCG: function(current){
+		try {
+			var cgStRelayId = new GetStRelay().getStRelayId();
+			var cgClientId = this.getClientBusinessId(current, gs.getUser());
+
+			var cgCommLinksProfiles = this.getCommunicationLinks(cgClientId, cgStRelayId, current.flow_model_name);
+			gs.info("[{0}] communication profile links: {1}","syncProfilesWithCG", JSON.stringify(cgCommLinksProfiles));
+
+			var client_profile_field = this.getClientProfileFieldSn(current, gs.getUser());
+			var server_profile_field = this.getServerProfileFieldSn(current, gs.getUser());
+
+			if(cgCommLinksProfiles.length == 0){
+				// clean up existing client records if there is any
+				gs.info("CG did not return any client communication link. Clean up existing records.");
+				if(!gs.nil(client_profile_field.profile) && !gs.nil(client_profile_field.profile.sys_created_on)){
+					gs.info("Remove client profile.");
+					client_profile_field.profile.deleteRecord();
+				}
+
+				// GET server communication profiles
+				var cgServerProfiles = this.getProductServerProfiles(cgStRelayId, current.flow_model_name);
+				if(cgServerProfiles.length == 0){
+					if(!gs.nil(server_profile_field.profile) && !gs.nil(server_profile_field.profile.sys_created_on)){
+						gs.info("Remove server profile.");
+						server_profile_field.profile.deleteRecord();
+					}
+				} else {
+					var srv_profile = cgServerProfiles[0].communication_profile;
+
+					if(gs.nil(server_profile_field.profile) || gs.nil(server_profile_field.profile.sys_created_on)){
+						// create server 
+						gs.info("creating new server profile...");
+						var serverIdSn = this.createNewServerCommunication(cgStRelayId, srv_profile, current.flow_model_name);
+						current.setValue(server_profile_field.field_name, serverIdSn);
+					} else {
+						// update
+						gs.info("Updating server profile..");
+						this.updateServerCommunication(server_profile_field.profile, srv_profile);
+					}
+				}
+			} else {
+				var client_id = cgCommLinksProfiles[0].link.client.communication_profile_businessId;
+				var server_id = cgCommLinksProfiles[0].link.server.communication_profile_businessId;
+				var source_id = current.source;
+				var destination_id = current.destination;
+				var name = cgCommLinksProfiles[0].pattern.pattern_data.name;
+				var client_profile = cgCommLinksProfiles[0].link.client.communication_profile;
+				var server_profile = cgCommLinksProfiles[0].link.server.communication_profile;
+
+				if(gs.nil(client_profile_field.profile) || gs.nil(client_profile_field.profile.sys_created_on)){
+					// create client
+					gs.debug("creating new object: clientId={0}, serverId={1}, sourceId={2}, destinationId={3}, name={4}, clientProfile=" + JSON.stringify(client_profile), client_id, server_id, source_id, destination_id, name);
+					var linkId = this.createNewClientCommunication(client_id,
+																server_id,
+																source_id,
+																destination_id,
+																name,
+																client_profile,
+																current.flow_model_name);
+					current.setValue(client_profile_field.field_name, linkId);
+				} else {
+					gs.debug("updating client comm profile: clientId={0}, serverId={1}, sourceId={2}, destinationId={3}, name={4}, clientProfile=" + JSON.stringify(client_profile), client_id, server_id, source_id, destination_id, name);
+					this.updateClientProfile(client_profile_field.profile,
+											client_id,
+											server_id,
+											source_id,
+											destination_id,
+											name,
+											client_profile,
+											current.flow_model_name);
+				}
+				
+				if(gs.nil(server_profile_field.profile) || gs.nil(server_profile_field.profile.sys_created_on)){
+					// create server 
+					gs.info("creating new server profile...");
+					var serverId = this.createNewServerCommunication(cgStRelayId, server_profile, current.flow_model_name);
+					current.setValue(server_profile_field.field_name, serverId);
+				} else {
+					// update
+					gs.info("Updating server profile..");
+					this.updateServerCommunication(server_profile_field.profile, server_profile);
+				}
+				
+				current.update();
+			}
+		} catch (ex){
+			gs.error("[update_comprofiles]: {0}", ex.message);
 		}
 	},
 	
     type: 'CommProfilesUtils'
-});]]></script>
+});
+
+function setNewClient (flow_model_name, client_profile, commLink){
+	var clientId;
+	if(flow_model_name == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' 
+	   && gs.getUser().hasRole("x_305439_digital_m.app_sender")){
+		clientId = insertPesitClient(client_profile.pesitLogin, client_profile.certificateAlias);
+		commLink.setValue("pesit_client", clientId);
+	} else {
+		clientId = insertSFTPClient(client_profile.login, client_profile.keyAlias, client_profile.clientAuthentication);
+		commLink.setValue("sftp_client", clientId);
+	} 
+}
+
+function setEmptyClient (type, commLink){
+	var clientId;
+	if(type == "PESIT"){
+		clientId = insertPesitClient("", "");
+		commLink.setValue("pesit_client", clientId);
+	} else {
+		clientId = insertSFTPClient("", "", "");
+		commLink.setValue("sftp_client", clientId);
+	} 
+	
+}
+
+function updateClient(flow_model_name, client_profile, commLink){
+	if(flow_model_name == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' 
+	   && gs.getUser().hasRole("x_305439_digital_m.app_sender")){
+		commLink.pesit_client.login_name = client_profile.pesitLogin + "";
+		commLink.pesit_client.certificate_alias = client_profile.certificateAlias + "";
+	} else {
+		commLink.sftp_client.login_name = client_profile.login + "";
+		commLink.sftp_client.key_alias = client_profile.keyAlias + "";
+		commLink.sftp_client.login_type = client_profile.clientAuthentication + "";
+	} 
+}
+
+function insertPesitClient(login, alias){
+	var client = new GlideRecord('x_305439_digital_m_cp_pesit');
+	client.initialize();
+	client.setValue("login_name", login + "");
+	client.setValue("certificate_alias", alias + "");
+	
+	return client.insert();
+}
+
+function insertSFTPClient(login, alias, authType){
+	var client = new GlideRecord('x_305439_digital_m_cp_sftp');
+	client.initialize();
+	client.setValue("login_name", login + "");
+
+	if(authType == "PUBLIC_KEY"){
+		client.setValue("login_type", "PUBLIC_KEY");
+		client.setValue("key_alias", alias + "");
+	} else {
+		client.setValue("login_type", "PASSWORD");
+	}
+	return client.insert();
+}
+
+function getCGServerCommunicationProfileById(product_id, profile_id){
+	try { 
+		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', 'Get Server Profile by Id');
+		new ConnectionSettings().setMandatoryProps(r);
+		r.setStringParameterNoEscape('server_id', product_id);
+		r.setStringParameterNoEscape('profile_id', profile_id);
+
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
+		if(httpStatus == 200){
+			var body = JSON.parse(responseBody);
+			return body.data;
+		} else {
+			gs.error("Failed to retrieve server profile, status code={0}", httpStatus);
+			return undefined;
+		}
+	} catch(ex) {
+	  var message = ex.message;
+	}
+}
+
+/**
+	Set REST request parameters based on the query type we want to perform. It could be either PESIT or SFTP.
+	@param {RESTMessageV2} r the REST request object
+	@param {boolean} pesitQuery
+*/
+function setQueryServerProfilesParameters(r, pesitQuery){
+	if (pesitQuery){
+		r.setQueryParameter("sslTls", "Mutual_Authentication");
+		r.setQueryParameter("protocol", "PESIT");
+// 		r.setQueryParameter("name", "ST_Relay_PESIT_SSL_auth_required_private_zone");
+	} else {
+		r.setQueryParameter("clientAuthentication", "PASSWORD_OR_PUBLIC_KEY");
+		r.setQueryParameter("protocol", "SFTP");
+// 		r.setQueryParameter("name", "ST_Relay_SFTP_both_private_zone");
+	}
+}
+
+function findServerProfile(isPesitProtocol){
+	var server_record = new GlideRecord("x_305439_digital_m_server_comm_profiles");
+	var relayId = new GetStRelay().getStRelayId();
+
+	if(isPesitProtocol){
+		server_record.addQuery("protocol", "PESIT");
+		server_record.addQuery("cg_product_id", relayId);
+		server_record.addNotNullQuery("cg_id");
+	} else {
+		server_record.addQuery("protocol", "SFTP");
+		server_record.addQuery("cg_product_id", relayId);
+		server_record.addNotNullQuery("cg_id");
+	}
+	server_record.query();
+	if(server_record.next()){
+		return server_record.sys_id;
+	}
+}
+
+function setServerProfile(current, server_profile_field, isPesitProtocol){
+	if(gs.nil(server_profile_field.profile) || gs.nil(server_profile_field.profile.sys_created_on)){
+		var id = findServerProfile(isPesitProtocol);
+		if(gs.nil(id)){
+			id = createNewDefaultServerCommProfile();
+		} 
+		current.setValue(server_profile_field.field_name, id);
+	}
+}
+
+function createNewDefaultServerCommProfile(){
+	var serverProfile = new GlideRecord("x_305439_digital_m_server_comm_profiles");
+	serverProfile.initialize();
+	return serverProfile.insert();
+}
+
+/**
+	Check if Server communication profile exists into DB.
+	@param {string} server_profile_id the server communication profile id to check
+*/
+function existsServerProfile(server_profile_id){
+	var server_record = new GlideRecord("x_305439_digital_m_server_comm_profiles");
+	server_record.addQuery("cg_id", server_profile_id);
+	server_record.query();
+	if(server_record.next()){
+		return true;
+	}
+	return false;
+}
+]]></script>
         <sys_class_name>sys_script_include</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-18 15:35:52</sys_created_on>
         <sys_id>caba4ecf4f30f7002f86b5e18110c7a0</sys_id>
-        <sys_mod_count>8</sys_mod_count>
+        <sys_mod_count>65</sys_mod_count>
         <sys_name>CommProfilesUtils</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_caba4ecf4f30f7002f86b5e18110c7a0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-24 10:31:39</sys_updated_on>
+        <sys_updated_on>2019-05-13 14:12:15</sys_updated_on>
     </sys_script_include>
 </record_update>

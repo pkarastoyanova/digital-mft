@@ -15,7 +15,9 @@
         <condition/>
         <description/>
         <execute_function>false</execute_function>
-        <filter_condition/>
+        <filter_condition table="x_305439_digital_m_flow_settings">sys_created_onISNOTEMPTY^EQ<item endquery="false" field="sys_created_on" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
         <is_rest>false</is_rest>
         <message/>
         <name>LoadAliases</name>
@@ -28,23 +30,22 @@
         <rest_variables/>
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
-
-	// Add your code here
-	gs.info("before display");
-	
+    gs.info("Loading Certificate and Key aliases...");
 	g_scratchpad.flow_model_name = current.flow_model_name;
-	
+
 	try{
 		var utils = new CommProfilesUtils();
 		var stRelayHelper = new GetStRelay();
 		var stRelayId = stRelayHelper.getStRelayId();
 
 		var clientId = utils.getClientBusinessId(current, gs.getUser());
-		var clientAliases = getProductCertificates(clientId, false, true);
-		var serverAliases = getProductCertificates(stRelayId, true, false);
+		var clientCertAliases = getProductCertificates(clientId);
+		var clientKeyAliases = getLocalKeyAliases(current);
+		var serverAliases = getProductCertificates(stRelayId);
 		var serverKeyAliases = getProductKeys(stRelayId);
 
-		g_scratchpad.cert_aliases = clientAliases;
+		g_scratchpad.client_key_aliases = clientKeyAliases;
+		g_scratchpad.client_cert_aliases = clientCertAliases;
 		g_scratchpad.server_cert_aliases = serverAliases;
 		g_scratchpad.server_key_aliases = serverKeyAliases;
 		
@@ -59,8 +60,11 @@
 
 function getProductKeys(participant_id){
 	try {
+		var connHelper = new ConnectionSettings();
 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', 'Get product ssh keys');
-			r.setStringParameterNoEscape('product_id', participant_id);
+		connHelper.setMandatoryProps(r);
+		r.setStringParameterNoEscape('product_id', participant_id);
+		
 		var response = r.execute();
 		var responseBody = response.getBody();
 		var httpStatus = response.getStatusCode();
@@ -79,14 +83,36 @@ function getProductKeys(participant_id){
 	}
 }
 
-function getProductCertificates(participant_id, is_private, is_client){
-	if((current.flow_model_name == "PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER" ||
-	  gs.getUser().hasRole("x_305439_digital_m.app_receiver")) && is_client){
-		return [];
+function getLocalKeyAliases(current){
+	var utils = new CommProfilesUtils();
+	var client_profile = utils.getClientProfileFieldSn(current, gs.getUser());
+	if(!gs.nil(client_profile)){
+		var client_settings_sys_id = utils.getClientProfileSettingsSn(client_profile.profile, current.flow_model_name);
+		gs.info("record sys_id= " + client_settings_sys_id);
+		var key_aliases = [];
+		if(!gs.nil(current.flow_model_name) && !utils.isPesitClient()){
+			var attachments = new GlideRecord("sys_attachment");
+			attachments.addQuery("table_sys_id", client_settings_sys_id);
+			attachments.addQuery("table_name", "ZZ_YYx_305439_digital_m_cp_sftp");
+			attachments.query();
+			while(attachments.next()){
+				var file_name = attachments.file_name + "";
+				gs.info("attachment: {0}, {1}, {2}", file_name, attachments.table_name, attachments.content_type);
+				key_aliases.push(file_name);
+			}
+			gs.info("key_aliases: " + key_aliases);
+			return key_aliases;
+		}
 	}
+}
+
+function getProductCertificates(participant_id){
 	try {
+		var connHelper = new ConnectionSettings();
 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Certificates', 'Get product certificates');
-			r.setStringParameterNoEscape('participant_id', participant_id);
+		r.setStringParameterNoEscape('participant_id', participant_id);
+		connHelper.setMandatoryProps(r);
+		
 		var response = r.execute();
 		var responseBody = response.getBody();
 		var httpStatus = response.getStatusCode();
@@ -94,9 +120,7 @@ function getProductCertificates(participant_id, is_private, is_client){
 			var body = JSON.parse(responseBody);
 			var aliases = [];
 			body.data.forEach(function(certificate){
-				if(!certificate.isPrivateCertificate){
-					aliases.push(certificate.name);
-				}
+				aliases.push(certificate.name);
 			});
 			return aliases;
 		}
@@ -110,7 +134,7 @@ function getProductCertificates(participant_id, is_private, is_client){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>205984704f013f002f86b5e18110c705</sys_id>
-        <sys_mod_count>18</sys_mod_count>
+        <sys_mod_count>42</sys_mod_count>
         <sys_name>LoadAliases</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -118,7 +142,7 @@ function getProductCertificates(participant_id, is_private, is_client){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_205984704f013f002f86b5e18110c705</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-24 13:18:31</sys_updated_on>
+        <sys_updated_on>2019-05-13 15:13:43</sys_updated_on>
         <template/>
         <when>before_display</when>
     </sys_script>

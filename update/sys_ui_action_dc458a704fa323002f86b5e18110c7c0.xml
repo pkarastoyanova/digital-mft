@@ -29,55 +29,11 @@
         <script><![CDATA[function create_new_cg_flow(){
 	
 	var gu = new GlideURL('x_305439_digital_m_flow_settings.do');
-	//var gu = new GlideURL('x_305439_digital_m_general_flow_settings.do');
 	var url = gu.addParam('sys_id', '-1');
 	url = gu.addParam('sysparm_view', 'destsettings');
-	
 	g_navigation.open(url.getURL());
 	
 // 	g_navigation.open("/x_305439_digital_m_flow_settings.do?sys_id=-1&sysparm_view=destsettings");
-	
-// 	var modal = new GlideModal('');
-// 	modal.setTitle('Related Incidents Raised On Same CI');
-// 	modal.setWidth(1000);
-// 	modal.setPreference('table', 'x_305439_digital_m_flow_settings');
-// 	modal.setPreference('sysparm_view', 'destsettings');
-// 	modal.render();
-	
-// 	var dialog = new GlideModalForm('Create New Flow', 'x_305439_digital_m_flow_settings');
-// 	dialog.setSysID(-1); //Pass in sys_id to edit existing record, -1 to create new record
-//  	dialog.addParm('sysparm_view', 'destsettings');  // select the view
-// 	dialog.addParm('sysparm_form_only', 'true');
-// 	dialog.setOnloadCallback(function (iframeDoc){
-// 		iframeDoc.$window[0].getElementsByClassName("modal-frame")[0].setAttribute("style", "width: 100%; height: 100%");  // try to expand the window on max
-// 	});
-// 	dialog.setCompletionCallback(source_settings);
-//     dialog.render();
-}
-
-function source_settings(/*String*/ action_verb, /*String*/ sys_id, /*String*/ table, /*String*/ displayValue){
-	this.destroy();
-	var createNew = new GlideModalForm('Select Source', table);
-	createNew.setSysID(sys_id);
-	createNew.addParm('sysparm_view', 'sourcesettings');  // select the view
-	createNew.addParm('sysparm_form_only', 'true');
-	createNew.setOnloadCallback(function (iframeDoc){
-		iframeDoc.$window[0].getElementsByClassName("modal-frame")[0].setAttribute("style", "width: 100%; height: 100%");  // try to expand the window on max
-	});
-	createNew.setCompletionCallback(preview);
-	createNew.render();
-}
-
-function preview(/*String*/ action_verb, /*String*/ sys_id, /*String*/ table, /*String*/ displayValue){
-	this.destroy();
-	var createNew = new GlideModalForm('Flow preview', table);
-	createNew.setSysID(sys_id);
-	createNew.addParm('sysparm_view', 'preview');  // select the view
-	createNew.addParm('sysparm_form_only', 'true');
-	createNew.setOnloadCallback(function (iframeDoc){
-		iframeDoc.$window[0].getElementsByClassName("modal-frame")[0].setAttribute("style", "width: 100%; height: 100%");  // try to expand the window on max
-	});
-	createNew.render();
 }]]></script>
         <show_insert>true</show_insert>
         <show_multiple_update>false</show_multiple_update>
@@ -89,7 +45,7 @@ function preview(/*String*/ action_verb, /*String*/ sys_id, /*String*/ table, /*
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>dc458a704fa323002f86b5e18110c7c0</sys_id>
-        <sys_mod_count>42</sys_mod_count>
+        <sys_mod_count>43</sys_mod_count>
         <sys_name>New Flow</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -97,7 +53,7 @@ function preview(/*String*/ action_verb, /*String*/ sys_id, /*String*/ table, /*
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_dc458a704fa323002f86b5e18110c7c0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-16 15:56:09</sys_updated_on>
+        <sys_updated_on>2019-05-09 15:45:00</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>true</ui16_compatible>

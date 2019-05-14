@@ -2,7 +2,7 @@
     <sys_properties_category_m2m action="INSERT_OR_UPDATE">
         <category display_value="Digital MFT Properties">ea3f454e4f7cf3002f86b5e18110c789</category>
         <order>1</order>
-        <property display_value="x_305439_digital_m.stRelayName" name="x_305439_digital_m.stRelayName">89d115ce4f7cf3002f86b5e18110c790</property>
+        <property display_value="x_305439_digital_m.st.relay.name" name="x_305439_digital_m.st.relay.name">89d115ce4f7cf3002f86b5e18110c790</property>
         <sys_class_name>sys_properties_category_m2m</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-15 10:04:04</sys_created_on>

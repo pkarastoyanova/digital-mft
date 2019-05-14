@@ -14,17 +14,42 @@
    //Type appropriate comment here, and begin script below
    try {
 	   if(!g_form.isNewRecord()){
-		   jslog("cert_aliases: " + g_scratchpad.cert_aliases);
+		   var clientCertAliases = g_scratchpad.client_cert_aliases;
+		   var clientKeyAliases = g_scratchpad.client_key_aliases;
+		   var serverCertAliases = g_scratchpad.server_cert_aliases;
+		   
+		   jslog("client_cert_aliases: " + g_scratchpad.client_cert_aliases);
+		   jslog("client_key_aliases: " + g_scratchpad.client_key_aliases);
 		   jslog("server_cert_aliases: " + g_scratchpad.server_cert_aliases);
-		   if(g_scratchpad.cert_aliases != undefined){
-			   g_scratchpad.cert_aliases.forEach(function(alias){
-			   g_form.addOption("client_profile_1.pesit_client.certificate_alias", alias, alias);
+		   
+		   var client_prefix;
+		   var server_prefix;
+		   
+		   if(g_user.hasRole("x_305439_digital_m.app_sender")){
+			   client_prefix = "client_profile_1.";
+			   server_prefix = "server_profile_1.";
+		   } else {
+			   client_prefix = "client_profile_2.";
+			   server_prefix = "server_profile_2.";
+		   }
+		   
+		   
+		   if(clientCertAliases != undefined){
+			   clientCertAliases.forEach(function(alias){
+				   g_form.addOption(client_prefix + "pesit_client.certificate_alias", alias, alias);
+			   });
+		   }
+		   
+		   if(clientKeyAliases != undefined){
+			   clientKeyAliases.forEach(function(alias){
+				   jslog("adding key " + alias + " to " + client_prefix + "sftp_client.key_alias");
+				   g_form.addOption(client_prefix + "sftp_client.key_alias", alias, alias);
 			   });
 		   }
 		
-		   if(g_scratchpad.server_cert_aliases != undefined){
-			   g_scratchpad.server_cert_aliases.forEach(function(alias){
-			   g_form.addOption("server_profile_1.certificate_alias", alias, alias);
+		   if(serverCertAliases != undefined){
+			   serverCertAliases.forEach(function(alias){
+				   g_form.addOption(server_prefix + "certificate_alias", alias, alias);
 			   });
 		   }
 	   }
@@ -39,7 +64,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>1d654c7c4fcdfb002f86b5e18110c773</sys_id>
-        <sys_mod_count>7</sys_mod_count>
+        <sys_mod_count>9</sys_mod_count>
         <sys_name>loadAliases</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -47,7 +72,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_client_1d654c7c4fcdfb002f86b5e18110c773</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-24 12:56:49</sys_updated_on>
+        <sys_updated_on>2019-05-13 15:16:14</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <type>onLoad</type>
         <ui_type>0</ui_type>

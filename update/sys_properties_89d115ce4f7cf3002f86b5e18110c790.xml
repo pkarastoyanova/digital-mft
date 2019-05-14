@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties">
     <sys_properties action="INSERT_OR_UPDATE">
         <choices/>
-        <description>The product name of the SecureTransport  in CG which will be used as a relay server.</description>
+        <description>The product name of the SecureTransport  in CG which will be used as a relay server. </description>
         <ignore_cache>false</ignore_cache>
         <is_private>false</is_private>
-        <name>x_305439_digital_m.stRelayName</name>
-        <read_roles/>
-        <suffix>stRelayName</suffix>
+        <name>x_305439_digital_m.st.relay.name</name>
+        <read_roles>x_305439_digital_m.configuration</read_roles>
+        <suffix>st.relay.name</suffix>
         <sys_class_name>sys_properties</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-15 08:40:50</sys_created_on>
         <sys_id>89d115ce4f7cf3002f86b5e18110c790</sys_id>
-        <sys_mod_count>1</sys_mod_count>
-        <sys_name>x_305439_digital_m.stRelayName</sys_name>
+        <sys_mod_count>37</sys_mod_count>
+        <sys_name>x_305439_digital_m.st.relay.name</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_properties_89d115ce4f7cf3002f86b5e18110c790</sys_update_name>
-        <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-15 10:19:43</sys_updated_on>
+        <sys_updated_by>sender</sys_updated_by>
+        <sys_updated_on>2019-05-07 17:14:22</sys_updated_on>
         <type>string</type>
         <value>SecureTransport04</value>
-        <write_roles/>
+        <write_roles>x_305439_digital_m.configuration</write_roles>
     </sys_properties>
     <sys_translated_text action="delete_multiple" query="documentkey=89d115ce4f7cf3002f86b5e18110c790"/>
 </record_update>

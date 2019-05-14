@@ -11,22 +11,31 @@ GetStRelay.prototype = {
     initialize: function() {
     },
 	getStRelayId: function(){
-		var relayName = gs.getProperty("x_305439_digital_m.stRelayName");
+		
+		var relayId = gs.getProperty("x_305439_digital_m.st.relay.id");
+		if (!gs.nil(relayId)){
+			return relayId;
+		}
+		
+		var relayName = gs.getProperty("x_305439_digital_m.st.relay.name");
 		if( relayName == ''){
-			gs.error("SecureTransport product name is not set up");
+			gs.error("SecureTransport product name is not set up.");
 			return '';
 		}
 		
 		try {
 			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Participants', 'Get ST relay');
 			r.setStringParameterNoEscape('st_relay_name', relayName);
+			new ConnectionSettings().setMandatoryProps(r);
 			
 			var response = r.execute();
 			var responseBody = response.getBody();
 			var httpStatus = response.getStatusCode();
 			if(httpStatus == 200){
 				var jsonObj = JSON.parse(responseBody);
-				return jsonObj.data[0].businessId;
+				var id = jsonObj.data[0].businessId;
+				gs.setProperty("x_305439_digital_m.st.relay.id", id);
+				return id;
 			} else {
 				gs.error("Failed to get SecureTransport product from CG. Http status is [" + httpStatus + "]. Response body: " + responseBody);
 			}
@@ -37,7 +46,13 @@ GetStRelay.prototype = {
 	},
 	getStHost: function(){
 		try {
-			var relayName = gs.getProperty("x_305439_digital_m.stRelayName");
+			
+			var relayHost = gs.getProperty("x_305439_digital_m.st.relay.host");
+			if (!gs.nil(relayHost)){
+				return relayHost;
+			}
+			
+			var relayName = gs.getProperty("x_305439_digital_m.st.relay.name");
 			if( relayName == ''){
 				gs.error("SecureTransport product name is not set up");
 				return '';
@@ -45,13 +60,16 @@ GetStRelay.prototype = {
 			
 			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Participants', 'Get ST relay');
 			r.setStringParameterNoEscape('st_relay_name', relayName);
+			new ConnectionSettings().setMandatoryProps(r);
 			
 			var response = r.execute();
 			var responseBody = response.getBody();
 			var httpStatus = response.getStatusCode();
 			if(httpStatus == 200){
 				var jsonObj = JSON.parse(responseBody);
-				return jsonObj.data[0].host;
+				var host = jsonObj.data[0].host;
+				gs.setProperty("x_305439_digital_m.st.relay.host", host);
+				return host;
 			} else {
 				gs.error("Failed to get SecureTransport product from CG. Http status is [" + httpStatus + "]. Response body: " + responseBody);
 			}
@@ -60,19 +78,22 @@ GetStRelay.prototype = {
 		}
 		return '';
 	},
+	pesit_profile_name: "ST_Relay_PESIT_SSL_auth_required_private_zone",
+	sftp_profile_name: "ST_Relay_SFTP_both_private_zone",
+	
     type: 'GetStRelay'
 };]]></script>
         <sys_class_name>sys_script_include</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-16 11:27:07</sys_created_on>
         <sys_id>1f518b1e4f7c37002f86b5e18110c7e2</sys_id>
-        <sys_mod_count>4</sys_mod_count>
+        <sys_mod_count>12</sys_mod_count>
         <sys_name>GetStRelay</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_1f518b1e4f7c37002f86b5e18110c7e2</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-24 13:40:35</sys_updated_on>
+        <sys_updated_on>2019-05-10 10:26:11</sys_updated_on>
     </sys_script_include>
 </record_update>

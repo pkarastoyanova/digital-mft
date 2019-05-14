@@ -13,29 +13,35 @@
         <on_load>false</on_load>
         <order>300</order>
         <reverse_if_false>true</reverse_if_false>
-        <run_scripts>false</run_scripts>
+        <run_scripts>true</run_scripts>
         <script_false><![CDATA[function onCondition() {
-
+	if(g_user.hasRole("x_305439_digital_m.app_sender")){
+		console.log(g_form.getValue("client_profile_1.sftp_client.login_type"));
+		
+		g_form.setDisabled("client_profile_1.sftp_client.password", false);
+		g_form.setDisabled("client_profile_1.sftp_client.key_alias", true);
+		toggleSSHKeyBtn(true);
+	} else {
+		console.log(g_form.getValue("client_profile_2.sftp_client.login_type"));
+		
+		g_form.setDisabled("client_profile_2.sftp_client.password", false);
+		g_form.setDisabled("client_profile_2.sftp_client.key_alias", true);
+		toggleSSHKeyBtn(true);
+	}
 }]]></script_false>
         <script_true><![CDATA[function onCondition() {
 	if(g_user.hasRole("x_305439_digital_m.app_sender")){
-		if(g_form.getValue("flow_model_name") == "PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER"){
-			if(g_form.getValue("client_profile_1.sftp_client.login_type") == 'PUBLIC_KEY' ){
-				g_form.setDisplay("client_profile_1.sftp_client.password", false);
-				g_form.setDisplay("client_profile_1.sftp_client.ssh_key", true);
-			} else {
-				g_form.setDisplay("client_profile_1.sftp_client.password", true);
-				g_form.setDisplay("client_profile_1.sftp_client.ssh_key", false);
-			}
-		} 
+		console.log(g_form.getValue("client_profile_1.sftp_client.login_type"));
+		
+		g_form.setDisabled("client_profile_1.sftp_client.password", true);
+		g_form.setDisabled("client_profile_1.sftp_client.key_alias", false);
+		toggleSSHKeyBtn(false);
 	} else {
-		if(g_form.getValue("client_profile_2.sftp_client.login_type") == 'PUBLIC_KEY' ){
-			g_form.setDisplay("client_profile_2.sftp_client.password", false);
-			g_form.setDisplay("client_profile_2.sftp_client.ssh_key", true);
-		} else {
-			g_form.setDisplay("client_profile_2.sftp_client.password", true);
-			g_form.setDisplay("client_profile_2.sftp_client.ssh_key", false);
-		}
+		console.log(g_form.getValue("client_profile_2.sftp_client.login_type"));
+		
+		g_form.setDisabled("client_profile_2.sftp_client.password", true);
+		g_form.setDisabled("client_profile_2.sftp_client.key_alias", false);
+		toggleSSHKeyBtn(false);
 	}
 }]]></script_true>
         <set_values/>
@@ -46,7 +52,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>12c2e8f44f413f002f86b5e18110c7d6</sys_id>
-        <sys_mod_count>12</sys_mod_count>
+        <sys_mod_count>37</sys_mod_count>
         <sys_name>OnChange Client 1 SFTP login type</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -54,7 +60,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_policy_12c2e8f44f413f002f86b5e18110c7d6</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-24 08:10:10</sys_updated_on>
+        <sys_updated_on>2019-05-13 10:29:12</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui_type>0</ui_type>
         <view/>

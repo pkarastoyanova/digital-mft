@@ -34,15 +34,18 @@ var scope = gs.getCurrentScopeName();
 var table_prefix = current.getTableName();
 
 try{
-	createFlowSpecificSettings();
-	createServerSpecificSettings();
+//	createFlowSpecificSettings();
+//	createServerSpecificSettings();
 // 	createClientSpecificSettings();
-	current.update();
-	
-	gs.info("triggering update on communication profiles.");
-	gs.eventQueue("x_305439_digital_m.update_comprofiles", current, "hello", gs.getUserName());
+//	current.update();
+
 	
 	var flowHelper = new FlowUtils();
+	flowHelper.createFlowSpecificSettings(current);
+	createClientProfile();
+	
+	current.update();
+	
 	var body = flowHelper.getRequestBody(current);
 	gs.info("Update request body: " + body);
 	
@@ -55,55 +58,28 @@ try{
 
 function createClientProfile(){
 	var utils = new CommProfilesUtils();
-	var profile = utils.getClientProfileSn(current);
-	var serverProfile = utils.getServerProfileSn(current);
-	
-	if(serverProfile.nil()){
-		gs.addErrorMessage("Please specify communication server settings.");
+	var profile = utils.getClientProfileFieldSn(current, gs.getUser());
+	if(gs.nil(profile.profile) || gs.nil(profile.profile.sys_created_on)){
+		var linkId;
+		if (current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER" && gs.getUser().hasRole("x_305439_digital_m.app_sender")){
+			linkId = utils.createEmptyClientProfile("PESIT");
+		} else {
+			linkId = utils.createEmptyClientProfile("SFTP");
+		}
+		current.setValue(profile.field_name, linkId);
 	}
-	
-	if(profile.nil()){
-		// create new profile
-		
-// 		var commLink = new GlideRecord('x_305439_digital_m_communication_links');
-// 		commLink.initialize();
-// 		commLink.setValue("cg_client_profile_id", profiles[0].link.client.communication_profile_businessId);
-// 		commLink.setValue("cg_server_profile_id", profiles[0].link.server.communication_profile_businessId);
-// 		commLink.setValue("client", current.source);
-// 		commLink.setValue("server", current.destination);
-// 		commLink.setValue("name", profiles[0].pattern.pattern_data.name);
-// 		setNewClient(current, profiles[0].link.client.communication_profile, commLink);
-// 		var linkId = commLink.insert();
-// 		var client_profile = getClientProfile();
-// 		current.setValue(client_profile, linkId);
-// 		current.update();
-		
-// 		var profileSettings = utils.getClientProfileSettingsSn(profile, current.flow_model_name);
-	}
-	
 }
 
 function createServerSpecificSettings(){
-		
-	var server;
-	if(gs.getUser().hasRole("x_305439_digital_m.app_sender")){
-		server = "server_profile_1";
-	} else {
-		server = "server_profile_2";
-	}
+	var utils = new CommProfilesUtils();
+	
+	var server_profile_field = utils.getServerProfileFieldSn(current, gs.getUser());
 
-	var port_field = table_prefix + "." + server + ".port";
+	var port_field = table_prefix + "." + server_profile_field.field_name + ".port";
+	
 	var srv_obj = current.getValue(server);
 	
-	if (gs.nil(srv_obj)){
-		var relay = new GetStRelay();
-		var r = new GlideRecord(scope + '_server_comm_profiles');
-		r.initialize();
-		r.setValue("host", relay.getStHost());
-		r.setValue("port", RP.getParameterValue(port_field));
-		var serverId = r.insert();
-		current.setValue(server, serverId);
-	}
+	
 }
 
 function createFlowSpecificSettings(){
@@ -159,6 +135,7 @@ function updateFlow(){
 	 try {
 		 var flowHelper = new FlowUtils();
 		 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Update a flow');
+		 new ConnectionSettings().setMandatoryProps(r);
 		 r.setStringParameterNoEscape('businessId', current.cg_id);
 		 r.setStringParameterNoEscape('flow_model_name', current.flow_model_name);
 		 r.setRequestBody(flowHelper.getRequestBody(current));
@@ -229,7 +206,7 @@ function createServerProfile(){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>431a27034f0433002f86b5e18110c797</sys_id>
-        <sys_mod_count>88</sys_mod_count>
+        <sys_mod_count>101</sys_mod_count>
         <sys_name>Save</sys_name>
         <sys_overrides display_value="Save">42e780d40a0a0b34007e0d4a52d33405</sys_overrides>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -237,7 +214,7 @@ function createServerProfile(){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_431a27034f0433002f86b5e18110c797</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-24 13:29:35</sys_updated_on>
+        <sys_updated_on>2019-05-10 11:25:32</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>false</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

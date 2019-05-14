@@ -2,63 +2,93 @@
     <sys_ui_list parent="" relationship="" sys_domain="global" table="x_305439_digital_m_server_comm_profiles" version="2" view="">
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
-            <element>cg_id</element>
-            <list_id display_value="x_305439_digital_m_server_comm_profiles" element="NULL" name="x_305439_digital_m_server_comm_profiles" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4cb2bf7b4f9c73002f86b5e18110c7cb</list_id>
+            <element>name</element>
+            <list_id display_value="x_305439_digital_m_server_comm_profiles" element="NULL" name="x_305439_digital_m_server_comm_profiles" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">393efe894fdd33002f86b5e18110c785</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>0</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-03-27 10:20:32</sys_created_on>
-            <sys_id>04b2bf7b4f9c73002f86b5e18110c7cc</sys_id>
+            <sys_created_on>2019-05-07 10:30:46</sys_created_on>
+            <sys_id>f53efe894fdd33002f86b5e18110c786</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-03-27 10:20:32</sys_updated_on>
+            <sys_updated_on>2019-05-07 10:30:46</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
-            <element>credentials</element>
-            <list_id display_value="x_305439_digital_m_server_comm_profiles" element="NULL" name="x_305439_digital_m_server_comm_profiles" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4cb2bf7b4f9c73002f86b5e18110c7cb</list_id>
+            <element>host</element>
+            <list_id display_value="x_305439_digital_m_server_comm_profiles" element="NULL" name="x_305439_digital_m_server_comm_profiles" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">393efe894fdd33002f86b5e18110c785</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>1</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-03-27 10:20:32</sys_created_on>
-            <sys_id>84b2bf7b4f9c73002f86b5e18110c7cc</sys_id>
+            <sys_created_on>2019-05-07 10:30:46</sys_created_on>
+            <sys_id>bd3efe894fdd33002f86b5e18110c786</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-03-27 10:20:32</sys_updated_on>
+            <sys_updated_on>2019-05-07 10:30:46</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
-            <element>host</element>
-            <list_id display_value="x_305439_digital_m_server_comm_profiles" element="NULL" name="x_305439_digital_m_server_comm_profiles" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4cb2bf7b4f9c73002f86b5e18110c7cb</list_id>
+            <element>port</element>
+            <list_id display_value="x_305439_digital_m_server_comm_profiles" element="NULL" name="x_305439_digital_m_server_comm_profiles" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">393efe894fdd33002f86b5e18110c785</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>2</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-03-27 10:20:32</sys_created_on>
-            <sys_id>08b2bf7b4f9c73002f86b5e18110c7cc</sys_id>
+            <sys_created_on>2019-05-07 10:30:46</sys_created_on>
+            <sys_id>313efe894fdd33002f86b5e18110c787</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-03-27 10:20:32</sys_updated_on>
+            <sys_updated_on>2019-05-07 10:30:46</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
-            <element>port</element>
-            <list_id display_value="x_305439_digital_m_server_comm_profiles" element="NULL" name="x_305439_digital_m_server_comm_profiles" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4cb2bf7b4f9c73002f86b5e18110c7cb</list_id>
+            <element>login_key_alias</element>
+            <list_id display_value="x_305439_digital_m_server_comm_profiles" element="NULL" name="x_305439_digital_m_server_comm_profiles" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">393efe894fdd33002f86b5e18110c785</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>3</position>
             <sum>false</sum>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-03-27 10:20:32</sys_created_on>
-            <sys_id>88b2bf7b4f9c73002f86b5e18110c7cc</sys_id>
+            <sys_created_on>2019-05-07 10:30:46</sys_created_on>
+            <sys_id>b13efe894fdd33002f86b5e18110c787</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-03-27 10:20:32</sys_updated_on>
+            <sys_updated_on>2019-05-07 10:30:46</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>certificate_alias</element>
+            <list_id display_value="x_305439_digital_m_server_comm_profiles" element="NULL" name="x_305439_digital_m_server_comm_profiles" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">393efe894fdd33002f86b5e18110c785</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>4</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-05-07 10:30:46</sys_created_on>
+            <sys_id>353efe894fdd33002f86b5e18110c787</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-05-07 10:30:46</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>cg_id</element>
+            <list_id display_value="x_305439_digital_m_server_comm_profiles" element="NULL" name="x_305439_digital_m_server_comm_profiles" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">393efe894fdd33002f86b5e18110c785</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>5</position>
+            <sum>false</sum>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-05-07 10:30:46</sys_created_on>
+            <sys_id>b53efe894fdd33002f86b5e18110c787</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-05-07 10:30:46</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
@@ -72,10 +102,10 @@
             <sum>false</sum>
             <sys_class_name>sys_ui_list</sys_class_name>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-03-27 10:20:32</sys_created_on>
+            <sys_created_on>2019-05-07 10:30:46</sys_created_on>
             <sys_domain>global</sys_domain>
             <sys_domain_path>/</sys_domain_path>
-            <sys_id>4cb2bf7b4f9c73002f86b5e18110c7cb</sys_id>
+            <sys_id>393efe894fdd33002f86b5e18110c785</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_name>x_305439_digital_m_server_comm_profiles</sys_name>
             <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -83,7 +113,7 @@
             <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
             <sys_update_name>sys_ui_list_x_305439_digital_m_server_comm_profiles_null</sys_update_name>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-03-27 10:20:32</sys_updated_on>
+            <sys_updated_on>2019-05-07 10:30:46</sys_updated_on>
             <sys_user/>
             <view display_value="Default view" name="NULL">Default view</view>
             <view_name/>

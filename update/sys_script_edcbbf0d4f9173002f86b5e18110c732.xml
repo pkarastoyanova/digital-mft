@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>false</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>sys_properties</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="sys_properties">sys_scope.name=digital-mft^nameENDSWITHst.relay.name^valueISNOTEMPTY^EQ<item endquery="false" field="sys_scope.name" goto="false" newquery="false" operator="=" or="false" value="digital-mft"/>
+            <item endquery="false" field="name" goto="false" newquery="false" operator="ENDSWITH" or="false" value="st.relay.name"/>
+            <item endquery="false" field="value" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>SysProp StRelayName Changed</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions>x_305439_digital_m.configuration</role_conditions>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+gs.info("System property changed...");
+	
+	if(gs.nil(gs.getProperty("x_305439_digital_m.amft.host"))){
+		gs.addErrorMessage("amft.host cannot be empty.");
+		current.setAbortAction(true);
+		return;
+	}
+	
+	if(gs.nil(gs.getProperty("x_305439_digital_m.amft.port"))){
+		gs.addErrorMessage("amft.port cannot be empty.");
+		current.setAbortAction(true);
+		return;
+	}
+	
+	if(gs.nil(gs.getProperty("x_305439_digital_m.http.timeout"))){
+		gs.addErrorMessage("http.timeout cannot be empty.");
+		current.setAbortAction(true);
+		return;
+	}
+	
+	try{
+		var connHelper = new ConnectionSettings();
+		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Participants', 'Get ST relay');
+		connHelper.setMandatoryProps(r);
+		r.setStringParameterNoEscape('st_relay_name', current.value);
+
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
+		if(httpStatus == 200){
+			var jsonObj = JSON.parse(responseBody);
+			if (jsonObj.data.length > 0){
+				var id = jsonObj.data[0].businessId;
+				var host = jsonObj.data[0].host;
+				gs.setProperty("x_305439_digital_m.st.relay.id", id);
+				gs.setProperty("x_305439_digital_m.st.relay.host", host);
+				gs.info("x_305439_digital_m.st.relay.id=" + gs.getProperty("x_305439_digital_m.st.relay.id"));
+				gs.info("x_305439_digital_m.st.relay.host=" + gs.getProperty("x_305439_digital_m.st.relay.host"));
+			} else {
+				current.setAbortAction(true);
+				gs.addErrorMessage("Cannot find in CG product with name=" + current.value);
+				gs.error("Cannot find in CG product with name=" + current.value);
+			}
+		} else {
+			current.setAbortAction(true);
+			gs.addErrorMessage("Failed to get SecureTransport product from CG. Http status is [" + httpStatus + "]");
+			gs.error("Failed to get SecureTransport product from CG. Http status is [" + httpStatus + "]. Response body: " + responseBody);
+		}
+	} catch (ex){
+		current.setAbortAction(true);
+		gs.addErrorMessage("Failed to set st.relay.name");
+		gs.error("Cannot update system property x_305439_digital_m.st.relay.id. Error: {0}", ex.message);
+	}
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-05-07 15:06:03</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>edcbbf0d4f9173002f86b5e18110c732</sys_id>
+        <sys_mod_count>23</sys_mod_count>
+        <sys_name>SysProp StRelayName Changed</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_edcbbf0d4f9173002f86b5e18110c732</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-05-10 09:04:19</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=edcbbf0d4f9173002f86b5e18110c732"/>
+</record_update>

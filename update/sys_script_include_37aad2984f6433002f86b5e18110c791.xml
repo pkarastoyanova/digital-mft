@@ -11,26 +11,26 @@ CommProfiles.prototype = {
     initialize: function() {
     },
 	getLinks: function(client_id, server_id){
-		try { 
-		 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', 'GET communication links');
-		r.setStringParameterNoEscape('client_id', client_id);
-		r.setStringParameterNoEscape('server_id', server_id);
+		try {
+			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', 'GET communication links');
+			new ConnectionSettings().setMandatoryProps(r);
+			r.setStringParameterNoEscape('client_id', client_id);
+			r.setStringParameterNoEscape('server_id', server_id);
 
-		 var response = r.execute();
-		 var responseBody = response.getBody();
-		 var httpStatus = response.getStatusCode();
-		 if(httpStatus != 200){
-			gs.error("Failed to get all client communication links; HTTP status: " + httpStatus);
-			return;
-		 } else if(httpStatus == 200){
-			var jsonObj = JSON.parse(responseBody);
-			return jsonObj.data;
-		 }
-		   
-		}
-		catch(ex) {
-		 var message = ex.message;
-		}
+			var response = r.execute();
+			var responseBody = response.getBody();
+			var httpStatus = response.getStatusCode();
+			if(httpStatus != 200){
+				gs.error("Failed to get all client communication links; HTTP status: " + httpStatus);
+				return;
+			} else if(httpStatus == 200){
+				var jsonObj = JSON.parse(responseBody);
+				return jsonObj.data;
+			}
+
+			} catch(ex) {
+				var message = ex.message;
+			}
 	},
 	uploadCredentials: function(certificate, fileName, passwd, type){
 		var certRequest = {};
@@ -47,6 +47,7 @@ CommProfiles.prototype = {
 				method = 'Upload product certificate';
 			}
 			 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Certificates', method);
+			new ConnectionSettings().setMandatoryProps(r);
 			 r.setRequestBody(body);
 
 			 var response = r.execute();
@@ -68,17 +69,16 @@ CommProfiles.prototype = {
 		var body = JSON.stringify(serverRequest);
 		
 		try { 
-		 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', 'Create Server profile');
-		 r.setStringParameterNoEscape('server_id', server_id);
+			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', 'Create Server profile');
+			new ConnectionSettings().setMandatoryProps(r);
+			r.setStringParameterNoEscape('server_id', server_id);
 			r.setRequestBody(body);
-
-		 var response = r.execute();
-		 var responseBody = response.getBody();
-		 var httpStatus = response.getStatusCode();
+			var response = r.execute();
+			var responseBody = response.getBody();
+			var httpStatus = response.getStatusCode();
 			return httpStatus;
-		}
-		catch(ex) {
-		 var message = ex.message;
+		} catch(ex) {
+			var message = ex.message;
 		}
 	},
     type: 'CommProfiles'
@@ -88,13 +88,13 @@ CommProfiles.prototype = {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-03-28 17:13:48</sys_created_on>
         <sys_id>37aad2984f6433002f86b5e18110c791</sys_id>
-        <sys_mod_count>5</sys_mod_count>
+        <sys_mod_count>6</sys_mod_count>
         <sys_name>CommProfiles</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_37aad2984f6433002f86b5e18110c791</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-03 12:38:18</sys_updated_on>
+        <sys_updated_on>2019-05-10 10:30:12</sys_updated_on>
     </sys_script_include>
 </record_update>
