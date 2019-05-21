@@ -7,9 +7,7 @@
         <description/>
         <name>FlowUtils</name>
         <script><![CDATA[var FlowUtils = Class.create();
-FlowUtils.prototype = {
-    initialize: function() {
-    },
+FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {    
 	
 	getRequestBody: function(record){
 		try{
@@ -55,7 +53,7 @@ FlowUtils.prototype = {
 				flowRequest.application_id = record.source.cg_id + "";
 				flowRequest.application_product_id = record.source.cg_product_id + "";
 				flowRequest.st_relay_id = stRelayId + "";
-				flowRequest.target_partner_id = record.destination.cg_id + "";
+				flowRequest.partner_id = record.destination.cg_id + "";
 
 				var model_0023 = new GlideRecord("x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner");
 				model_0023.get(record.model_0023);
@@ -137,8 +135,54 @@ FlowUtils.prototype = {
 		}
 	},
 	
+	populateFlowSettings: function (current) {
+		gs.info("populateFlowSettings");
+		var scope = gs.getCurrentScopeName();
+		var table_prefix = current.getTableName();
+		
+		if(current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
+			if (current.model_0023.nil()){
+				var _0023 = new GlideRecord(scope + '_app_cft_pesit_push_st_sftp_pull_partner');
+				_0023.initialize();
+				var _0023_id = _0023.insert();
+				current.setValue("model_0023", _0023_id);
+			}
+		} else if (current.flow_model_name == "PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER"){
+			if(current.model_0043.nil()){
+				var _0043 = new GlideRecord(scope + '_partner_sftp_push_st_sftp_pull_partner');
+				_0043.initialize();
+				var _0043_id = _0043.insert();
+				current.setValue("model_0043", _0043_id);
+			}
+		}
+	},
+	
+	/**
+	 Sends asynchronous REST request to create a new flow in CentralGovernance.
+	*/
+	sendAsyncFlowCreateRequest: function(current){
+		gs.info("{0} is sending a new flow create request to CG.", gs.getUserName());
+		
+		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Create a Flow');
+		new ConnectionSettings().setMandatoryProps(r);
+		r.setStringParameterNoEscape('flow_name', current.flow_model_name);
+		r.setEccCorrelator("Create a Flow");
+		
+		var body = this.getRequestBody(current);
+		r.setRequestBody(body);
+		
+		gs.debug("Request endpoint: {0}", r.getEndpoint());
+		gs.debug("Request headers: {0}", r.getRequestHeaders());
+		gs.debug("Request body: {0}", r.getRequestBody());
+
+		r.executeAsync();
+	},
+	
+	isPesit: function (current){
+		return gs.getUser().hasRole("x_305439_digital_m.app_sender") && current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER";
+	},
     type: 'FlowUtils'
-};
+});
 
 function getUserData(){
 	var userRecord = new GlideRecord("sys_user");
@@ -163,13 +207,13 @@ function getUserData(){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-17 11:36:19</sys_created_on>
         <sys_id>7bb6447a4fbc77002f86b5e18110c7f0</sys_id>
-        <sys_mod_count>19</sys_mod_count>
+        <sys_mod_count>33</sys_mod_count>
         <sys_name>FlowUtils</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_7bb6447a4fbc77002f86b5e18110c7f0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-09 15:32:10</sys_updated_on>
+        <sys_updated_on>2019-05-17 13:25:03</sys_updated_on>
     </sys_script_include>
 </record_update>

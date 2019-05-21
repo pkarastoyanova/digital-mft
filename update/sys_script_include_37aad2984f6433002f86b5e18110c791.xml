@@ -32,6 +32,23 @@ CommProfiles.prototype = {
 				var message = ex.message;
 			}
 	},
+	
+	sendAsyncSshKeyUpload: function (current, isPesit){
+		if(!isPesit){
+			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', "Create SSH Key");
+			new ConnectionSettings().setMandatoryProps(r);
+			
+			var comProfileHelper = new CommProfofilesUtils();
+			var clientProfile = comProfileHelper.getClientProfileFieldSn(current).profile;
+			
+			r.setEccCorrelator("Create SSH Key-" + clientProfile.sys_id);
+			r.setStringParameterNoEscape('partner_id', clientProfile.client.cg_id);
+			var body = getSshKeyRequestBody(current.sftp_client.getRefRecord());
+			r.setRequestBody(body);
+			r.executeAsync();
+		}
+	},
+	
 	uploadCredentials: function(certificate, fileName, passwd, type){
 		var certRequest = {};
 		certRequest.certificateContent = certificate + "";
@@ -47,7 +64,7 @@ CommProfiles.prototype = {
 				method = 'Upload product certificate';
 			}
 			 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Certificates', method);
-			new ConnectionSettings().setMandatoryProps(r);
+			 new ConnectionSettings().setMandatoryProps(r);
 			 r.setRequestBody(body);
 
 			 var response = r.execute();
@@ -60,41 +77,77 @@ CommProfiles.prototype = {
 			gs.error(message);
 		}
 	},
-	createServerProfile: function(host, port, certificate_alias, app_name, server_id){
-		var serverRequest = {};
-		serverRequest.hosts = [host];
-		serverRequest.port = port + "";
-		serverRequest.certificateAlias = certificate_alias;
-		serverRequest.pesitLogin = app_name + "";
-		var body = JSON.stringify(serverRequest);
-		
-		try { 
-			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', 'Create Server profile');
-			new ConnectionSettings().setMandatoryProps(r);
-			r.setStringParameterNoEscape('server_id', server_id);
-			r.setRequestBody(body);
-			var response = r.execute();
-			var responseBody = response.getBody();
-			var httpStatus = response.getStatusCode();
-			return httpStatus;
-		} catch(ex) {
-			var message = ex.message;
+	
+	sendAsyncServerProfileCreate: function(server_record, app_name, is_pesit){
+		var request_name;
+		if(is_pesit === true){
+			request_name = 'Create PESIT Server';
+		} else {
+			request_name = 'Create SFTP Server';
 		}
+		
+		var relayHelper = new GetStRelay();
+		var relayId = relayHelper.getStRelayId();
+		
+		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', request_name);
+		new ConnectionSettings().setMandatoryProps(r);
+		r.setStringParameterNoEscape('server_id', relayId);// check if product id is required or application id
+		r.setEccCorrelator("Create a server");
+		
+		var serverRequest = getRequestBody(server_record, app_name, is_pesit);
+		var body = JSON.stringify(serverRequest);
+		r.setRequestBody(body);
+		r.executeAsync();
 	},
     type: 'CommProfiles'
 };
+
+function getSshKeyRequestBody(sftp_settings_record){
+	var g_record = new GlideRecord("sys_attachment");
+	g_record.addQuery("sys_id", sftp_settings_record.ssh_key);
+	g_record.orderByDesc("sys_created_on");
+	g_record.query();
+	var requestBody = {};
+	if(g_record.next()){
+		requestBody.name = g_record.file_name + "";
+		var attachment  = new GlideSysAttachment();
+		var content = attachment.getContentBase64(g_record);
+		requestBody.keyContent = content;
+	}
+	return JSON.stringify(requestBody);
+}
+
+function getRequestBody(server_record, app_name, isPesit){
+	var stRelayUtils = new GetStRelay();
+	var serverRequest = {};
+	serverRequest.name = stRelayUtils.pesit_profile_name + "_" + server_record.sys_id;
+	serverRequest.networkZone = stRelayUtils.getStZone();
+	serverRequest.hosts = [server_record.host + ""];
+	serverRequest.port = server_record.port + "";
+	
+	if(isPesit){
+		serverRequest.certificateAlias = server_record.certificate_alias + "";
+		serverRequest.clientAuthenticationRequired = "Yes";
+		serverRequest.networkProtocol = "TCP";
+		serverRequest.pesitLogin = app_name + "";
+	} else {
+		
+		serverRequest.keyAlias = server_record.login_key_alias;
+	}
+	return serverRequest;
+}
 ]]></script>
         <sys_class_name>sys_script_include</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-03-28 17:13:48</sys_created_on>
         <sys_id>37aad2984f6433002f86b5e18110c791</sys_id>
-        <sys_mod_count>6</sys_mod_count>
+        <sys_mod_count>22</sys_mod_count>
         <sys_name>CommProfiles</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_37aad2984f6433002f86b5e18110c791</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-10 10:30:12</sys_updated_on>
+        <sys_updated_on>2019-05-20 13:59:26</sys_updated_on>
     </sys_script_include>
 </record_update>

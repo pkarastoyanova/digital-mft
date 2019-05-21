@@ -1,209 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update>
     <sys_ui_section caption="Server Settings" section_id="8dee929c4f6433002f86b5e18110c745" sys_domain="global" table="x_305439_digital_m_flow_settings" version="3" view="">
-        <sys_ui_annotation action="INSERT_OR_UPDATE">
-            <is_plain_text>false</is_plain_text>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>3d2c6ace4f9137002f86b5e18110c794</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
-            <text>Server profile 2</text>
-            <type display_value="Section Details">19756e5ec3313000bac1addbdfba8f18</type>
-        </sys_ui_annotation>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>x_305439_digital_m_server_login_details.xml</element>
             <position>0</position>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>fd2c6ace4f9137002f86b5e18110c794</sys_id>
+            <sys_created_on>2019-05-14 15:40:10</sys_created_on>
+            <sys_id>ce288ca74fd533002f86b5e18110c738</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter display_value="Server Login Details">68f0eed44f8dbb002f86b5e18110c75b</sys_ui_formatter>
             <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
+            <sys_updated_on>2019-05-14 15:40:10</sys_updated_on>
             <sys_user/>
             <type>formatter</type>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
-            <element>server_profile_1.name</element>
+            <element>server_profile_1.host</element>
             <position>1</position>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>352c6ace4f9137002f86b5e18110c795</sys_id>
+            <sys_created_on>2019-05-14 15:40:10</sys_created_on>
+            <sys_id>06288ca74fd533002f86b5e18110c739</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
-            <sys_user/>
-            <type/>
-        </sys_ui_element>
-        <sys_ui_element action="INSERT_OR_UPDATE">
-            <element>server_profile_1.host</element>
-            <position>2</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>b52c6ace4f9137002f86b5e18110c795</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_ui_formatter/>
-            <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
+            <sys_updated_on>2019-05-14 15:40:10</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>server_profile_1.port</element>
-            <position>3</position>
+            <position>2</position>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>392c6ace4f9137002f86b5e18110c795</sys_id>
+            <sys_created_on>2019-05-14 15:40:10</sys_created_on>
+            <sys_id>86288ca74fd533002f86b5e18110c739</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
+            <sys_updated_on>2019-05-14 15:40:10</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>server_profile_1.certificate_alias</element>
-            <position>4</position>
+            <position>3</position>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>b92c6ace4f9137002f86b5e18110c795</sys_id>
+            <sys_created_on>2019-05-14 15:40:10</sys_created_on>
+            <sys_id>0a288ca74fd533002f86b5e18110c739</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
+            <sys_updated_on>2019-05-14 15:40:10</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>server_profile_1.login_key_alias</element>
-            <position>5</position>
+            <position>4</position>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>3d2c6ace4f9137002f86b5e18110c795</sys_id>
+            <sys_created_on>2019-05-14 15:40:10</sys_created_on>
+            <sys_id>8a288ca74fd533002f86b5e18110c739</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
-            <sys_user/>
-            <type/>
-        </sys_ui_element>
-        <sys_ui_element action="INSERT_OR_UPDATE">
-            <element>server_profile_1</element>
-            <position>6</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>bd2c6ace4f9137002f86b5e18110c795</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_ui_formatter/>
-            <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
-            <sys_user/>
-            <type/>
-        </sys_ui_element>
-        <sys_ui_element action="INSERT_OR_UPDATE">
-            <element>3d2c6ace4f9137002f86b5e18110c794</element>
-            <position>7</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>312c6ace4f9137002f86b5e18110c796</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_ui_formatter/>
-            <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
-            <sys_user/>
-            <type>annotation</type>
-        </sys_ui_element>
-        <sys_ui_element action="INSERT_OR_UPDATE">
-            <element>server_profile_2.name</element>
-            <position>8</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>b12c6ace4f9137002f86b5e18110c796</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_ui_formatter/>
-            <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
+            <sys_updated_on>2019-05-14 15:40:10</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>server_profile_2.host</element>
-            <position>9</position>
+            <position>5</position>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>352c6ace4f9137002f86b5e18110c796</sys_id>
+            <sys_created_on>2019-05-14 15:40:10</sys_created_on>
+            <sys_id>0e288ca74fd533002f86b5e18110c739</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
+            <sys_updated_on>2019-05-14 15:40:10</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>server_profile_2.port</element>
-            <position>10</position>
+            <position>6</position>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>b52c6ace4f9137002f86b5e18110c796</sys_id>
+            <sys_created_on>2019-05-14 15:40:10</sys_created_on>
+            <sys_id>8e288ca74fd533002f86b5e18110c739</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
+            <sys_updated_on>2019-05-14 15:40:10</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>server_profile_2.certificate_alias</element>
-            <position>11</position>
+            <position>7</position>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>392c6ace4f9137002f86b5e18110c796</sys_id>
+            <sys_created_on>2019-05-14 15:40:10</sys_created_on>
+            <sys_id>02288ca74fd533002f86b5e18110c73a</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
+            <sys_updated_on>2019-05-14 15:40:10</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>server_profile_2.login_key_alias</element>
-            <position>12</position>
+            <position>8</position>
             <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>b92c6ace4f9137002f86b5e18110c796</sys_id>
+            <sys_created_on>2019-05-14 15:40:10</sys_created_on>
+            <sys_id>82288ca74fd533002f86b5e18110c73a</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
-            <sys_user/>
-            <type/>
-        </sys_ui_element>
-        <sys_ui_element action="INSERT_OR_UPDATE">
-            <element>server_profile_2</element>
-            <position>13</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2019-05-10 11:45:46</sys_created_on>
-            <sys_id>3d2c6ace4f9137002f86b5e18110c796</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_ui_formatter/>
-            <sys_ui_section caption="Server Settings" display_value="Server Settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="Default view">8dee929c4f6433002f86b5e18110c745</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-05-10 11:45:46</sys_updated_on>
+            <sys_updated_on>2019-05-14 15:40:10</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>

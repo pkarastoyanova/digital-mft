@@ -44,6 +44,19 @@ GetStRelay.prototype = {
 		}
 		return '';
 	},
+	getStRelayParticipant: function (){
+		var relayId = gs.getProperty("x_305439_digital_m.st.relay.id");
+		var relayApplication = gs.getProperty("x_305439_digital_m.st.relay.app.name");
+		var participantRecord = new GlideRecord("x_305439_digital_m_participants");
+		
+		participantRecord.addQuery("cg_product_id", relayId);
+		participantRecord.addQuery("participant_name", relayApplication);
+		participantRecord.query();
+		if(participantRecord.next()){
+			return participantRecord;
+		}
+	},
+	
 	getStHost: function(){
 		try {
 			
@@ -78,6 +91,11 @@ GetStRelay.prototype = {
 		}
 		return '';
 	},
+	
+	getStZone: function (){
+		return gs.getProperty("x_305439_digital_m.st.relay.networkzone");
+	},
+	
 	pesit_profile_name: "ST_Relay_PESIT_SSL_auth_required_private_zone",
 	sftp_profile_name: "ST_Relay_SFTP_both_private_zone",
 	
@@ -87,13 +105,13 @@ GetStRelay.prototype = {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-16 11:27:07</sys_created_on>
         <sys_id>1f518b1e4f7c37002f86b5e18110c7e2</sys_id>
-        <sys_mod_count>12</sys_mod_count>
+        <sys_mod_count>18</sys_mod_count>
         <sys_name>GetStRelay</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_1f518b1e4f7c37002f86b5e18110c7e2</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-10 10:26:11</sys_updated_on>
+        <sys_updated_on>2019-05-20 08:25:01</sys_updated_on>
     </sys_script_include>
 </record_update>

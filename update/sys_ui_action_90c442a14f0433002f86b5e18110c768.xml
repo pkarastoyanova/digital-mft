@@ -27,42 +27,43 @@
         <onclick/>
         <order>100</order>
         <script><![CDATA[var view = RP.getViewName();
-if(view === "destsettings"){
-	if(current.destination.type == "application"){
-		gs.addErrorMessage("Please select a partner. Applications are not supported as target destination.");
-		current.destination = "";
-		answer = current.insert();
-		action.setRedirectURL(current);
-	} else {
-		answer = current.insert();
-		action.setRedirectURL("/x_305439_digital_m_flow_settings.do?sys_id=" + answer + "&sysparm_view=sourcesettings");
-		//action.setRedirectURL("/x_305439_digital_m_general_flow_settings.do?sys_id=" + answer + "&sysparm_view=sourcesettings");
-		gs.include('ActionUtils');
-		var au = new ActionUtils();
-		au.postInsert(current);
-	}
+try{
+	if(view === "destsettings"){
+		if(current.destination.type == "application"){
+			gs.addErrorMessage("Please select a partner. Applications are not supported as target destination.");
+			current.destination = "";
+			answer = current.insert();
+			action.setRedirectURL(current);
+		} else {
+			answer = current.insert();
+			action.setRedirectURL("/x_305439_digital_m_flow_settings.do?sys_id=" + answer + "&sysparm_view=sourcesettings");
+		}
+}
+	
+} catch(ex){
+	gs.error(ex.message);
 }
 
 ]]></script>
         <show_insert>true</show_insert>
         <show_multiple_update>false</show_multiple_update>
         <show_query>false</show_query>
-        <show_update>true</show_update>
+        <show_update>false</show_update>
         <sys_class_name>sys_ui_action</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-03-07 16:18:56</sys_created_on>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>90c442a14f0433002f86b5e18110c768</sys_id>
-        <sys_mod_count>28</sys_mod_count>
+        <sys_mod_count>32</sys_mod_count>
         <sys_name>Next</sys_name>
         <sys_overrides display_value="Submit">42da42d00a0a0b340066377beb6dd099</sys_overrides>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_90c442a14f0433002f86b5e18110c768</sys_update_name>
-        <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-16 15:56:24</sys_updated_on>
+        <sys_updated_by>receiver</sys_updated_by>
+        <sys_updated_on>2019-05-15 10:31:41</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

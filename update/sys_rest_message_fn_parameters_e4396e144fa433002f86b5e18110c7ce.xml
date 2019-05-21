@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message_fn_parameters">
     <sys_rest_message_fn_parameters action="INSERT_OR_UPDATE">
         <name>server_id</name>
-        <rest_message_function display_value="Create Server profile">2b1962544fa433002f86b5e18110c727</rest_message_function>
+        <rest_message_function display_value="Create PESIT Server">2b1962544fa433002f86b5e18110c727</rest_message_function>
         <sys_class_name>sys_rest_message_fn_parameters</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-03-28 18:16:24</sys_created_on>

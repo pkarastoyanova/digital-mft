@@ -109,11 +109,10 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 	/**
 		Get service now client communication profile field.
 		 @param {GlideRecord} record - the record for which the comm profile should be returned
-		 @param {GlideUser} user - the current user requesting the data
 	*/
-	getClientProfileFieldSn: function(record, user){
+	getClientProfileFieldSn: function(record){
 		var profile = {};
-		if(user.hasRole("x_305439_digital_m.app_sender")){
+		if(gs.getUser().hasRole("x_305439_digital_m.app_sender")){
 			profile.profile = record.client_profile_1.getRefRecord(); 
 			profile.field_name = "client_profile_1";
 		} else {
@@ -176,9 +175,11 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 	}, 
 	
 	// Create empty client profile objects into the database
-	createEmptyClientProfile: function (type){
+	createEmptyClientProfile: function (type, client, server){
 		var emptyCommLink = new GlideRecord('x_305439_digital_m_communication_links');
 		emptyCommLink.initialize();
+		emptyCommLink.setValue("client", client);
+		emptyCommLink.setValue("server", server);
 		
 		setEmptyClient(type, emptyCommLink);
 		
@@ -271,15 +272,15 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 		try {
 			var client_profile_field = this.getClientProfileFieldSn(current, gs.getUser());
 			if(current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
-				current.client_profile_1 = createEmptyClientProfile("PESIT");
-				current.client_profile_2 = createEmptyClientProfile("SFTP");
-				current.server_profile_1 = createNewDefaultServerCommProfile();
-				current.server_profile_2 = createNewDefaultServerCommProfile();
+				current.client_profile_1 = this.createEmptyClientProfile("PESIT", current.source, current.relay);
+				current.client_profile_2 = this.createEmptyClientProfile("SFTP", current.destination, current.relay);
+				current.server_profile_1 = createNewDefaultServerCommProfile(true);
+				current.server_profile_2 = createNewDefaultServerCommProfile(false);
 			} else {
-				current.client_profile_1 = createEmptyClientProfile("SFTP");
-				current.client_profile_2 = createEmptyClientProfile("SFTP");
-				current.server_profile_1 = createNewDefaultServerCommProfile();
-				current.server_profile_2 = createNewDefaultServerCommProfile();
+				current.client_profile_1 = this.createEmptyClientProfile("SFTP", current.source, current.relay);
+				current.client_profile_2 = this.createEmptyClientProfile("SFTP", current.destination, current.relay);
+				current.server_profile_1 = createNewDefaultServerCommProfile(false);
+				current.server_profile_2 = createNewDefaultServerCommProfile(false);
 			}
 		} catch (ex){
 			gs.error("CommProfilesUtils.setServerProfile() {0}", ex.message);
@@ -532,16 +533,24 @@ function setServerProfile(current, server_profile_field, isPesitProtocol){
 	if(gs.nil(server_profile_field.profile) || gs.nil(server_profile_field.profile.sys_created_on)){
 		var id = findServerProfile(isPesitProtocol);
 		if(gs.nil(id)){
-			id = createNewDefaultServerCommProfile();
+			id = createNewDefaultServerCommProfile(isPesitProtocol);
 		} 
 		current.setValue(server_profile_field.field_name, id);
 	}
 }
 
-function createNewDefaultServerCommProfile(){
+function createNewDefaultServerCommProfile(isPesit){
 	var serverProfile = new GlideRecord("x_305439_digital_m_server_comm_profiles");
 	serverProfile.initialize();
-	return serverProfile.insert();
+	var sys_id = serverProfile.insert();
+	var stRelayUtils = new GetStRelay();
+	if(isPesit){
+		serverProfile.setValue("name", stRelayUtils.pesit_profile_name + "_" + sys_id);
+	} else {
+		serverProfile.setValue("name", stRelayUtils.sftp_profile_name + "_" + sys_id);
+	}
+	serverProfile.update();
+	return sys_id;
 }
 
 /**
@@ -562,13 +571,13 @@ function existsServerProfile(server_profile_id){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-18 15:35:52</sys_created_on>
         <sys_id>caba4ecf4f30f7002f86b5e18110c7a0</sys_id>
-        <sys_mod_count>65</sys_mod_count>
+        <sys_mod_count>73</sys_mod_count>
         <sys_name>CommProfilesUtils</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_caba4ecf4f30f7002f86b5e18110c7a0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-13 14:12:15</sys_updated_on>
+        <sys_updated_on>2019-05-20 11:26:06</sys_updated_on>
     </sys_script_include>
 </record_update>

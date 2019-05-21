@@ -15,7 +15,9 @@
         <condition/>
         <description/>
         <execute_function>false</execute_function>
-        <filter_condition table="x_305439_digital_m_flow_settings">sys_created_onISNOTEMPTY^EQ<item endquery="false" field="sys_created_on" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+        <filter_condition table="x_305439_digital_m_flow_settings">sys_created_onISNOTEMPTY^statusISNOTEMPTY^flow_model_nameISNOTEMPTY^EQ<item endquery="false" field="sys_created_on" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="false" field="status" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
+            <item endquery="false" field="flow_model_name" goto="false" newquery="false" operator="ISNOTEMPTY" or="false" value=""/>
             <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
         </filter_condition>
         <is_rest>false</is_rest>
@@ -39,19 +41,26 @@
 		var stRelayId = stRelayHelper.getStRelayId();
 
 		var clientId = utils.getClientBusinessId(current, gs.getUser());
-		var clientCertAliases = getProductCertificates(clientId);
-		var clientKeyAliases = getLocalKeyAliases(current);
-		var serverAliases = getProductCertificates(stRelayId);
-		var serverKeyAliases = getProductKeys(stRelayId);
-
+		var clientCertAliases;
+		var serverAliases;
+		var clientKeyAliases;
+		var serverKeyAliases;
+		if(current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
+			if(gs.getUser().hasRole("sender")){
+				clientCertAliases = getProductCertificates(clientId);
+			} else {
+				clientKeyAliases = getLocalKeyAliases(current);
+			}
+			serverAliases = getProductCertificates(stRelayId);
+		} else {
+			serverKeyAliases = getProductKeys(stRelayId);
+			clientKeyAliases = getLocalKeyAliases(current);
+		}
+		
 		g_scratchpad.client_key_aliases = clientKeyAliases;
 		g_scratchpad.client_cert_aliases = clientCertAliases;
 		g_scratchpad.server_cert_aliases = serverAliases;
 		g_scratchpad.server_key_aliases = serverKeyAliases;
-		
-		gs.info("cert aliases: " + clientAliases);
-		gs.info("server cert aliases: " + serverAliases);
-		gs.info("server key aliases: " + serverKeyAliases);
 	} catch (err){
 		gs.error("Failed to evaluate certificate and key aliases. " + err.message);
 	}
@@ -64,7 +73,7 @@ function getProductKeys(participant_id){
 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', 'Get product ssh keys');
 		connHelper.setMandatoryProps(r);
 		r.setStringParameterNoEscape('product_id', participant_id);
-		
+
 		var response = r.execute();
 		var responseBody = response.getBody();
 		var httpStatus = response.getStatusCode();
@@ -93,7 +102,7 @@ function getLocalKeyAliases(current){
 		if(!gs.nil(current.flow_model_name) && !utils.isPesitClient()){
 			var attachments = new GlideRecord("sys_attachment");
 			attachments.addQuery("table_sys_id", client_settings_sys_id);
-			attachments.addQuery("table_name", "ZZ_YYx_305439_digital_m_cp_sftp");
+			attachments.addQuery("table_name", "ENDSWITH", "digital_m_cp_sftp");
 			attachments.query();
 			while(attachments.next()){
 				var file_name = attachments.file_name + "";
@@ -134,7 +143,7 @@ function getProductCertificates(participant_id){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>205984704f013f002f86b5e18110c705</sys_id>
-        <sys_mod_count>42</sys_mod_count>
+        <sys_mod_count>51</sys_mod_count>
         <sys_name>LoadAliases</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -142,7 +151,7 @@ function getProductCertificates(participant_id){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_205984704f013f002f86b5e18110c705</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-13 15:13:43</sys_updated_on>
+        <sys_updated_on>2019-05-21 11:20:07</sys_updated_on>
         <template/>
         <when>before_display</when>
     </sys_script>

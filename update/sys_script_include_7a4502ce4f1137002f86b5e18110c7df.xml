@@ -19,6 +19,13 @@ ConnectionSettings.prototype = {
 		request.setHttpTimeout(gs.getProperty("x_305439_digital_m.http.timeout"));
 		request.setStringParameterNoEscape('amft_host', gs.getProperty("x_305439_digital_m.amft.host"));
 		request.setStringParameterNoEscape('amft_port', gs.getProperty("x_305439_digital_m.amft.port"));
+		request.setEccParameter('skip_sensor', true);
+		
+		var midServer = gs.getProperty("x_305439_digital_m.mid.server");
+		if(!gs.nil(midServer)){
+			request.setMIDServer(gs.getProperty("x_305439_digital_m.mid.server"));
+		}
+		
 	},
 
     type: 'ConnectionSettings'
@@ -27,13 +34,13 @@ ConnectionSettings.prototype = {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-05-10 08:58:45</sys_created_on>
         <sys_id>7a4502ce4f1137002f86b5e18110c7df</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>4</sys_mod_count>
         <sys_name>ConnectionSettings</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_7a4502ce4f1137002f86b5e18110c7df</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-10 08:59:55</sys_updated_on>
+        <sys_updated_on>2019-05-17 11:02:43</sys_updated_on>
     </sys_script_include>
 </record_update>

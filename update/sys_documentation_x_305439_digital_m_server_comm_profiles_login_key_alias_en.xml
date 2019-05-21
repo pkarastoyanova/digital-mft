@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update>
-    <sys_documentation element="login_key_alias" label="Login key alias" language="en" table="x_305439_digital_m_server_comm_profiles">
+    <sys_documentation element="login_key_alias" label="Key alias" language="en" table="x_305439_digital_m_server_comm_profiles">
         <sys_documentation action="INSERT_OR_UPDATE">
             <element>login_key_alias</element>
             <help/>
             <hint/>
-            <label>Login key alias</label>
+            <label>Key alias</label>
             <language>en</language>
             <name>x_305439_digital_m_server_comm_profiles</name>
-            <plural>Login key alias</plural>
+            <plural>Key alias</plural>
             <sys_class_name>sys_documentation</sys_class_name>
             <sys_created_by>admin</sys_created_by>
             <sys_created_on>2019-04-18 14:23:19</sys_created_on>
             <sys_id>873d750f4f30f7002f86b5e18110c7c6</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_name>Login key alias</sys_name>
+            <sys_mod_count>1</sys_mod_count>
+            <sys_name>Key alias</sys_name>
             <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
             <sys_policy/>
             <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
             <sys_update_name>sys_documentation_x_305439_digital_m_server_comm_profiles_login_key_alias_en</sys_update_name>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-04-18 14:23:19</sys_updated_on>
+            <sys_updated_on>2019-05-14 15:40:58</sys_updated_on>
             <url/>
             <url_target/>
         </sys_documentation>

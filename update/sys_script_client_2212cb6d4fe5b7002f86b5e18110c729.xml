@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script_client">
+    <sys_script_client action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <applies_extended>false</applies_extended>
+        <condition/>
+        <description/>
+        <field>status</field>
+        <global>true</global>
+        <isolate_script>true</isolate_script>
+        <messages/>
+        <name>LoadAliases_2</name>
+        <order/>
+        <script><![CDATA[function onLoad() {
+	try {
+		if(!g_form.isNewRecord()){
+			loadAliases();
+		}
+	} catch (ex){
+		jslog(ex.message);
+	}
+}
+
+function loadAliases(){
+	
+	if(g_scratchpad.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
+		if(g_user.hasRole("x_305439_digital_m.app_sender")){
+			clientCertAliases = getProductCertificates("client");
+		} else {
+			clientKeyAliases = getLocalKeyAliases();
+		}
+		serverAliases = getProductCertificates("server");
+	} else {
+		serverKeyAliases = getProductKeys();
+		clientKeyAliases = getLocalKeyAliases();
+	}
+	
+}
+
+function getProductCertificates(type){
+	var ga = new GlideAjax('LoadAliases');
+	ga.addParam('sysparm_name','getAliases');
+	ga.addParam('sysparm_alias_type', "product_certs");
+	ga.addParam('sysparm_certs_type', type);
+	ga.addParam("sysparm_current_id", g_form.getUniqueValue());
+	ga.getXMLAnswer(setAliases);
+}
+
+function getLocalKeyAliases(){
+	var ga = new GlideAjax('LoadAliases');
+	ga.addParam('sysparm_name','getAliases');
+	ga.addParam('sysparm_alias_type', "local_keys");
+	ga.addParam("sysparm_current_id", g_form.getUniqueValue());
+	ga.getXMLAnswer(setAliases);
+}
+
+function getProductKeys(){
+	var ga = new GlideAjax('LoadAliases');
+	ga.addParam('sysparm_name','getAliases');
+	ga.addParam('sysparm_alias_type', "product_keys");
+	ga.addParam("sysparm_current_id", g_form.getUniqueValue());
+	ga.getXMLAnswer(setAliases);
+}
+
+function setAliases(answer){
+	jslog("Load aliases result: " + answer);
+	
+}
+
+]]></script>
+        <sys_class_name>sys_script_client</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-05-21 10:21:27</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>2212cb6d4fe5b7002f86b5e18110c729</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>LoadAliases_2</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_client_2212cb6d4fe5b7002f86b5e18110c729</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-05-21 11:24:34</sys_updated_on>
+        <table>x_305439_digital_m_flow_settings</table>
+        <type>onLoad</type>
+        <ui_type>10</ui_type>
+        <view/>
+    </sys_script_client>
+</record_update>

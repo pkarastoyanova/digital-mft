@@ -33,6 +33,12 @@
 		g_form.setDisplay("client_profile_1.pesit_client.login_name", true);
 		g_form.setDisplay("client_profile_1.pesit_client.certificate_alias", true);
 		
+		// show server 1
+		g_form.setDisplay("server_profile_1.host", true);
+		g_form.setDisplay("server_profile_1.port", true);
+		g_form.setDisplay("server_profile_1.certificate_alias", true);
+		g_form.setDisplay("server_profile_1.login_key_alias", false);
+		
 		// hide sftp and pesit client 2
 		g_form.setDisplay("client_profile_2.sftp_client.login_name", false);
 		g_form.setDisplay("client_profile_2.sftp_client.login_type", false);
@@ -41,6 +47,12 @@
 		g_form.setDisplay("client_profile_2.sftp_client.key_alias", false);
 		g_form.setDisplay("client_profile_2.pesit_client.certificate_alias", false);
 		g_form.setDisplay("client_profile_2.pesit_client.login_name", false);
+		
+		// hide sftp server 2
+		g_form.setDisplay("server_profile_2.host", false);
+		g_form.setDisplay("server_profile_2.port", false);
+		g_form.setDisplay("server_profile_2.certificate_alias", false);
+		g_form.setDisplay("server_profile_2.login_key_alias", false);
 		
 		// hide sftp settings
 		g_form.setDisplay("model_0043.destination_file", false);
@@ -62,7 +74,19 @@
 		g_form.setDisplay("client_profile_2.sftp_client.login_type", true);
 		g_form.setDisplay("client_profile_2.sftp_client.password", true);
 		g_form.setDisplay("client_profile_2.sftp_client.ssh_key", true);
-		g_form.setDisplay("client_profile_1.sftp_client.key_alias", true);
+		g_form.setDisplay("client_profile_2.sftp_client.key_alias", true);
+		
+		// show server 2
+		g_form.setDisplay("server_profile_2.host", true);
+		g_form.setDisplay("server_profile_2.port", true);
+		g_form.setDisplay("server_profile_2.certificate_alias", false);
+		g_form.setDisplay("server_profile_2.login_key_alias", true);
+		
+		// hide server 1
+		g_form.setDisplay("server_profile_1.host", false);
+		g_form.setDisplay("server_profile_1.port", false);
+		g_form.setDisplay("server_profile_1.certificate_alias", false);
+		g_form.setDisplay("server_profile_1.login_key_alias", false);
 		
 		// hide pesit client 2
 		g_form.setDisplay("client_profile_2.pesit_client.certificate_alias", false);
@@ -83,15 +107,15 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>0bfd9c264ff077002f86b5e18110c751</sys_id>
-        <sys_mod_count>25</sys_mod_count>
+        <sys_mod_count>28</sys_mod_count>
         <sys_name>APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_policy_0bfd9c264ff077002f86b5e18110c751</sys_update_name>
-        <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-10 12:40:51</sys_updated_on>
+        <sys_updated_by>receiver</sys_updated_by>
+        <sys_updated_on>2019-05-15 08:45:45</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui_type>10</ui_type>
         <view/>

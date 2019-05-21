@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>ecc_queue</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition table="ecc_queue">queue=input^state=ready^agent_correlator=Create a server^EQ<item endquery="false" field="queue" goto="false" newquery="false" operator="=" or="false" value="input"/>
+            <item endquery="false" field="state" goto="false" newquery="false" operator="=" or="false" value="ready"/>
+            <item endquery="false" field="agent_correlator" goto="false" newquery="false" operator="=" or="false" value="Create a server"/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </filter_condition>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Sensor Server Create</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	// Add your code here
+	gs.debug("Sensor Server Create");
+	
+	var xmlDoc = new XMLDocument2();
+	xmlDoc.parseXML(current.payload);
+	var responseBody = xmlDoc.getNodeText("//result/output");
+	var response = JSON.parse(responseBody);
+	
+	if(response.status != "201"){
+		gs.error(responseBody);
+	} else {
+		var comprofile = response.data.communication_profile;
+		var serverRecord = new GlideRecord("x_305439_digital_m_server_comm_profiles");
+		serverRecord.addQuery("name", comprofile.name);
+		serverRecord.query();
+		if(serverRecord.next()){
+			serverRecord.setValue("cg_id", response.data.businessId);
+			serverRecord.setValue("cg_product_id", response.data.participant_businessId);
+			serverRecord.setValue("protocol", comprofile.protocol);
+			serverRecord.setValue("port", comprofile.port);
+			serverRecord.setValue("host", comprofile.hosts[0]);
+			if(!gs.nil(comprofile.certificateAlias)){
+				serverRecord.setValue("certificate_alias", comprofile.certificateAlias);
+			} else {
+				serverRecord.setValue("login_key_alias", comprofile.keyAlias);
+			}
+			serverRecord.update();
+		}
+	}
+	
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-05-17 12:09:43</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>434432d44f69b3002f86b5e18110c7d4</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>Sensor Server Create</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_434432d44f69b3002f86b5e18110c7d4</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-05-20 10:51:44</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=434432d44f69b3002f86b5e18110c7d4"/>
+</record_update>

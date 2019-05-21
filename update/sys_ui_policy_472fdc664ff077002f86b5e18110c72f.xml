@@ -51,6 +51,19 @@
 		g_form.setDisplay("model_0023.relay_receive_file_as", false);
 		g_form.setDisplay("model_0023.sftp_transfer_mode", false);
 		g_form.setDisplay("model_0023.source_file_type", false);
+		
+		// show server 1
+		g_form.setDisplay("server_profile_1.host", true);
+		g_form.setDisplay("server_profile_1.port", true);
+		g_form.setDisplay("server_profile_1.certificate_alias", false);
+		g_form.setDisplay("server_profile_1.login_key_alias", true);
+		
+		// hide server 2
+		g_form.setDisplay("server_profile_2.host", false);
+		g_form.setDisplay("server_profile_2.port", false);
+		g_form.setDisplay("server_profile_2.certificate_alias", false);
+		g_form.setDisplay("server_profile_2.login_key_alias", false);
+		
 	} else if (g_user.hasRole('x_305439_digital_m.app_receiver')){
 		// hide client 1
 		g_form.setDisplay("client_profile_1.sftp_client.login_name", false);
@@ -81,6 +94,18 @@
 		g_form.setDisplay("model_0023.relay_receive_file_as", false);
 		g_form.setDisplay("model_0023.sftp_transfer_mode", false);
 		g_form.setDisplay("model_0023.source_file_type", false);
+		
+		// show server 2
+		g_form.setDisplay("server_profile_2.host", true);
+		g_form.setDisplay("server_profile_2.port", true);
+		g_form.setDisplay("server_profile_2.certificate_alias", false);
+		g_form.setDisplay("server_profile_2.login_key_alias", true);
+		
+		// hide server 1
+		g_form.setDisplay("server_profile_1.host", false);
+		g_form.setDisplay("server_profile_1.port", false);
+		g_form.setDisplay("server_profile_1.certificate_alias", false);
+		g_form.setDisplay("server_profile_1.login_key_alias", false);
 	}
 }]]></script_true>
         <set_values/>
@@ -91,7 +116,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>472fdc664ff077002f86b5e18110c72f</sys_id>
-        <sys_mod_count>20</sys_mod_count>
+        <sys_mod_count>21</sys_mod_count>
         <sys_name>PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -99,7 +124,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_policy_472fdc664ff077002f86b5e18110c72f</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-13 10:20:38</sys_updated_on>
+        <sys_updated_on>2019-05-14 15:10:23</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui_type>0</ui_type>
         <view/>

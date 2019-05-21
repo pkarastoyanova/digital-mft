@@ -3,7 +3,7 @@
         <sys_documentation action="INSERT_OR_UPDATE">
             <element>src_transfer_mode</element>
             <help/>
-            <hint/>
+            <hint>The transfer mode to be used when transfering files between the source party and the relay server.</hint>
             <label>Source transfer mode</label>
             <language>en</language>
             <name>x_305439_digital_m_partner_sftp_push_st_sftp_pull_partner</name>
@@ -12,14 +12,14 @@
             <sys_created_by>admin</sys_created_by>
             <sys_created_on>2019-04-18 08:46:57</sys_created_on>
             <sys_id>f330f8034f7cb7002f86b5e18110c753</sys_id>
-            <sys_mod_count>0</sys_mod_count>
+            <sys_mod_count>3</sys_mod_count>
             <sys_name>Source transfer mode</sys_name>
             <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
             <sys_policy/>
             <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
             <sys_update_name>sys_documentation_x_305439_digital_m_partner_sftp_push_st_sftp_pull_partner_src_transfer_mode_en</sys_update_name>
             <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2019-04-18 08:46:57</sys_updated_on>
+            <sys_updated_on>2019-05-14 15:49:34</sys_updated_on>
             <url/>
             <url_target/>
         </sys_documentation>

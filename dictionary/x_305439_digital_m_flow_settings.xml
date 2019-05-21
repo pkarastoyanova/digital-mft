@@ -9,6 +9,7 @@
         <element label="Flow name" mandatory="true" max_length="64" name="flow_name" type="string" unique="true"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Model 0023" max_length="32" name="model_0023" reference="x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner" type="reference"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Model 0043" max_length="32" name="model_0043" reference="x_305439_digital_m_partner_sftp_push_st_sftp_pull_partner" type="reference"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Relay" max_length="32" name="relay" reference="x_305439_digital_m_participants" type="reference"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Server Profile 1" max_length="32" name="server_profile_1" reference="x_305439_digital_m_server_comm_profiles" type="reference"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" label="Server Profile 2" max_length="32" name="server_profile_2" reference="x_305439_digital_m_server_comm_profiles" type="reference"/>
         <element label="Source" mandatory="true" max_length="32" name="source" reference="x_305439_digital_m_participants" type="reference"/>
@@ -21,24 +22,27 @@
             <element name="client_profile_2"/>
         </index>
         <index name="index3">
-            <element name="destination"/>
+            <element name="relay"/>
         </index>
         <index name="index4">
-            <element name="flow_name"/>
+            <element name="destination"/>
         </index>
         <index name="index5">
-            <element name="client_profile_1"/>
+            <element name="flow_name"/>
         </index>
         <index name="index6">
-            <element name="source"/>
+            <element name="client_profile_1"/>
         </index>
         <index name="index7">
-            <element name="model_0043"/>
+            <element name="source"/>
         </index>
         <index name="index8">
-            <element name="server_profile_1"/>
+            <element name="model_0043"/>
         </index>
         <index name="index9">
+            <element name="server_profile_1"/>
+        </index>
+        <index name="index10">
             <element name="model_0023"/>
         </index>
     </element>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_305439_digital_m.FlowValidator</api_name>
+        <client_callable>true</client_callable>
+        <description/>
+        <name>FlowValidator</name>
+        <script><![CDATA[var FlowValidator = Class.create();
+FlowValidator.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
+
+	flowExists: function (){
+	    var flowName = this.getParameter('sysparm_flow_name');
+		gs.debug("Check if a flow with name '" + flowName + "' already exists.");
+		try{
+			var name = this.getParameter('sysparm_flow_name');
+			
+			var record = new GlideRecord("x_305439_digital_m_flow_settings");
+			record.addQuery("flow_name", name);
+			record.query();
+			var foundRecord = record.next();
+			
+			gs.debug("Is is flow with name={0} found? '{1}'", flowName, foundRecord);
+			if(foundRecord){
+				return true;
+			}
+			return false;
+		} catch (ex){
+			gs.error("Error while checking if flow exists. " + ex.message);
+		}
+		return true;
+	},
+    type: 'FlowValidator'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-05-15 12:21:08</sys_created_on>
+        <sys_id>9243a87b4f5933002f86b5e18110c7a1</sys_id>
+        <sys_mod_count>6</sys_mod_count>
+        <sys_name>FlowValidator</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_script_include_9243a87b4f5933002f86b5e18110c7a1</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-05-16 10:59:54</sys_updated_on>
+    </sys_script_include>
+</record_update>

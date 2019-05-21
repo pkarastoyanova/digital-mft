@@ -17,10 +17,12 @@
 		   var clientCertAliases = g_scratchpad.client_cert_aliases;
 		   var clientKeyAliases = g_scratchpad.client_key_aliases;
 		   var serverCertAliases = g_scratchpad.server_cert_aliases;
+		   var serverKeyAliases = g_scratchpad.server_key_aliases;
 		   
-		   jslog("client_cert_aliases: " + g_scratchpad.client_cert_aliases);
-		   jslog("client_key_aliases: " + g_scratchpad.client_key_aliases);
-		   jslog("server_cert_aliases: " + g_scratchpad.server_cert_aliases);
+		   jslog("client_cert_aliases: " + clientCertAliases);
+		   jslog("client_key_aliases: " + clientKeyAliases);
+		   jslog("server_cert_aliases: " + serverCertAliases);
+		   jslog("server_key_aliases: " + serverKeyAliases);
 		   
 		   var client_prefix;
 		   var server_prefix;
@@ -33,30 +35,31 @@
 			   server_prefix = "server_profile_2.";
 		   }
 		   
+		   setAliases(clientCertAliases, client_prefix + "pesit_client.certificate_alias");
+		   setAliases(clientKeyAliases, client_prefix + "sftp_client.key_alias");
+		   setAliases(serverCertAliases, server_prefix + "certificate_alias");
+		   setAliases(serverKeyAliases, server_prefix + "login_key_alias");
 		   
-		   if(clientCertAliases != undefined){
-			   clientCertAliases.forEach(function(alias){
-				   g_form.addOption(client_prefix + "pesit_client.certificate_alias", alias, alias);
-			   });
-		   }
-		   
-		   if(clientKeyAliases != undefined){
-			   clientKeyAliases.forEach(function(alias){
-				   jslog("adding key " + alias + " to " + client_prefix + "sftp_client.key_alias");
-				   g_form.addOption(client_prefix + "sftp_client.key_alias", alias, alias);
-			   });
-		   }
-		
-		   if(serverCertAliases != undefined){
-			   serverCertAliases.forEach(function(alias){
-				   g_form.addOption(server_prefix + "certificate_alias", alias, alias);
-			   });
-		   }
 	   }
    } catch (error){
 	   jslog("exception was thrown from loadAliases script");
 	   jslog(error.message);
    }
+}
+
+function setAliases(aliases_array, alias_field_name){
+	if(aliases_array != undefined){
+		var alias_field = g_form.getValue(alias_field_name);
+		aliases_array.forEach(function(alias){
+			if(alias_field === "undefined" || alias_field === ""){
+				g_form.setValue(alias_field_name, alias);
+				alias_field = alias;
+			}
+			jslog("adding '" + alias + "' to " + alias_field_name);
+			g_form.addOption(alias_field_name, alias, alias);
+
+		});
+	}
 }]]></script>
         <sys_class_name>sys_script_client</sys_class_name>
         <sys_created_by>admin</sys_created_by>
@@ -64,7 +67,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>1d654c7c4fcdfb002f86b5e18110c773</sys_id>
-        <sys_mod_count>9</sys_mod_count>
+        <sys_mod_count>21</sys_mod_count>
         <sys_name>loadAliases</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -72,7 +75,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_client_1d654c7c4fcdfb002f86b5e18110c773</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-13 15:16:14</sys_updated_on>
+        <sys_updated_on>2019-05-21 11:24:40</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <type>onLoad</type>
         <ui_type>0</ui_type>

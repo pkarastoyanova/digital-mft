@@ -10,28 +10,41 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-05-10 11:44:14</sys_created_on>
         <sys_id>3189e64e4f9137002f86b5e18110c79f</sys_id>
-        <sys_mod_count>22</sys_mod_count>
+        <sys_mod_count>26</sys_mod_count>
         <sys_name>attachment</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_macro_3189e64e4f9137002f86b5e18110c79f</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-13 08:45:50</sys_updated_on>
+        <sys_updated_on>2019-05-15 08:03:48</sys_updated_on>
         <xml><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
 	
 	<g2:evaluate>
-		var sftp_client_sys_id = current.client_profile_1.sftp_client;
-		var id = "x_305439_digital_m_flow_settings.client_profile_1.sftp_client.ssh_key_btn";
+		var sftp_client_sys_id;
+		var id;
+		var show_control_display = "block";
+		
+		if(gs.getUser().hasRole("x_305439_digital_m.app_sender")){
+			sftp_client_sys_id = current.client_profile_1.sftp_client;
+			id = "x_305439_digital_m_flow_settings.client_profile_1.sftp_client.ssh_key_btn";
+		    if (current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
+		         show_control_display = "none"
+		    }
+		} else {
+			sftp_client_sys_id = current.client_profile_2.sftp_client;
+			id = "x_305439_digital_m_flow_settings.client_profile_2.sftp_client.ssh_key_btn";
+		}
+		 style="display:$[jvar_show_tasks_display]"
 	</g2:evaluate>
 
-	<div class="foreign" data-type="label" choice="0" type="string" nowrap="true">
+	<div class="foreign" data-type="label" choice="0" type="string" nowrap="true" style="display: $[show_control_display]">
 			<label onclick="return labelClicked(this);" for="$[id]" class=" col-xs-12 col-md-1_5 col-lg-2 control-label">
 				<span class="label-text" data-html="false" data-original-title="SSH Key">SSH key</span>
 			</label>
 	</div>
-	<div class="col-xs-10 col-md-9 col-lg-8 form-field input_controls">
+	<div class="col-xs-10 col-md-9 col-lg-8 form-field input_controls" style="display: $[show_control_display]">
 		<button id="$[id]" class="btn btn-default" style="white-space: nowrap" type="button" onclick="saveFileAttachment('x_305439_digital_m_flow_settings', 'file_attachment.do?sysparm_sys_id=$[sftp_client_sys_id]&amp;sysparm_fieldname=ssh_key&amp;sysparm_table=x_305439_digital_m_cp_sftp');">File Upload</button>
 
 		<script>
