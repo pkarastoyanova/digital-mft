@@ -35,16 +35,40 @@ CommProfiles.prototype = {
 	
 	sendAsyncSshKeyUpload: function (current, isPesit){
 		if(!isPesit){
-			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', "Create SSH Key");
-			new ConnectionSettings().setMandatoryProps(r);
-			
-			var comProfileHelper = new CommProfofilesUtils();
+			var comProfileHelper = new CommProfilesUtils();
 			var clientProfile = comProfileHelper.getClientProfileFieldSn(current).profile;
-			
-			r.setEccCorrelator("Create SSH Key-" + clientProfile.sys_id);
-			r.setStringParameterNoEscape('partner_id', clientProfile.client.cg_id);
-			var body = getSshKeyRequestBody(current.sftp_client.getRefRecord());
-			r.setRequestBody(body);
+			var attachment_obj = getAttachmentObject(clientProfile.sftp_client.ssh_key);
+			var r;
+			if(gs.nil(attachment_obj)){
+				//remote alias, do not try to upload
+				// get the key id
+				
+				var restMethod;
+				var participant_id;
+				if(!gs.nil(clientProfile.client.cg_product_id)){
+					restMethod = "Get product SSH key";
+					participant_id = clientProfile.client.cg_product_id;
+				} else {
+					restMethod = "Get partner SSH key";
+					participant_id = clientProfile.client.cg_id;
+				}
+				
+				r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', restMethod);
+				new ConnectionSettings().setMandatoryProps(r);
+				
+				r.setEccCorrelator("Get SSH Key-" + clientProfile.sys_id);
+				r.setStringParameterNoEscape('participant_id', participant_id);
+				r.setStringParameterNoEscape('key_name', clientProfile.sftp_client.key_alias);
+			} else {
+				r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', "Create SSH Key");
+				new ConnectionSettings().setMandatoryProps(r);
+
+				r.setEccCorrelator("Create SSH Key-" + clientProfile.sys_id);
+				r.setStringParameterNoEscape('partner_id', clientProfile.client.cg_id);
+				
+				var body = this.getSshKeyRequestBody(attachment_obj);
+				r.setRequestBody(body);
+			}
 			r.executeAsync();
 		}
 	},
@@ -78,7 +102,7 @@ CommProfiles.prototype = {
 		}
 	},
 	
-	sendAsyncServerProfileCreate: function(server_record, app_name, is_pesit){
+	sendAsyncServerProfileCreate: function(server_record, app_name, is_pesit, client_prifle_id){
 		var request_name;
 		if(is_pesit === true){
 			request_name = 'Create PESIT Server';
@@ -92,47 +116,133 @@ CommProfiles.prototype = {
 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', request_name);
 		new ConnectionSettings().setMandatoryProps(r);
 		r.setStringParameterNoEscape('server_id', relayId);// check if product id is required or application id
-		r.setEccCorrelator("Create a server");
+		gs.debug("correlator id=" + "Create a server-" + client_prifle_id);
+		r.setEccCorrelator("Create a server-" + client_prifle_id);
 		
 		var serverRequest = getRequestBody(server_record, app_name, is_pesit);
 		var body = JSON.stringify(serverRequest);
 		r.setRequestBody(body);
 		r.executeAsync();
 	},
+	
+	sendAsyncClientProfileCreate: function (client_record, isSftpClient, requiresSshKey){
+		gs.debug("sendAsyncClientProfileCreate");
+		var restName;
+		var body;
+		if(isSftpClient){
+			if(requiresSshKey){
+					restName = "Create SFTP Key";
+					body = getClientRequestBody(restName, client_record.sftp_client.getRefRecord(), client_record.sys_id, client_record.name);
+			} else {
+				restName = "Create SFTP Password";
+					body = getClientRequestBody(restName, client_record.sftp_client.getRefRecord(), client_record.sys_id, client_record.name);
+			}
+		} else {
+			restName = "Create PESIT SSL";
+			body = getClientRequestBody(restName, client_record.pesit_client.getRefRecord(), client_record.sys_id, client_record.name, client_record.client.cg_product_id);
+		}
+		
+		var clientProductId;
+		if(gs.nil(client_record.client.cg_product_id)){
+			clientProductId = client_record.client.cg_id;
+		} else {
+			clientProductId = client_record.client.cg_product_id;
+		}
+		
+		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', restName);
+		new ConnectionSettings().setMandatoryProps(r);
+		r.setEccCorrelator("Create client profile.");
+		r.setStringParameterNoEscape("clientNodeId", clientProductId);
+		r.setStringParameterNoEscape("serverNodeId", client_record.server.cg_product_id); // the server is always ST relay.
+		r.setStringParameterNoEscape("serverId", client_record.cg_server_comprofile_id);
+		
+		r.setRequestBody(body);
+		r.executeAsync();
+	},
+	
+	getSshKeyRequestBody: function (attachment_obj){
+		var requestBody = {};
+		requestBody.name = attachment_obj.file_name + "";
+		var attachment  = new GlideSysAttachment();
+		var content = attachment.getContentBase64(attachment_obj);
+		requestBody.keyContent = content;
+
+		return JSON.stringify(requestBody);
+	},
+	
     type: 'CommProfiles'
 };
 
-function getSshKeyRequestBody(sftp_settings_record){
+function getAttachmentObject(sftp_client_sys_id){
 	var g_record = new GlideRecord("sys_attachment");
-	g_record.addQuery("sys_id", sftp_settings_record.ssh_key);
-	g_record.orderByDesc("sys_created_on");
-	g_record.query();
-	var requestBody = {};
+		g_record.addQuery("sys_id", sftp_client_sys_id);
+		g_record.orderByDesc("sys_created_on");
+		g_record.query();
 	if(g_record.next()){
-		requestBody.name = g_record.file_name + "";
-		var attachment  = new GlideSysAttachment();
-		var content = attachment.getContentBase64(g_record);
-		requestBody.keyContent = content;
+		return g_record;
 	}
-	return JSON.stringify(requestBody);
+}
+
+function getClientRequestBody(type, settings, sys_id, name, product_id){
+	var body = {};
+	switch(type){
+		case "Create SFTP Key":
+			body.name = name + "";
+			body.keyAlias = settings.key_alias + "";
+			body.login = settings.login_name + "";
+			break;
+		case "Create SFTP Password":
+			body.name = name + "";
+			body.password = settings.password.getDecryptedValue();
+			body.login = settings.login_name + "";
+			break;
+		case "Create PESIT SSL":
+			body.name = name + "";
+			body.certificateAlias = settings.certificate_alias + "";
+			body.pesitLogin = settings.login_name + "";
+			body.cft_properties = getProtocolInfo(product_id); // Aditional API Call
+			break;
+	}
+	return JSON.stringify(body);
+}
+
+function getProtocolInfo(product_id){
+	try { 
+		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', 'Get protocol info');
+		new ConnectionSettings().setMandatoryProps(r);
+		r.setStringParameterNoEscape('product_id', product_id);
+		r.setStringParameterNoEscape('protocol_name', gs.getProperty("x_305439_digital_m.cft.protocol.name"));
+		
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
+		if(httpStatus == "200"){
+			var body = JSON.parse(responseBody);
+			return body.data.AMFTCFTProtocol;
+		}
+	}
+	catch(ex) {
+		var message = ex.message;
+	}
 }
 
 function getRequestBody(server_record, app_name, isPesit){
 	var stRelayUtils = new GetStRelay();
 	var serverRequest = {};
-	serverRequest.name = stRelayUtils.pesit_profile_name + "_" + server_record.sys_id;
+	
 	serverRequest.networkZone = stRelayUtils.getStZone();
 	serverRequest.hosts = [server_record.host + ""];
 	serverRequest.port = server_record.port + "";
 	
 	if(isPesit){
+		serverRequest.name = stRelayUtils.pesit_profile_name + "_" + server_record.sys_id;
 		serverRequest.certificateAlias = server_record.certificate_alias + "";
 		serverRequest.clientAuthenticationRequired = "Yes";
 		serverRequest.networkProtocol = "TCP";
 		serverRequest.pesitLogin = app_name + "";
 	} else {
-		
-		serverRequest.keyAlias = server_record.login_key_alias;
+		serverRequest.name = stRelayUtils.sftp_profile_name + "_" + server_record.sys_id;
+		serverRequest.keyAlias = server_record.login_key_alias + "";
 	}
 	return serverRequest;
 }
@@ -141,13 +251,13 @@ function getRequestBody(server_record, app_name, isPesit){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-03-28 17:13:48</sys_created_on>
         <sys_id>37aad2984f6433002f86b5e18110c791</sys_id>
-        <sys_mod_count>22</sys_mod_count>
+        <sys_mod_count>39</sys_mod_count>
         <sys_name>CommProfiles</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_37aad2984f6433002f86b5e18110c791</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-20 13:59:26</sys_updated_on>
+        <sys_updated_on>2019-05-23 15:17:12</sys_updated_on>
     </sys_script_include>
 </record_update>

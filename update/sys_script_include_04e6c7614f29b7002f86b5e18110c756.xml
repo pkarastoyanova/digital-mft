@@ -8,47 +8,123 @@
         <name>LoadAliases</name>
         <script><![CDATA[var LoadAliases = Class.create();
 LoadAliases.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
-
-	getFavorites : function() {
-        // build new response xml element for result
-		gs.info("get favorites");
-        var result = this.newItem("result");
-
-        result.setAttribute("message", "returning all favorites");
-
-        //add some favorite nodes with name and value attributes
-        this._addFavorite("color", "blue");
-        this._addFavorite("beer", "lager");
-        this._addFavorite("pet", "dog");
-
-		return "I dont have a favorite fruit.";
-        // all items are returned to the client through the inherited methods of AbstractAjaxProcessor
-    },
 	
-	_addFavorite : function(name, value) {
-        var favs = this.newItem("favorite");
-        favs.setAttribute("name", name);
-        favs.setAttribute("value", value);
-    },
+	_addAlias: function(name){
+		var alias = this.newItem("alias");
+		alias.setAttribute("name", name);
+	},
+
 	
 	getAliases: function (){
-		var type = this.getParameter('sysparm_alias_type');
-		var certsType = this.getParameter('sysparm_certs_type');
-		var sys_id = this.getParameter('sysparm_current_id');
-		var current = getCurrentRecord(sys_id);
-		var stRelayHelper = new GetStRelay();
-		var stRelayId = stRelayHelper.getStRelayId();
-		
-		if(!gs.nil(current)){
-			switch(type){
-				case 'product_certs': 
-					var participant_id = getParticipantId(certsType, current);
-					return getProductCertificates(participant_id);
-				case 'product_keys':
-					return getProductKeys(stRelayId);
-				case 'local_keys':
-					return getLocalKeyAliases(current);
+		try{
+			var type = this.getParameter('sysparm_alias_type');
+			var certsType = this.getParameter('sysparm_certs_type');
+			var sys_id = this.getParameter('sysparm_current_id');
+
+			gs.debug("alias_type={0}, certs_type={1}, current flow_settings id={2}", type, certsType, sys_id);
+
+			var current = getCurrentRecord(sys_id);
+			var stRelayHelper = new GetStRelay();
+			var stRelayId = stRelayHelper.getStRelayId();
+
+			if(!gs.nil(current)){
+				switch(type){
+					case 'product_certs': 
+						var participant_id = getParticipantId(certsType, current);
+						this._setProductCertificates(participant_id, this);
+						break;
+					case 'product_keys':
+						this._setProductKeys(stRelayId, this, "products");
+						break;
+					case 'local_keys':
+						this._setLocalKeyAliases(current, this);
+						this._setProductKeys(getParticipantId("client", current), this, "partners");
+						break;
+				}
 			}
+		} catch (ex){
+			gs.error(ex.message);
+		}
+	},
+
+	_setProductKeys: function (participant_id, obj, participant){
+		gs.info("_set Product keys");
+		try {
+			var restMethod;
+			if(participant == "products"){
+				restMethod = "Get All product ssh keys";
+			} else {
+				restMethod = "Get All partner ssh keys";
+			}
+			gs.info("rest method name={0}", restMethod);
+			
+			var connHelper = new ConnectionSettings();
+			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', restMethod);
+			connHelper.setMandatoryProps(r);
+			r.setStringParameterNoEscape('product_id', participant_id);
+
+			var response = r.execute();
+			var responseBody = response.getBody();
+			var httpStatus = response.getStatusCode();
+			if (httpStatus == 200){
+				var body = JSON.parse(responseBody);
+				var aliases = [];
+				body.data.forEach(function(key){
+					aliases.push(key.name);
+					obj._addAlias(key.name);
+				});
+				return aliases;
+			}
+		} catch (err){
+			gs.error("Failed to get product SSH Keys: " + err.message);
+		}
+	},
+	
+	_setLocalKeyAliases: function (current, obj){
+		var utils = new CommProfilesUtils();
+		var client_profile = utils.getClientProfileFieldSn(current, gs.getUser());
+		if(!gs.nil(client_profile)){
+			var client_settings_sys_id = utils.getClientProfileSettingsSn(client_profile.profile, current.flow_model_name);
+			var key_aliases = [];
+			if(!gs.nil(current.flow_model_name) && !utils.isPesitClient()){
+				var attachments = new GlideRecord("sys_attachment");
+				attachments.addQuery("table_sys_id", client_settings_sys_id);
+				attachments.addQuery("table_name", "ENDSWITH", "digital_m_cp_sftp");
+				attachments.query();
+				while(attachments.next()){
+					var file_name = attachments.file_name + "";
+					gs.info("attachment: {0}, {1}, {2}", file_name, attachments.table_name, attachments.content_type);
+					key_aliases.push(file_name);
+					obj._addAlias(file_name);
+				}
+				gs.info("key_aliases: " + key_aliases);
+				return key_aliases;
+			}
+		}
+	},
+	
+	_setProductCertificates: function (participant_id, obj){
+		try {
+			var connHelper = new ConnectionSettings();
+			var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Certificates', 'Get product certificates');
+			r.setStringParameterNoEscape('participant_id', participant_id);
+			connHelper.setMandatoryProps(r);
+
+			var response = r.execute();
+			var responseBody = response.getBody();
+			var httpStatus = response.getStatusCode();
+			gs.info("_setProductCertificates response={0}", httpStatus);
+			if (httpStatus == 200){
+				var body = JSON.parse(responseBody);
+				var aliases = [];
+				body.data.forEach(function(certificate){
+					aliases.push(certificate.name);
+					obj._addAlias(certificate.name);
+				});
+				return aliases;
+			}
+		} catch (err){
+			gs.error("Failed to get product Certificates: " + err.message);
 		}
 	},
 	
@@ -63,84 +139,16 @@ function getCurrentRecord(sys_id){
 	}
 }
 
-function getProductKeys(participant_id){
-	try {
-		var connHelper = new ConnectionSettings();
-		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', 'Get product ssh keys');
-		connHelper.setMandatoryProps(r);
-		r.setStringParameterNoEscape('product_id', participant_id);
-		
-		var response = r.execute();
-		var responseBody = response.getBody();
-		var httpStatus = response.getStatusCode();
-		if (httpStatus == 200){
-			var body = JSON.parse(responseBody);
-			var aliases = [];
-			body.data.forEach(function(key){
-				aliases.push(key.name);
-			});
-			return aliases;
-		}
-	} catch (err){
-		gs.error("Failed to get product SSH Keys: " + err.message);
-	}
-}
 
-function getLocalKeyAliases(current){
-	var utils = new CommProfilesUtils();
-	var client_profile = utils.getClientProfileFieldSn(current, gs.getUser());
-	if(!gs.nil(client_profile)){
-		var client_settings_sys_id = utils.getClientProfileSettingsSn(client_profile.profile, current.flow_model_name);
-		gs.info("record sys_id= " + client_settings_sys_id);
-		var key_aliases = [];
-		if(!gs.nil(current.flow_model_name) && !utils.isPesitClient()){
-			var attachments = new GlideRecord("sys_attachment");
-			attachments.addQuery("table_sys_id", client_settings_sys_id);
-			attachments.addQuery("table_name", "ENDSWITH", "digital_m_cp_sftp");
-			attachments.query();
-			while(attachments.next()){
-				var file_name = attachments.file_name + "";
-				gs.info("attachment: {0}, {1}, {2}", file_name, attachments.table_name, attachments.content_type);
-				key_aliases.push(file_name);
-			}
-			gs.info("key_aliases: " + key_aliases);
-			return key_aliases;
-		}
-	}
-}
-
-function getProductCertificates(participant_id){
-	try {
-		var connHelper = new ConnectionSettings();
-		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Certificates', 'Get product certificates');
-		r.setStringParameterNoEscape('participant_id', participant_id);
-		connHelper.setMandatoryProps(r);
-
-		var response = r.execute();
-		var responseBody = response.getBody();
-		var httpStatus = response.getStatusCode();
-		if (httpStatus == 200){
-			var body = JSON.parse(responseBody);
-			var aliases = [];
-			body.data.forEach(function(certificate){
-				aliases.push(certificate.name);
-			});
-			return aliases;
-		}
-	} catch (err){
-		gs.error("Failed to get product Certificates: " + err.message);
-	}
-}
-
-function getParticipantId(certsType, current){
+function getParticipantId(type, current){
 	var participant_id;
 	var stRelayHelper = new GetStRelay();
 	var utils = new CommProfilesUtils();
 
-	if(certsType == "server"){
+	if(type == "server"){
 		participant_id = stRelayHelper.getStRelayId();
 	} else {
-		participant_id = utils.getClientBusinessId(current, gs.getUser());
+		participant_id = utils.getClientBusinessId(current);
 	}
 	
 	return participant_id;
@@ -150,13 +158,13 @@ function getParticipantId(certsType, current){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-05-21 10:41:38</sys_created_on>
         <sys_id>04e6c7614f29b7002f86b5e18110c756</sys_id>
-        <sys_mod_count>5</sys_mod_count>
+        <sys_mod_count>30</sys_mod_count>
         <sys_name>LoadAliases</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_04e6c7614f29b7002f86b5e18110c756</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-21 11:48:54</sys_updated_on>
+        <sys_updated_on>2019-05-23 14:57:11</sys_updated_on>
     </sys_script_include>
 </record_update>

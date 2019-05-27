@@ -5,28 +5,28 @@
         <basic_auth_profile/>
         <basic_auth_user/>
         <content/>
-        <function_name>Get All product ssh keys</function_name>
+        <function_name>Get partner SSH key</function_name>
         <http_method>get</http_method>
         <lock>false</lock>
         <oauth2_profile/>
         <protocol_name/>
-        <qualified_name>AMFT-SSH Keys [ Get All product ssh keys ]</qualified_name>
-        <rest_endpoint>https://${amft_host}:${amft_port}/PatternAPI/v3/products/${product_id}/sshkeys</rest_endpoint>
+        <qualified_name>AMFT-SSH Keys [ Get partner SSH key ]</qualified_name>
+        <rest_endpoint>https://${amft_host}:${amft_port}/PatternAPI/v3/partners/${participant_id}/sshkeys?name=${key_name}</rest_endpoint>
         <rest_message display_value="AMFT-SSH Keys">357628454f8d3f002f86b5e18110c755</rest_message>
         <sys_class_name>sys_rest_message_fn</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2019-04-24 13:13:11</sys_created_on>
-        <sys_id>d2b62c454f8d3f002f86b5e18110c78d</sys_id>
-        <sys_mod_count>6</sys_mod_count>
-        <sys_name>Get All product ssh keys</sys_name>
+        <sys_created_on>2019-05-23 15:13:06</sys_created_on>
+        <sys_id>8b2816564fe93b002f86b5e18110c7bb</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Get partner SSH key</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
-        <sys_update_name>sys_rest_message_fn_d2b62c454f8d3f002f86b5e18110c78d</sys_update_name>
+        <sys_update_name>sys_rest_message_fn_8b2816564fe93b002f86b5e18110c7bb</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-23 14:46:16</sys_updated_on>
+        <sys_updated_on>2019-05-23 15:17:00</sys_updated_on>
         <use_basic_auth>false</use_basic_auth>
-        <use_mid_server display_value="vm15-39-mid-server">c82e1a854f8323002f86b5e18110c724</use_mid_server>
+        <use_mid_server/>
         <use_mutual_auth>false</use_mutual_auth>
     </sys_rest_message_fn>
 </record_update>

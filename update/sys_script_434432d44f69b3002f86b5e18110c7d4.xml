@@ -15,9 +15,9 @@
         <condition/>
         <description/>
         <execute_function>false</execute_function>
-        <filter_condition table="ecc_queue">queue=input^state=ready^agent_correlator=Create a server^EQ<item endquery="false" field="queue" goto="false" newquery="false" operator="=" or="false" value="input"/>
+        <filter_condition table="ecc_queue">queue=input^state=ready^agent_correlatorSTARTSWITHCreate a server^EQ<item endquery="false" field="queue" goto="false" newquery="false" operator="=" or="false" value="input"/>
             <item endquery="false" field="state" goto="false" newquery="false" operator="=" or="false" value="ready"/>
-            <item endquery="false" field="agent_correlator" goto="false" newquery="false" operator="=" or="false" value="Create a server"/>
+            <item endquery="false" field="agent_correlator" goto="false" newquery="false" operator="STARTSWITH" or="false" value="Create a server"/>
             <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
         </filter_condition>
         <is_rest>false</is_rest>
@@ -35,43 +35,74 @@
 
 	// Add your code here
 	gs.debug("Sensor Server Create");
-	
-	var xmlDoc = new XMLDocument2();
-	xmlDoc.parseXML(current.payload);
-	var responseBody = xmlDoc.getNodeText("//result/output");
-	var response = JSON.parse(responseBody);
-	
-	if(response.status != "201"){
-		gs.error(responseBody);
-	} else {
-		var comprofile = response.data.communication_profile;
-		var serverRecord = new GlideRecord("x_305439_digital_m_server_comm_profiles");
-		serverRecord.addQuery("name", comprofile.name);
-		serverRecord.query();
-		if(serverRecord.next()){
-			serverRecord.setValue("cg_id", response.data.businessId);
-			serverRecord.setValue("cg_product_id", response.data.participant_businessId);
-			serverRecord.setValue("protocol", comprofile.protocol);
-			serverRecord.setValue("port", comprofile.port);
-			serverRecord.setValue("host", comprofile.hosts[0]);
-			if(!gs.nil(comprofile.certificateAlias)){
-				serverRecord.setValue("certificate_alias", comprofile.certificateAlias);
-			} else {
-				serverRecord.setValue("login_key_alias", comprofile.keyAlias);
-			}
-			serverRecord.update();
-		}
-	}
-	
+	try{
+		var xmlDoc = new XMLDocument2();
+		xmlDoc.parseXML(current.payload);
+		var responseBody = xmlDoc.getNodeText("//result/output");
+		var response = JSON.parse(responseBody);
 
-})(current, previous);]]></script>
+		if(response.status != "201"){
+			gs.error(responseBody);
+		} else {
+			var comprofile = response.data.communication_profile;
+			gs.debug("server commprofile={0}", JSON.stringify(comprofile));
+			gs.debug("searching for profile with name={0}", comprofile.name);
+			var serverRecord = new GlideRecord("x_305439_digital_m_server_comm_profiles");
+			serverRecord.addQuery("name", comprofile.name);
+			serverRecord.query();
+			if(serverRecord.next()){
+				gs.debug("update server profile...");
+				serverRecord.setValue("cg_id", response.data.businessId);
+				serverRecord.setValue("cg_product_id", response.data.participant_businessId);
+				serverRecord.setValue("protocol", comprofile.protocol);
+				serverRecord.setValue("port", comprofile.port);
+				serverRecord.setValue("host", comprofile.hosts[0]);
+				if(!gs.nil(comprofile.certificateAlias)){
+					serverRecord.setValue("certificate_alias", comprofile.certificateAlias);
+				} else {
+					serverRecord.setValue("login_key_alias", comprofile.keyAlias);
+				}
+				serverRecord.update();
+
+				setClientRecord(current.agent_correlator + "", response.data.businessId);
+			} else {
+				gs.debug("profile with name={0} is not found", comprofile.name);
+			}
+		}
+	} catch (ex){
+		gs.error(ex.message);
+	}
+
+})(current, previous);
+
+function getCommLinkId(correlator){
+	if(!gs.nil(correlator)){
+		var idIndex = correlator.indexOf("-") + 1;
+		return correlator.slice(idIndex);
+	} else {
+		gs.error("Cannot extract the client communication id from the correlator={0}", correlator);
+	}
+}
+
+function setClientRecord(correlator, server_profile_id){
+	var sys_id = getCommLinkId(correlator);
+	
+	var clientRecord = new GlideRecord("x_305439_digital_m_communication_links");
+	var found = clientRecord.get(sys_id);
+	gs.debug("communication link id={0}, found={1}", sys_id, found);
+	if(found){
+		gs.debug("set cg_server_comprofile_id={0}", server_profile_id);
+		clientRecord.setValue("cg_server_comprofile_id", server_profile_id);
+		clientRecord.update();
+	}
+}]]></script>
         <sys_class_name>sys_script</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-05-17 12:09:43</sys_created_on>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>434432d44f69b3002f86b5e18110c7d4</sys_id>
-        <sys_mod_count>7</sys_mod_count>
+        <sys_mod_count>22</sys_mod_count>
         <sys_name>Sensor Server Create</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -79,7 +110,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_434432d44f69b3002f86b5e18110c7d4</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-20 10:51:44</sys_updated_on>
+        <sys_updated_on>2019-05-22 15:38:48</sys_updated_on>
         <template/>
         <when>after</when>
     </sys_script>

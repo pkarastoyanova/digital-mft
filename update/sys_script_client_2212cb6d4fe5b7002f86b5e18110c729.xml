@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script_client">
     <sys_script_client action="INSERT_OR_UPDATE">
-        <active>false</active>
+        <active>true</active>
         <applies_extended>false</applies_extended>
         <condition/>
         <description/>
@@ -12,7 +12,10 @@
         <order/>
         <script><![CDATA[function onLoad() {
 	try {
-		if(!g_form.isNewRecord()){
+		jslog("g_scratchpad.load_aliases: " + g_scratchpad.load_aliases);
+		var view = getView();
+		if(!g_form.isNewRecord() && g_scratchpad.load_aliases && (view == "" || view == "settings")){
+			jslog("initiate load on aliases... ");
 			loadAliases();
 		}
 	} catch (ex){
@@ -21,51 +24,78 @@
 }
 
 function loadAliases(){
-	
 	if(g_scratchpad.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
 		if(g_user.hasRole("x_305439_digital_m.app_sender")){
-			clientCertAliases = getProductCertificates("client");
+			getProductCertificates("client", "client_profile_1.pesit_client.certificate_alias");
+			getProductCertificates("server", "server_profile_1.certificate_alias");
 		} else {
-			clientKeyAliases = getLocalKeyAliases();
+			getLocalKeyAliases("client_profile_2.sftp_client.key_alias");
+			getProductCertificates("server", "server_profile_2.login_key_alias");
 		}
-		serverAliases = getProductCertificates("server");
 	} else {
-		serverKeyAliases = getProductKeys();
-		clientKeyAliases = getLocalKeyAliases();
+		if(g_user.hasRole("x_305439_digital_m.app_sender")){
+			getLocalKeyAliases("client_profile_1.sftp_client.key_alias");
+			getProductKeys("server_profile_1.login_key_alias");
+		} else {
+			getLocalKeyAliases("client_profile_2.sftp_client.key_alias");
+			getProductKeys("server_profile_2.login_key_alias");
+		}
 	}
-	
 }
 
-function getProductCertificates(type){
+function getProductCertificates(type, field_name){
+	jslog("getProductCertificates type=" + type + ", field_name=" + field_name);
 	var ga = new GlideAjax('LoadAliases');
 	ga.addParam('sysparm_name','getAliases');
 	ga.addParam('sysparm_alias_type', "product_certs");
 	ga.addParam('sysparm_certs_type', type);
 	ga.addParam("sysparm_current_id", g_form.getUniqueValue());
-	ga.getXMLAnswer(setAliases);
+	ga.getXML(function(response){initAliases(response, field_name);});
 }
 
-function getLocalKeyAliases(){
+function getLocalKeyAliases(field_name){
+	jslog("getLocalKeyAliases field_name=" + field_name);
 	var ga = new GlideAjax('LoadAliases');
 	ga.addParam('sysparm_name','getAliases');
 	ga.addParam('sysparm_alias_type', "local_keys");
 	ga.addParam("sysparm_current_id", g_form.getUniqueValue());
-	ga.getXMLAnswer(setAliases);
+	ga.getXML(function(response){initAliases(response, field_name);});
 }
 
-function getProductKeys(){
+function getProductKeys(field_name){
+	jslog("getProductKeys field_name=" + field_name);
 	var ga = new GlideAjax('LoadAliases');
 	ga.addParam('sysparm_name','getAliases');
 	ga.addParam('sysparm_alias_type', "product_keys");
 	ga.addParam("sysparm_current_id", g_form.getUniqueValue());
-	ga.getXMLAnswer(setAliases);
+	ga.getXML(function(response){initAliases(response, field_name);});
 }
 
-function setAliases(answer){
-	jslog("Load aliases result: " + answer);
+function initAliases(response, alias_field_name){	
+	var aliases = response.responseXML.documentElement.getElementsByTagName("alias");
+	jslog("response for alias_field_name=" + alias_field_name + " aliases=" + aliases);
+	var aliasesArray = [];
+	for(var i = 0; i < aliases.length; i ++) { 
+		var alias = aliases[i].getAttribute("name");
+		aliasesArray.push(alias);
+    }
 	
+	setAllAliases(aliasesArray, alias_field_name);
 }
 
+function setAllAliases(aliases_array, alias_field_name){
+	if(aliases_array != undefined){
+		var alias_field = g_form.getValue(alias_field_name);
+		aliases_array.forEach(function(alias){
+			if(alias_field === "undefined" || alias_field === ""){
+				g_form.setValue(alias_field_name, alias);
+				alias_field = alias;
+			}
+			jslog("adding '" + alias + "' to " + alias_field_name);
+			g_form.addOption(alias_field_name, alias, alias);
+		});
+	}
+}
 ]]></script>
         <sys_class_name>sys_script_client</sys_class_name>
         <sys_created_by>admin</sys_created_by>
@@ -73,7 +103,7 @@ function setAliases(answer){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>2212cb6d4fe5b7002f86b5e18110c729</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>11</sys_mod_count>
         <sys_name>LoadAliases_2</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -81,7 +111,7 @@ function setAliases(answer){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_client_2212cb6d4fe5b7002f86b5e18110c729</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-21 11:24:34</sys_updated_on>
+        <sys_updated_on>2019-05-22 07:52:47</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <type>onLoad</type>
         <ui_type>10</ui_type>

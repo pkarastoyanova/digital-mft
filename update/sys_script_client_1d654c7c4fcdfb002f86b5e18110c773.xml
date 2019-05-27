@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script_client">
     <sys_script_client action="INSERT_OR_UPDATE">
-        <active>true</active>
+        <active>false</active>
         <applies_extended>false</applies_extended>
         <condition/>
         <description/>
@@ -67,7 +67,7 @@ function setAliases(aliases_array, alias_field_name){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>1d654c7c4fcdfb002f86b5e18110c773</sys_id>
-        <sys_mod_count>21</sys_mod_count>
+        <sys_mod_count>22</sys_mod_count>
         <sys_name>loadAliases</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -75,7 +75,7 @@ function setAliases(aliases_array, alias_field_name){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_client_1d654c7c4fcdfb002f86b5e18110c773</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-21 11:24:40</sys_updated_on>
+        <sys_updated_on>2019-05-21 15:12:18</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <type>onLoad</type>
         <ui_type>0</ui_type>

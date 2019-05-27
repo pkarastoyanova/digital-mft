@@ -74,7 +74,7 @@ function createClientProfile(){
 function createServerSpecificSettings(){
 	var utils = new CommProfilesUtils();
 	
-	var server_profile_field = utils.getServerProfileFieldSn(current, gs.getUser());
+	var server_profile_field = utils.getServerProfileFieldSn(current);
 
 	var port_field = table_prefix + "." + server_profile_field.field_name + ".port";
 	
@@ -158,7 +158,7 @@ function createServerProfile(){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>431a27034f0433002f86b5e18110c797</sys_id>
-        <sys_mod_count>106</sys_mod_count>
+        <sys_mod_count>107</sys_mod_count>
         <sys_name>Save</sys_name>
         <sys_overrides display_value="Save">42e780d40a0a0b34007e0d4a52d33405</sys_overrides>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -166,7 +166,7 @@ function createServerProfile(){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_431a27034f0433002f86b5e18110c797</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-15 15:19:04</sys_updated_on>
+        <sys_updated_on>2019-05-21 16:53:56</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>false</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

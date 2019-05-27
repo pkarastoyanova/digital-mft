@@ -80,25 +80,25 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 		@param {user} - the user which requests the operation.
 		@return the client id extracted from the 'current' record.
 	*/
-	getClientBusinessId: function(current, user){
+	getClientBusinessId: function(current){
 		var clientId;
 		if(current.flow_model_name == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' 
-		    && user.hasRole("x_305439_digital_m.app_sender")){
+		    && gs.getUser().hasRole("x_305439_digital_m.app_sender")){
 			if(!gs.nil(current.source)){
 					clientId = current.source.cg_product_id;
 			}
 		} else if (current.flow_model_name == 'APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER' 
-				  && user.hasRole("x_305439_digital_m.app_receiver")){
+				  && gs.getUser().hasRole("x_305439_digital_m.app_receiver")){
 			if(!gs.nil(current.destination)){
 				clientId = current.destination.cg_id;
 			}
 		} else if (current.flow_model_name == 'PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER'
-				  && user.hasRole("x_305439_digital_m.app_sender")){
+				  && gs.getUser().hasRole("x_305439_digital_m.app_sender")){
 			if(!gs.nil(current.source)){
 				clientId = current.source.cg_id;
 			}
 		} else if (current.flow_model_name == 'PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER'
-				  && user.hasRole("x_305439_digital_m.app_receiver")){
+				  && gs.getUser().hasRole("x_305439_digital_m.app_receiver")){
 			if(!gs.nil(current.destination)){
 				clientId = current.destination.cg_id;
 			}
@@ -127,7 +127,7 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 		 @param {GlideRecord} record - the record for which the comm profile should be returned
 		 @param {GlideUser} user - the current user requesting the data
 	*/
-	getServerProfileFieldSn: function(record, user, returnFirstServerProfile){
+	getServerProfileFieldSn: function(record, returnFirstServerProfile){
 		var profile = {};
 		
 		if(!gs.nil(returnFirstServerProfile) && returnFirstServerProfile){
@@ -144,7 +144,7 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 			return profile;
 		}
 		
-		if(user.hasRole("x_305439_digital_m.app_sender")){
+		if(gs.getUser().hasRole("x_305439_digital_m.app_sender")){
 			profile.profile = record.server_profile_1.getRefRecord();
 			profile.field_name = "server_profile_1";
 		} else {
@@ -184,6 +184,9 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 		setEmptyClient(type, emptyCommLink);
 		
 		var linkId = emptyCommLink.insert();
+		emptyCommLink.setValue("name", type + "_client_" + linkId);
+		emptyCommLink.update();
+		
 		return linkId;
 	},
 	
@@ -227,7 +230,7 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 		var commLink = new GlideRecord('x_305439_digital_m_communication_links');
 		commLink.initialize();
 		commLink.setValue("cg_client_profile_id", cg_client_profile_id + "");
-		commLink.setValue("cg_server_profile_id", cg_server_profile_id + "");
+		commLink.setValue("cg_server_comprofile_id", cg_server_profile_id + "");
 		commLink.setValue("client", client + "");
 		commLink.setValue("server", server + "");
 		commLink.setValue("name", name + "");
@@ -238,7 +241,7 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 	
 	updateClientProfile: function(commLink, cg_client_profile_id, cg_server_profile_id, client, server, name, profile, flow_model){
 		commLink.setValue("cg_client_profile_id", cg_client_profile_id);
-		commLink.setValue("cg_server_profile_id", cg_server_profile_id);
+		commLink.setValue("cg_server_comprofile_id", cg_server_profile_id);
 		commLink.setValue("client", client);
 		commLink.setValue("server", server);
 		commLink.setValue("name", name);
@@ -252,8 +255,8 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 	populateServerProfiles: function (current){
 		gs.info("populateServerProfiles");
 		try {
-			var server_profile_field_1 = this.getServerProfileFieldSn(current, gs.getUser(), true);
-			var server_profile_field_2 = this.getServerProfileFieldSn(current, gs.getUser(), false);
+			var server_profile_field_1 = this.getServerProfileFieldSn(current, true);
+			var server_profile_field_2 = this.getServerProfileFieldSn(current, false);
 			
 			if(current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
 				setServerProfile(current, server_profile_field_1, true);
@@ -327,8 +330,8 @@ CommProfilesUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor,
 			var cgCommLinksProfiles = this.getCommunicationLinks(cgClientId, cgStRelayId, current.flow_model_name);
 			gs.info("[{0}] communication profile links: {1}","syncProfilesWithCG", JSON.stringify(cgCommLinksProfiles));
 
-			var client_profile_field = this.getClientProfileFieldSn(current, gs.getUser());
-			var server_profile_field = this.getServerProfileFieldSn(current, gs.getUser());
+			var client_profile_field = this.getClientProfileFieldSn(current);
+			var server_profile_field = this.getServerProfileFieldSn(current);
 
 			if(cgCommLinksProfiles.length == 0){
 				// clean up existing client records if there is any
@@ -571,13 +574,13 @@ function existsServerProfile(server_profile_id){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-18 15:35:52</sys_created_on>
         <sys_id>caba4ecf4f30f7002f86b5e18110c7a0</sys_id>
-        <sys_mod_count>73</sys_mod_count>
+        <sys_mod_count>78</sys_mod_count>
         <sys_name>CommProfilesUtils</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_caba4ecf4f30f7002f86b5e18110c7a0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-20 11:26:06</sys_updated_on>
+        <sys_updated_on>2019-05-23 14:12:03</sys_updated_on>
     </sys_script_include>
 </record_update>

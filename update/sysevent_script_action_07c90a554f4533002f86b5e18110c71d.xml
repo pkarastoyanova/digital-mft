@@ -17,8 +17,8 @@
 		var cgCommLinksProfiles = utils.getCommunicationLinks(cgClientId, cgStRelayId, current.flow_model_name);
 		gs.info("[{0}] communication profile links: {1}","update_comprofiles", JSON.stringify(cgCommLinksProfiles));
 		
-		var client_profile_field = utils.getClientProfileFieldSn(current, gs.getUser());
-		var server_profile_field = utils.getServerProfileFieldSn(current, gs.getUser());
+		var client_profile_field = utils.getClientProfileFieldSn(current);
+		var server_profile_field = utils.getServerProfileFieldSn(current);
 		
 		if(cgCommLinksProfiles.length == 0){
 			// clean up existing records if there is any
@@ -83,7 +83,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>07c90a554f4533002f86b5e18110c71d</sys_id>
-        <sys_mod_count>31</sys_mod_count>
+        <sys_mod_count>32</sys_mod_count>
         <sys_name>handle comprofiles update</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -91,6 +91,6 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sysevent_script_action_07c90a554f4533002f86b5e18110c71d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-07 09:34:27</sys_updated_on>
+        <sys_updated_on>2019-05-21 16:54:33</sys_updated_on>
     </sysevent_script_action>
 </record_update>

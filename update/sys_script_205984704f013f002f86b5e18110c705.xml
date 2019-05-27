@@ -32,38 +32,39 @@
         <rest_variables/>
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
-    gs.info("Loading Certificate and Key aliases...");
+    gs.info("Loading Certificate and Key aliases ...");
 	g_scratchpad.flow_model_name = current.flow_model_name;
+	g_scratchpad.load_aliases = "true";
 
-	try{
-		var utils = new CommProfilesUtils();
-		var stRelayHelper = new GetStRelay();
-		var stRelayId = stRelayHelper.getStRelayId();
+// 	try{
+// 		var utils = new CommProfilesUtils();
+// 		var stRelayHelper = new GetStRelay();
+// 		var stRelayId = stRelayHelper.getStRelayId();
 
-		var clientId = utils.getClientBusinessId(current, gs.getUser());
-		var clientCertAliases;
-		var serverAliases;
-		var clientKeyAliases;
-		var serverKeyAliases;
-		if(current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
-			if(gs.getUser().hasRole("sender")){
-				clientCertAliases = getProductCertificates(clientId);
-			} else {
-				clientKeyAliases = getLocalKeyAliases(current);
-			}
-			serverAliases = getProductCertificates(stRelayId);
-		} else {
-			serverKeyAliases = getProductKeys(stRelayId);
-			clientKeyAliases = getLocalKeyAliases(current);
-		}
+// 		var clientId = utils.getClientBusinessId(current, gs.getUser());
+// 		var clientCertAliases;
+// 		var serverAliases;
+// 		var clientKeyAliases;
+// 		var serverKeyAliases;
+// 		if(current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER"){
+// 			if(gs.getUser().hasRole("sender")){
+// 				clientCertAliases = getProductCertificates(clientId);
+// 			} else {
+// 				clientKeyAliases = getLocalKeyAliases(current);
+// 			}
+// 			serverAliases = getProductCertificates(stRelayId);
+// 		} else {
+// 			serverKeyAliases = getProductKeys(stRelayId);
+// 			clientKeyAliases = getLocalKeyAliases(current);
+// 		}
 		
-		g_scratchpad.client_key_aliases = clientKeyAliases;
-		g_scratchpad.client_cert_aliases = clientCertAliases;
-		g_scratchpad.server_cert_aliases = serverAliases;
-		g_scratchpad.server_key_aliases = serverKeyAliases;
-	} catch (err){
-		gs.error("Failed to evaluate certificate and key aliases. " + err.message);
-	}
+// 		g_scratchpad.client_key_aliases = clientKeyAliases;
+// 		g_scratchpad.client_cert_aliases = clientCertAliases;
+// 		g_scratchpad.server_cert_aliases = serverAliases;
+// 		g_scratchpad.server_key_aliases = serverKeyAliases;
+// 	} catch (err){
+// 		gs.error("Failed to evaluate certificate and key aliases. " + err.message);
+// 	}
 	
 })(current, previous);
 
@@ -143,7 +144,7 @@ function getProductCertificates(participant_id){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>205984704f013f002f86b5e18110c705</sys_id>
-        <sys_mod_count>51</sys_mod_count>
+        <sys_mod_count>56</sys_mod_count>
         <sys_name>LoadAliases</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -151,7 +152,7 @@ function getProductCertificates(participant_id){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_205984704f013f002f86b5e18110c705</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-21 11:20:07</sys_updated_on>
+        <sys_updated_on>2019-05-21 16:20:37</sys_updated_on>
         <template/>
         <when>before_display</when>
     </sys_script>

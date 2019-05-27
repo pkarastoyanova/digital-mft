@@ -32,16 +32,17 @@ FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 				flowRequest.target_partner_id = record.destination.cg_id + "";
 
 				// Specific flow settings
-				flowRequest.publish_folder = record.model_0043.destination_folder + "";
-				flowRequest.publish_file_as = record.model_0043.destination_file + "";
-				flowRequest.source_protocol_sftp_transfer_mode = record.model_0043.src_transfer_mode + "";
-				flowRequest.target_protocol_sftp_transfer_mode = record.model_0043.target_transfer_mode + "";
+				var _0043 = record.model_0043.getRefRecord();
+				flowRequest.publish_folder = _0043.destination_folder + "";
+				flowRequest.publish_file_as = _0043.destination_file + "";
+				flowRequest.source_protocol_sftp_transfer_mode = _0043.get.src_transfer_mode + "";
+				flowRequest.target_protocol_sftp_transfer_mode = _0043.target_transfer_mode + "";
 
 				// communication settings
-				flowRequest.source_to_relay_sender_profile_id = "";
-				flowRequest.source_to_relay_receiver_profile_id = "";
-				flowRequest.relay_to_target_sender_profile_id = "";
-				flowRequest.relay_to_target_receiver_profile_id = "";
+				flowRequest.source_to_relay_sender_profile_id = record.client_profile_1.cg_client_profile_id;
+				flowRequest.source_to_relay_receiver_profile_id = record.client_profile_1.cg_server_comprofile_id;
+				flowRequest.relay_to_target_sender_profile_id = record.client_profile_2.cg_server_comprofile_id;
+				flowRequest.relay_to_target_receiver_profile_id = record.client_profile_2.cg_client_profile_id;
 
 				// authentication settings
 				flowRequest.source_protocol_sftp_auth_mode = "";
@@ -69,10 +70,10 @@ FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 				flowRequest.publish_file_as = record.model_0023.destination_file + "";
 
 				// communication settings
-				flowRequest.source_to_relay_sender_profile_id = "";
-				flowRequest.source_to_relay_receiver_profile_id = "";
-				flowRequest.relay_to_target_sender_profile_id = "";
-				flowRequest.relay_to_target_receiver_profile_id = "";
+				flowRequest.source_to_relay_sender_profile_id = record.client_profile_1.cg_client_profile_id;
+				flowRequest.source_to_relay_receiver_profile_id = record.client_profile_1.cg_server_comprofile_id;
+				flowRequest.relay_to_target_sender_profile_id = record.client_profile_2.cg_server_comprofile_id;
+				flowRequest.relay_to_target_receiver_profile_id = record.client_profile_2.cg_client_profile_id;
 
 				// authentication settings
 				flowRequest.target_protocol_sftp_auth_mode = "";
@@ -169,13 +170,14 @@ FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 		r.setEccCorrelator("Create a Flow");
 		
 		var body = this.getRequestBody(current);
+		gs.info(body);
 		r.setRequestBody(body);
 		
 		gs.debug("Request endpoint: {0}", r.getEndpoint());
 		gs.debug("Request headers: {0}", r.getRequestHeaders());
 		gs.debug("Request body: {0}", r.getRequestBody());
 
-		r.executeAsync();
+// 		r.executeAsync();
 	},
 	
 	isPesit: function (current){
@@ -207,13 +209,13 @@ function getUserData(){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-17 11:36:19</sys_created_on>
         <sys_id>7bb6447a4fbc77002f86b5e18110c7f0</sys_id>
-        <sys_mod_count>33</sys_mod_count>
+        <sys_mod_count>40</sys_mod_count>
         <sys_name>FlowUtils</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_7bb6447a4fbc77002f86b5e18110c7f0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-17 13:25:03</sys_updated_on>
+        <sys_updated_on>2019-05-23 16:14:39</sys_updated_on>
     </sys_script_include>
 </record_update>
