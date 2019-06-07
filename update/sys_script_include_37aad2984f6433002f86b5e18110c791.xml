@@ -37,12 +37,12 @@ CommProfiles.prototype = {
 		if(!isPesit){
 			var comProfileHelper = new CommProfilesUtils();
 			var clientProfile = comProfileHelper.getClientProfileFieldSn(current).profile;
-			var attachment_obj = getAttachmentObject(clientProfile.sftp_client.ssh_key);
+			var attachment_obj = getAttachmentObject(clientProfile.sftp_client.ssh_key, clientProfile.sftp_client.key_alias);
 			var r;
 			if(gs.nil(attachment_obj)){
 				//remote alias, do not try to upload
 				// get the key id
-				
+				gs.info("attachment object is not found for filename=" + clientProfile.sftp_client.key_alias);
 				var restMethod;
 				var participant_id;
 				if(!gs.nil(clientProfile.client.cg_product_id)){
@@ -56,10 +56,11 @@ CommProfiles.prototype = {
 				r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', restMethod);
 				new ConnectionSettings().setMandatoryProps(r);
 				
-				r.setEccCorrelator("Get SSH Key-" + clientProfile.sys_id);
+				r.setEccCorrelator("Update SSH Key-" + clientProfile.sys_id);
 				r.setStringParameterNoEscape('participant_id', participant_id);
 				r.setStringParameterNoEscape('key_name', clientProfile.sftp_client.key_alias);
 			} else {
+				gs.info("attachment object is found for filename=" + clientProfile.sftp_client.key_alias);
 				r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', "Create SSH Key");
 				new ConnectionSettings().setMandatoryProps(r);
 
@@ -68,7 +69,9 @@ CommProfiles.prototype = {
 				
 				var body = this.getSshKeyRequestBody(attachment_obj);
 				r.setRequestBody(body);
+
 			}
+			gs.info("Sending async request to create/update the SSH key in CG.");
 			r.executeAsync();
 		}
 	},
@@ -103,42 +106,98 @@ CommProfiles.prototype = {
 	},
 	
 	sendAsyncServerProfileCreate: function(server_record, app_name, is_pesit, client_prifle_id){
-		var request_name;
-		if(is_pesit === true){
-			request_name = 'Create PESIT Server';
-		} else {
-			request_name = 'Create SFTP Server';
-		}
+// 		var request_name;
+// 		if(is_pesit === true){
+// 			request_name = 'Create PESIT Server';
+// 		} else {
+// 			request_name = 'Create SFTP Server';
+// 		}
 		
-		var relayHelper = new GetStRelay();
-		var relayId = relayHelper.getStRelayId();
+// 		var relayHelper = new GetStRelay();
+// 		var relayId = relayHelper.getStRelayId();
 		
-		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', request_name);
-		new ConnectionSettings().setMandatoryProps(r);
-		r.setStringParameterNoEscape('server_id', relayId);// check if product id is required or application id
-		gs.debug("correlator id=" + "Create a server-" + client_prifle_id);
-		r.setEccCorrelator("Create a server-" + client_prifle_id);
+// 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', request_name);
+// 		new ConnectionSettings().setMandatoryProps(r);
+// 		r.setStringParameterNoEscape('server_id', relayId);
+// 		r.setEccCorrelator("Create a server-" + client_prifle_id);
 		
-		var serverRequest = getRequestBody(server_record, app_name, is_pesit);
-		var body = JSON.stringify(serverRequest);
-		r.setRequestBody(body);
-		r.executeAsync();
+// 		var serverRequest = getRequestBody(server_record, app_name, is_pesit);
+// 		var body = JSON.stringify(serverRequest);
+// 		r.setRequestBody(body);
+// 		gs.info("Sending async request to create server profile in CG.");
+// 		r.executeAsync();
+		
+		sendServerProfileRequest(server_record, app_name, is_pesit, client_prifle_id, undefined);
 	},
 	
-	sendAsyncClientProfileCreate: function (client_record, isSftpClient, requiresSshKey){
+	sendAsyncServerProfileUpdate: function(server_record, app_name, is_pesit, client_id, cg_server_profile_id){
+		sendServerProfileRequest(server_record, app_name, is_pesit, client_id, cg_server_profile_id);
+	},
+	
+	sendAsyncClientDelete: function(client_record){
+		gs.debug("sendAsyncClientDelete");
+		try { 
+		 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', 'Delete link');
+		 new ConnectionSettings().setMandatoryProps(r);
+		 r.setStringParameterNoEscape('client_id', client_record.client.cg_id);
+		 r.setStringParameterNoEscape('client_profile_id', client_record.cg_client_profile_id + "");
+		 r.setStringParameterNoEscape('server_id', client_record.server.cg_product_id);
+		 r.setEccCorrelator("Delete comm link");
+
+		 var response = r.executeAsync();
+		}
+		catch(ex) {
+		 var message = ex.message;
+			gs.error("failed to remove communication link. " + message);
+		}
+		
+	},
+	
+	sendAsyncServerDelete: function(server_record){
+		gs.debug("sendAsyncServerDelete");
+		
+		try {
+		    var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', 'Delete Server');
+		    new ConnectionSettings().setMandatoryProps(r);
+			r.setStringParameterNoEscape('server_profile_id', server_record.cg_id);
+			r.setStringParameterNoEscape('server_product_id', server_record.cg_product_id);
+			r.setEccCorrelator("Delete server profile");
+
+			var response = r.executeAsync();
+		}
+		catch(ex) {
+		    var message = ex.message;
+			gs.error("failed to remove server communication profile. " + message);
+		}
+	},
+	
+	sendAsyncClientProfileCreate: function (client_record, isUpdate){
 		gs.debug("sendAsyncClientProfileCreate");
 		var restName;
 		var body;
-		if(isSftpClient){
+		var requireSshKey = requiresSshKey(current);
+		var sftpClient = isSftpClient(current);
+		var flowId = getFlowId(current);
+		
+		if(sftpClient){
 			if(requiresSshKey){
-					restName = "Create SFTP Key";
-					body = getClientRequestBody(restName, client_record.sftp_client.getRefRecord(), client_record.sys_id, client_record.name);
+				restName = "Create SFTP Key";
+				if(isUpdate){
+					restName = "Update SFTP Key";
+				}
+				body = getClientRequestBody(restName, client_record.sftp_client.getRefRecord(), client_record.sys_id, client_record.name);
 			} else {
 				restName = "Create SFTP Password";
-					body = getClientRequestBody(restName, client_record.sftp_client.getRefRecord(), client_record.sys_id, client_record.name);
+				if(isUpdate){
+					restName = "Update SFTP Password";
+				}
+				body = getClientRequestBody(restName, client_record.sftp_client.getRefRecord(), client_record.sys_id, client_record.name);
 			}
 		} else {
 			restName = "Create PESIT SSL";
+			if(isUpdate){
+				restName = "Update PESIT SSL";
+			}
 			body = getClientRequestBody(restName, client_record.pesit_client.getRefRecord(), client_record.sys_id, client_record.name, client_record.client.cg_product_id);
 		}
 		
@@ -151,12 +210,23 @@ CommProfiles.prototype = {
 		
 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', restName);
 		new ConnectionSettings().setMandatoryProps(r);
-		r.setEccCorrelator("Create client profile.");
+		
+		if(isUpdate){
+			r.setEccCorrelator("Update client profile-" + flowId);
+		} else {
+			r.setEccCorrelator("Create client profile-" + flowId);
+		}
+		
 		r.setStringParameterNoEscape("clientNodeId", clientProductId);
 		r.setStringParameterNoEscape("serverNodeId", client_record.server.cg_product_id); // the server is always ST relay.
 		r.setStringParameterNoEscape("serverId", client_record.cg_server_comprofile_id);
+		if(isUpdate){
+			r.setStringParameterNoEscape("clientid", client_record.cg_client_profile_id);
+		}
 		
 		r.setRequestBody(body);
+		gs.debug("Client communication link body=" + body);
+		gs.debug("Sending async request to create/update client communication link in CG.");
 		r.executeAsync();
 	},
 	
@@ -170,12 +240,62 @@ CommProfiles.prototype = {
 		return JSON.stringify(requestBody);
 	},
 	
+	getInfo: function(productId){
+		var body = getProtocolInfo(productId);
+		gs.info("protocol info body=" +body);
+	},
+	
     type: 'CommProfiles'
 };
 
-function getAttachmentObject(sftp_client_sys_id){
+function sendServerProfileRequest(server_record, app_name, is_pesit, client_prifle_id, cg_server_prof_id){
+
+	var isServerUpdate = !gs.nil(cg_server_prof_id);
+	var request_name = getServerRequestName(is_pesit, isServerUpdate);
+
+	var relayHelper = new GetStRelay();
+	var relayId = relayHelper.getStRelayId();
+
+	var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', request_name);
+	new ConnectionSettings().setMandatoryProps(r);
+	r.setStringParameterNoEscape('server_id', relayId);
+	if(isServerUpdate){
+		r.setStringParameterNoEscape("profile_id", cg_server_prof_id);
+	}
+	var correlator = request_name + "-" + client_prifle_id;
+	gs.info("correlator: " + correlator);
+	r.setEccCorrelator(correlator);
+
+	var serverRequest = getRequestBody(server_record, app_name, is_pesit);
+	var body = JSON.stringify(serverRequest);
+	r.setRequestBody(body);
+	gs.info("Sending async request to {0} profile in CG.", request_name);
+	r.executeAsync();
+}
+
+function getServerRequestName(is_pesit, is_update){
+	var sufix;
+	var prefix;
+	
+	if(is_update === true){
+		prefix = "Update ";
+	} else {
+		prefix = "Create ";
+	}
+	
+	if(is_pesit === true){
+		sufix = 'PESIT Server';
+	} else {
+		sufix = 'SFTP Server';
+	}
+	
+	return prefix + sufix;
+}
+
+function getAttachmentObject(sftp_client_sys_id, file_name){
 	var g_record = new GlideRecord("sys_attachment");
 		g_record.addQuery("sys_id", sftp_client_sys_id);
+	    g_record.addQuery("file_name", file_name);
 		g_record.orderByDesc("sys_created_on");
 		g_record.query();
 	if(g_record.next()){
@@ -186,20 +306,23 @@ function getAttachmentObject(sftp_client_sys_id){
 function getClientRequestBody(type, settings, sys_id, name, product_id){
 	var body = {};
 	switch(type){
+		case "Update SFTP Key":
 		case "Create SFTP Key":
 			body.name = name + "";
 			body.keyAlias = settings.key_alias + "";
 			body.login = settings.login_name + "";
 			break;
+		case "Update SFTP Password":
 		case "Create SFTP Password":
 			body.name = name + "";
 			body.password = settings.password.getDecryptedValue();
 			body.login = settings.login_name + "";
 			break;
+		case "Update PESIT SSL":
 		case "Create PESIT SSL":
 			body.name = name + "";
 			body.certificateAlias = settings.certificate_alias + "";
-			body.pesitLogin = settings.login_name + "";
+			body.pesitLogin = settings.login_name.toUpperCase();
 			body.cft_properties = getProtocolInfo(product_id); // Aditional API Call
 			break;
 	}
@@ -207,15 +330,18 @@ function getClientRequestBody(type, settings, sys_id, name, product_id){
 }
 
 function getProtocolInfo(product_id){
+	gs.debug("getProtocolInfo productid=" + product_id);
 	try { 
 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', 'Get protocol info');
 		new ConnectionSettings().setMandatoryProps(r);
 		r.setStringParameterNoEscape('product_id', product_id);
 		r.setStringParameterNoEscape('protocol_name', gs.getProperty("x_305439_digital_m.cft.protocol.name"));
 		
-		var response = r.execute();
+		var response = r.executeAsync();
+		response.waitForResponse(70);
 		var responseBody = response.getBody();
 		var httpStatus = response.getStatusCode();
+		gs.debug("Protocol info=" + responseBody + " status= " + httpStatus);
 		if(httpStatus == "200"){
 			var body = JSON.parse(responseBody);
 			return body.data.AMFTCFTProtocol;
@@ -223,6 +349,7 @@ function getProtocolInfo(product_id){
 	}
 	catch(ex) {
 		var message = ex.message;
+		gs.error("Protocol info error. " + message);
 	}
 }
 
@@ -246,18 +373,38 @@ function getRequestBody(server_record, app_name, isPesit){
 	}
 	return serverRequest;
 }
+
+function isSftpClient(clientRecord){
+	return !gs.nil(clientRecord.sftp_client);
+}
+
+function requiresSshKey(clientRecord){
+	return !gs.nil(clientRecord.sftp_client) && clientRecord.sftp_client.login_type == "PUBLIC_KEY";
+}
+
+function getFlowId(clientRecord){
+	var flowRecord = new GlideRecord("x_305439_digital_m_flow_settings");
+	var query = flowRecord.addQuery("client_profile_1", clientRecord.sys_id);
+	query.addOrCondition("client_profile_2", clientRecord.sys_id);
+	flowRecord.query();
+	if(flowRecord.next()){
+		return flowRecord.sys_id;
+	} else {
+		gs.error("Cannot find the flow settings to which this client profile belongs to.");
+	}
+}
 ]]></script>
         <sys_class_name>sys_script_include</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-03-28 17:13:48</sys_created_on>
         <sys_id>37aad2984f6433002f86b5e18110c791</sys_id>
-        <sys_mod_count>39</sys_mod_count>
+        <sys_mod_count>85</sys_mod_count>
         <sys_name>CommProfiles</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_37aad2984f6433002f86b5e18110c791</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-23 15:17:12</sys_updated_on>
+        <sys_updated_on>2019-06-07 10:20:33</sys_updated_on>
     </sys_script_include>
 </record_update>

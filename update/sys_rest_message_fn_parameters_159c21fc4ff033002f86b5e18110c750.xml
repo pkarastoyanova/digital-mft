@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_rest_message_fn_parameters">
     <sys_rest_message_fn_parameters action="INSERT_OR_UPDATE">
         <name>businessId</name>
-        <rest_message_function display_value="Update a flow">5cbb65bc4ff033002f86b5e18110c72a</rest_message_function>
+        <rest_message_function display_value="Update a Flow">5cbb65bc4ff033002f86b5e18110c72a</rest_message_function>
         <sys_class_name>sys_rest_message_fn_parameters</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-11 13:24:14</sys_created_on>

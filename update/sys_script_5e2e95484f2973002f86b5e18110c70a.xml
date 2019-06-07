@@ -15,8 +15,9 @@
         <condition/>
         <description/>
         <execute_function>false</execute_function>
-        <filter_condition table="ecc_queue">queue=input^agent_correlator=Create a Flow^state=ready^EQ<item endquery="false" field="queue" goto="false" newquery="false" operator="=" or="false" value="input"/>
-            <item endquery="false" field="agent_correlator" goto="false" newquery="false" operator="=" or="false" value="Create a Flow"/>
+        <filter_condition table="ecc_queue">queue=input^agent_correlatorSTARTSWITHCreate a Flow^ORagent_correlatorSTARTSWITHUpdate a Flow^state=ready^EQ<item endquery="false" field="queue" goto="false" newquery="false" operator="=" or="false" value="input"/>
+            <item endquery="false" field="agent_correlator" goto="false" newquery="false" operator="STARTSWITH" or="false" value="Create a Flow"/>
+            <item endquery="false" field="agent_correlator" goto="false" newquery="false" operator="STARTSWITH" or="true" value="Update a Flow"/>
             <item endquery="false" field="state" goto="false" newquery="false" operator="=" or="false" value="ready"/>
             <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
         </filter_condition>
@@ -36,38 +37,69 @@
 	// Add your code here
 	gs.debug("Sensor Flow Create");
 	
-	var xmlDoc = new XMLDocument2();
-	xmlDoc.parseXML(current.payload);
-	
-	var responseBody = xmlDoc.getNodeText("//result/output");
-	var response = JSON.parse(responseBody);
-	gs.info(responseBody);
-	
-	if(response.status == "201"){
-		var flowRecord = new GlideRecord("x_305439_digital_m_flow_settings");
-		gs.debug("Query DB for flow with name: {0}", response.data.pattern.pattern_data.flow_name);
-		flowRecord.addQuery("flow_name", response.data.pattern.pattern_data.flow_name);
-		flowRecord.query();
-		if(flowRecord.next()){
-			flowRecord.setValue("cg_status", response.data.statusFlow.code);
-			flowRecord.setValue("cg_id", response.data.businessId);
-			flowRecord.update();
-		}
-	} else if(typeof response.errors === 'object' && !gs.nil(response.errors)){
-		gs.addErrorMessage(JSON.stringify(response.errors));
-		gs.error(JSON.stringify(response.errors));
-	} else if (!gs.nil(response.errors)){
-		gs.addErrorMessage(response.errors);
-		gs.error(response.errors);
+	try{
+		var xmlDoc = new XMLDocument2();
+		xmlDoc.parseXML(current.payload);
+
+		var responseBody = xmlDoc.getNodeText("//result/output");
+		var response = JSON.parse(responseBody);
+		gs.info("[Sensor Flow Create] response body=" + responseBody);
+		var flowUtils = new FlowUtils();
+		var flowRecord = getFlow(current.agent_correlator);
+		
+		var isUpdateOperation = isUpdate(current.agent_correlator);
+		var operationName = getOperationName(current.agent_correlator);
+
+		if(response.status != "201" && response.status != "200"){
+			gs.error("[Sensor Flow Create] " + responseBody);
+			flowUtils.addJournalEntry(flowRecord, "Failed to {0} flow.", operationName);
+			
+			if(typeof response.errors === 'object' && !gs.nil(response.errors)){
+				gs.addErrorMessage(JSON.stringify(response.errors));
+				gs.error("[Sensor Flow Create] " + JSON.stringify(response.errors));
+			} else if (!gs.nil(response.errors)){
+				gs.addErrorMessage(response.errors);
+				gs.error("[Sensor Flow Create] " + response.errors);
+			}
+		} else {
+			gs.info("[Sensor Flow Create] Successfully {0}d a flow in CG.", operationName);
+			if(!gs.nil(flowRecord) && !isUpdateOperation){
+				flowRecord.setValue("cg_status", response.data.statusFlow.code);
+				flowRecord.setValue("cg_id", response.data.businessId);
+				flowRecord.update();
+			}
+			flowUtils.addJournalEntry(flowRecord, "Successfully {0}d a flow.", operationName);
+		} 
+	} catch (ex){
+		var record = getFlow(current.agent_correlator);
+		gs.error("[Sensor Flow Create] error while handling the response from CG for flow with name={0}. {1}", record.name, ex.message);
 	}
-})(current, previous);]]></script>
+})(current, previous);
+
+function getFlow(correlator){
+	if(!gs.nil(correlator)){
+		var idIndex = correlator.indexOf("-") + 1;
+		var sys_id = correlator.slice(idIndex);
+		var flowRecord = new GlideRecord("x_305439_digital_m_flow_settings");
+		if(flowRecord.get(sys_id)){
+			return flowRecord;
+		}
+	}
+}
+
+function isUpdate(correlator){
+	if(correlator.startsWith("Update")){
+		return true;
+	} 
+	return false;
+}]]></script>
         <sys_class_name>sys_script</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-05-16 14:16:20</sys_created_on>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>5e2e95484f2973002f86b5e18110c70a</sys_id>
-        <sys_mod_count>17</sys_mod_count>
+        <sys_mod_count>27</sys_mod_count>
         <sys_name>Sensor Flow Create</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -75,7 +107,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_5e2e95484f2973002f86b5e18110c70a</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-20 08:07:39</sys_updated_on>
+        <sys_updated_on>2019-06-07 12:48:38</sys_updated_on>
         <template/>
         <when>after</when>
     </sys_script>

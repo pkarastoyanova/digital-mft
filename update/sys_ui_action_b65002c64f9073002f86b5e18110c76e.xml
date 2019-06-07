@@ -23,18 +23,18 @@
         <list_link>false</list_link>
         <list_save_with_form_button>false</list_save_with_form_button>
         <list_style/>
-        <name>Update list</name>
+        <name>Refresh Participants</name>
         <onclick>loadParticipants()</onclick>
         <order>100</order>
         <script><![CDATA[function loadParticipants(){
 	var ga = new GlideAjax('LoadParticipants');
 	ga.addParam('sysparm_name', "triggerLoadParticipants");
 	ga.getXML(callback);
-	g_list.refreshWithOrderBy();
 }
 
 function callback(response){
 	console.log("try to refresh the list");
+	g_list.refreshWithOrderBy();
 }
 ]]></script>
         <show_insert>true</show_insert>
@@ -47,15 +47,15 @@ function callback(response){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>b65002c64f9073002f86b5e18110c76e</sys_id>
-        <sys_mod_count>11</sys_mod_count>
-        <sys_name>Update list</sys_name>
+        <sys_mod_count>13</sys_mod_count>
+        <sys_name>Refresh Participants</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_b65002c64f9073002f86b5e18110c76e</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-12 12:46:52</sys_updated_on>
+        <sys_updated_on>2019-06-05 14:07:31</sys_updated_on>
         <table>x_305439_digital_m_participants</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>true</ui16_compatible>

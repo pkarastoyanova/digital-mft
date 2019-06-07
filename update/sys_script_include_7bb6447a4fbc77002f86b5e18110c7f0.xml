@@ -39,10 +39,10 @@ FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 				flowRequest.target_protocol_sftp_transfer_mode = _0043.target_transfer_mode + "";
 
 				// communication settings
-				flowRequest.source_to_relay_sender_profile_id = record.client_profile_1.cg_client_profile_id;
-				flowRequest.source_to_relay_receiver_profile_id = record.client_profile_1.cg_server_comprofile_id;
-				flowRequest.relay_to_target_sender_profile_id = record.client_profile_2.cg_server_comprofile_id;
-				flowRequest.relay_to_target_receiver_profile_id = record.client_profile_2.cg_client_profile_id;
+				flowRequest.source_to_relay_sender_profile_id = record.client_profile_1.cg_client_profile_id + "";
+				flowRequest.source_to_relay_receiver_profile_id = record.client_profile_1.cg_server_comprofile_id + "";
+				flowRequest.relay_to_target_sender_profile_id = record.client_profile_2.cg_server_comprofile_id + "";
+				flowRequest.relay_to_target_receiver_profile_id = record.client_profile_2.cg_client_profile_id + "";
 
 				// authentication settings
 				flowRequest.source_protocol_sftp_auth_mode = "";
@@ -70,10 +70,10 @@ FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 				flowRequest.publish_file_as = record.model_0023.destination_file + "";
 
 				// communication settings
-				flowRequest.source_to_relay_sender_profile_id = record.client_profile_1.cg_client_profile_id;
-				flowRequest.source_to_relay_receiver_profile_id = record.client_profile_1.cg_server_comprofile_id;
-				flowRequest.relay_to_target_sender_profile_id = record.client_profile_2.cg_server_comprofile_id;
-				flowRequest.relay_to_target_receiver_profile_id = record.client_profile_2.cg_client_profile_id;
+				flowRequest.source_to_relay_sender_profile_id = record.client_profile_1.cg_client_profile_id + "";
+				flowRequest.source_to_relay_receiver_profile_id = record.client_profile_1.cg_server_comprofile_id + "";
+				flowRequest.relay_to_target_sender_profile_id = record.client_profile_2.cg_server_comprofile_id + "";
+				flowRequest.relay_to_target_receiver_profile_id = record.client_profile_2.cg_client_profile_id + "";
 
 				// authentication settings
 				flowRequest.target_protocol_sftp_auth_mode = "";
@@ -162,29 +162,68 @@ FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	 Sends asynchronous REST request to create a new flow in CentralGovernance.
 	*/
 	sendAsyncFlowCreateRequest: function(current){
-		gs.info("{0} is sending a new flow create request to CG.", gs.getUserName());
 		
-		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Create a Flow');
-		new ConnectionSettings().setMandatoryProps(r);
-		r.setStringParameterNoEscape('flow_name', current.flow_model_name);
-		r.setEccCorrelator("Create a Flow");
+// 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Create a Flow');
+// 		new ConnectionSettings().setMandatoryProps(r);
+// 		r.setStringParameterNoEscape('flow_name', current.flow_model_name);
+// 		r.setEccCorrelator("Create a Flow-" + current.sys_id);
 		
-		var body = this.getRequestBody(current);
-		gs.info(body);
-		r.setRequestBody(body);
+// 		var body = this.getRequestBody(current);
+// 		r.setRequestBody(body);
 		
-		gs.debug("Request endpoint: {0}", r.getEndpoint());
-		gs.debug("Request headers: {0}", r.getRequestHeaders());
-		gs.debug("Request body: {0}", r.getRequestBody());
-
+// 		gs.debug("Flow create request body: {0}", r.getRequestBody());
+// 		gs.debug("Sending async request to create a flow in CG.");
 // 		r.executeAsync();
+		sendFlowRequest(current, false);
+	},
+	
+	sendAsyncFlowUpdate: function(current){
+		sendFlowRequest(current, true);
 	},
 	
 	isPesit: function (current){
 		return gs.getUser().hasRole("x_305439_digital_m.app_sender") && current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER";
 	},
+	
+	addJournalEntry: function (flowRecord, message){
+		if(!gs.nil(flowRecord)){
+			flowRecord.journal = message;
+			flowRecord.update();
+		}
+	},
+	
     type: 'FlowUtils'
 });
+
+function sendFlowRequest(flow_record, isUpdate){
+	var operation = getOperationName(isUpdate);
+	var requestName = operation + " a Flow";
+	
+	var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', requestName);
+	new ConnectionSettings().setMandatoryProps(r);
+	r.setStringParameterNoEscape('flow_name', flow_record.flow_model_name);
+	
+	if(isUpdate){
+		r.setStringParameterNoEscape('flow_id', flow_record.cg_id);
+		r.setEccCorrelator(requestName + "-" + flow_record.sys_id);
+	} else {
+		r.setEccCorrelator(requestName + "-" + flow_record.sys_id);
+	}
+
+	var body = this.getRequestBody(flow_record);
+	r.setRequestBody(body);
+
+	gs.debug("Flow {0} request body: {1}", operation.toLowerCase(), r.getRequestBody());
+	gs.debug("Sending async request to {0} flow with name={1} in CG.", operation.toLowerCase(), flow_record.name);
+	r.executeAsync();
+}
+
+function getOperationName(isUpdate, upperCase){
+	if(isUpdate){
+		return "Update";
+	}
+	return "Create";
+}
 
 function getUserData(){
 	var userRecord = new GlideRecord("sys_user");
@@ -209,13 +248,13 @@ function getUserData(){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-17 11:36:19</sys_created_on>
         <sys_id>7bb6447a4fbc77002f86b5e18110c7f0</sys_id>
-        <sys_mod_count>40</sys_mod_count>
+        <sys_mod_count>50</sys_mod_count>
         <sys_name>FlowUtils</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_7bb6447a4fbc77002f86b5e18110c7f0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-23 16:14:39</sys_updated_on>
+        <sys_updated_on>2019-06-07 12:30:41</sys_updated_on>
     </sys_script_include>
 </record_update>

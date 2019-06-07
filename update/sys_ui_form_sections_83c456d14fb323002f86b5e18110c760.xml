@@ -42,6 +42,20 @@
             <sys_updated_by>admin</sys_updated_by>
             <sys_updated_on>2019-04-02 10:56:40</sys_updated_on>
         </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>3</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2019-06-03 13:09:07</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>6c65a6fd4f39f3402f86b5e18110c7eb</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_305439_digital_m_flow_settings" name="x_305439_digital_m_flow_settings" sys_domain="global" view="6eefcadd4f7323002f86b5e18110c70f">83c456d14fb323002f86b5e18110c760</sys_ui_form>
+            <sys_ui_section caption="Activity Log" display_value="Activity Log" name="x_305439_digital_m_flow_settings" sys_domain="global" view="6eefcadd4f7323002f86b5e18110c70f">e465a6fd4f39f3402f86b5e18110c7e9</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2019-06-03 13:09:07</sys_updated_on>
+        </sys_ui_form_section>
         <sys_ui_form action="INSERT_OR_UPDATE">
             <name>x_305439_digital_m_flow_settings</name>
             <roles/>

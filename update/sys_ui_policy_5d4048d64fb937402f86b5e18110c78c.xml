@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_policy">
+    <sys_ui_policy action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <conditions table="x_305439_digital_m_flow_settings">model_0023.destination_folderEMPTYSTRING^EQ<item endquery="false" field="model_0023.destination_folder" goto="false" newquery="false" operator="EMPTYSTRING" or="false" value=""/>
+            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
+        </conditions>
+        <description/>
+        <global>true</global>
+        <inherit>false</inherit>
+        <isolate_script>true</isolate_script>
+        <model_id/>
+        <model_table/>
+        <on_load>false</on_load>
+        <order>100</order>
+        <reverse_if_false>true</reverse_if_false>
+        <run_scripts>true</run_scripts>
+        <script_false><![CDATA[function onCondition() {
+	jslog("[Dest folder empty] false condition");
+	var folder = g_form.getValue("model_0023.destination_folder");
+	if(!folder.startsWith("/")){
+		g_form.hideFieldMsg('model_0023.destination_folder', true);
+	}
+}]]></script_false>
+        <script_true><![CDATA[function onCondition() {
+	jslog("[Dest folder empty] true condition");
+	var folder = g_form.getValue("model_0023.destination_folder");
+	if(!folder.startsWith("/")){
+		g_form.showFieldMsg('model_0023.destination_folder','Invalid folder','error',true);
+	}
+}]]></script_true>
+        <set_values/>
+        <short_description>Dest folder empty</short_description>
+        <sys_class_name>sys_ui_policy</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-06-04 14:30:56</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>5d4048d64fb937402f86b5e18110c78c</sys_id>
+        <sys_mod_count>9</sys_mod_count>
+        <sys_name>Dest folder empty</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_update_name>sys_ui_policy_5d4048d64fb937402f86b5e18110c78c</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-06-04 15:27:59</sys_updated_on>
+        <table>x_305439_digital_m_flow_settings</table>
+        <ui_type>0</ui_type>
+        <view/>
+    </sys_ui_policy>
+</record_update>

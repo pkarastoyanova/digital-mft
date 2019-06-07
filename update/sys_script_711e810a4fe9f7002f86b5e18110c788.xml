@@ -15,7 +15,8 @@
         <condition/>
         <description/>
         <execute_function>false</execute_function>
-        <filter_condition table="ecc_queue">agent_correlatorSTARTSWITHCreate client profile^state=ready^queue=input^EQ<item endquery="false" field="agent_correlator" goto="false" newquery="false" operator="STARTSWITH" or="false" value="Create client profile"/>
+        <filter_condition table="ecc_queue">agent_correlatorSTARTSWITHCreate client profile^ORagent_correlatorSTARTSWITHUpdate client profile^state=ready^queue=input^EQ<item endquery="false" field="agent_correlator" goto="false" newquery="false" operator="STARTSWITH" or="false" value="Create client profile"/>
+            <item endquery="false" field="agent_correlator" goto="false" newquery="false" operator="STARTSWITH" or="true" value="Update client profile"/>
             <item endquery="false" field="state" goto="false" newquery="false" operator="=" or="false" value="ready"/>
             <item endquery="false" field="queue" goto="false" newquery="false" operator="=" or="false" value="input"/>
             <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
@@ -33,42 +34,75 @@
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
 
-	gs.debug("Sensor Client Create");
+	gs.debug("Sensor Client Create/Update");
 	try {
+		var isUpdateRequest = isUpdate(current.agent_correlator);
+		var flowRecord = getFlow(current.agent_correlator);
 		var xmlDoc = new XMLDocument2();
 		xmlDoc.parseXML(current.payload);
 		var responseBody = xmlDoc.getNodeText("//result/output");
 		var response = JSON.parse(responseBody);
+		var flowUtils = new FlowUtils();
 		
-		if(response.status == "201"){
-			var client = response.data.link.client;
-			
-			var clientRecord = new GlideRecord("x_305439_digital_m_communication_links");
-			clientRecord.addQuery("name", client.communication_profile.name);
-			clientRecord.query();
-			if(clientRecord.next()){
-				gs.debug("CLIENT CREATE found client record.");
-				clientRecord.setValue("name", client.communication_profile.name);
-				clientRecord.setValue("cg_client_profile_id", client.communication_profile_businessId);
-				clientRecord.update();
+		if(isUpdateRequest){
+			if(response.status == "200"){
+				flowUtils.addJournalEntry(flowRecord, "Successfully updated client communication link.");
 			} else {
-				gs.debug("unable to find client profile with name={0}", client.communication_profile.name);
+				gs.error("[Sensor Client Create] Update response body=" + responseBody);
+				flowUtils.addJournalEntry(flowRecord, "Failure updating client communication link. ");
 			}
 		} else {
-			gs.error(responseBody);
+			if(response.status == "201"){
+				gs.info("[Sensor Client Create] client commlink successfully created.");
+				var client = response.data.link.client;
+				var clientRecord = new GlideRecord("x_305439_digital_m_communication_links");
+				clientRecord.addQuery("name", client.communication_profile.name);
+				clientRecord.query();
+				if(clientRecord.next()){
+					clientRecord.setValue("cg_client_profile_id", client.communication_profile_businessId);
+					clientRecord.update();
+					flowUtils.addJournalEntry(flowRecord, "Successfully created client communication link.");
+				} else {
+					flowUtils.addJournalEntry(flowRecord, "Failed to create client communication link.");
+					gs.debug("[Sensor Client Create] unable to find client profile with name={0}. The profile will not be updated.", client.communication_profile.name);
+				}
+			} else {
+				flowUtils.addJournalEntry(flowRecord, "Failed to create client communication link.");
+				gs.error("[Sensor Client Create] Create client commprofile response body=" + responseBody);
+			}
 		}
 	} catch (ex){
-		gs.error(ex.message);
+		gs.error("[Sensor Client Create] General error=" + ex.message);
 	}
 
-})(current, previous);]]></script>
+})(current, previous);
+
+function getFlow(correlator){
+	if(!gs.nil(correlator)){
+		var idIndex = correlator.indexOf("-") + 1;
+		var sys_id = correlator.slice(idIndex);
+		var flowRecord = new GlideRecord("x_305439_digital_m_flow_settings");
+		if(flowRecord.get(sys_id)){
+			return flowRecord;
+		}
+	} else {
+		gs.error("[Sensor Client Create] Cannot extract the flow id from the correlator={0}", correlator);
+	}
+}
+
+function isUpdate(correlator){
+	if(correlator.startsWith("Update")){
+		return true;
+	}
+	return false;
+}]]></script>
         <sys_class_name>sys_script</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-05-22 15:12:09</sys_created_on>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>711e810a4fe9f7002f86b5e18110c788</sys_id>
-        <sys_mod_count>3</sys_mod_count>
+        <sys_mod_count>11</sys_mod_count>
         <sys_name>Sensor Client Create</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -76,7 +110,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_711e810a4fe9f7002f86b5e18110c788</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-23 10:59:06</sys_updated_on>
+        <sys_updated_on>2019-06-06 12:36:24</sys_updated_on>
         <template/>
         <when>after</when>
     </sys_script>

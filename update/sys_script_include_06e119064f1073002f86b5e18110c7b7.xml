@@ -23,70 +23,79 @@ LoadParticipants.prototype = Object.extendsObject(global.AbstractAjaxProcessor, 
 
 function load(participantType){
 	var partUtil = new ParticipantsUtil();
-			
-	var loadedParticipantCount = partUtil.getParticipantsCount(participantType);
 	var participantPlural = partUtil.plural(participantType);
 	
-	// there is no participants from this type into the DB. Load everything returned from CG.
-	if(loadedParticipantCount == 0){
-		populateTable(getCgParticipants(participantPlural), {}, participantType, participantPlural);
-	} else {
-		var expiredApplications = partUtil.getExpiredParticipants(participantType);
-		var expiredAppCount = Object.keys(expiredApplications).length;
-		gs.info("expired participant count: " + expiredAppCount);
-		// update expired participants
-		if(expiredAppCount > 0){
-			populateTable(getCgParticipants(participantPlural), expiredApplications, participantType, participantPlural);
-		} else {
-			var part = getCgParticipants(participantPlural).data.length;
-			gs.info("total partners: " + part);
-			if (loadedParticipantCount < part){
-				populateTable(getCgParticipants(participantPlural), {}, participantType, participantPlural);
-			}
-		}
-	}
+	populateParticipants(getCgParticipants(participantPlural), participantType, participantPlural);
 }
 
-function populateTable(jsonObj, expiredParticipants, partType, partTypePlural){
-	jsonObj.data.forEach(function(element) {
-		var businessId = element.businessId;
-		var name = element[partTypePlural].name;
-		gs.info("fetched " + partType + " from CG with name=" + name + ", businessID=" + businessId);
-
-		// if participant value is expired in the DB update it
-		if(expiredParticipants.hasOwnProperty(businessId)){
-			var g_record = new GlideRecord("x_305439_digital_m_participants");
-			g_record.get("cg_id", businessId);
-			
-			g_record.setValue("participant_name", name);
-			g_record.setValue("type", partType);
-			g_record.setValue("sys_updated_on", new GlideDateTime());
-			
-			if(partType == "application"){
-				g_record.setValue("application_type", element[partTypePlural].productTypes[0]);
-				g_record.setValue("cg_product_id", element[partTypePlural].products[0].businessId);
+function populateParticipants(jsonObject, participantType, participantTypePlural){
+	var dbObjects = getAllDbRecords(participantType);
+	var responsePartIds = {};
+	jsonObject.data.forEach(function(participant){
+		var businessId = participant.businessId;
+		var name = participant[participantTypePlural].name;
+		responsePartIds[businessId] = businessId;
+		
+		if(businessId in dbObjects){
+			// update the participant if needed
+			var db_participant_name = dbObjects[businessId].participant_name;
+			gs.info("db_participant_name="+db_participant_name);
+			if (db_participant_name != name){
+				var g_record = new GlideRecord("x_305439_digital_m_participants");
+				g_record.addQuery("cg_id", businessId);
+				g_record.query();
+				g_record.next();
+				g_record.setValue("participant_name", name);
+				g_record.update();
 			}
-			
-			var updated = g_record.update("Updating participant.");
-			delete expiredParticipants[businessId];
 		} else {
-			// add the new values retrieved from Central Governance
-			gs.info("trying to add entry with name " + name + ", id=" + businessId);
-			var new_record = new GlideRecord("x_305439_digital_m_participants");
-			new_record.get("cg_id", businessId);
-			if(!new_record.next()){
-				new_record.initialize();
-				new_record.setValue("cg_id", businessId);
-				new_record.setValue("participant_name", name);
-				new_record.setValue("type", partType);
-				if(partType == "application"){
-					new_record.setValue("application_type", element[partTypePlural].productTypes[0]);
-					new_record.setValue("cg_product_id", element[partTypePlural].products[0].businessId);
-				}
-				new_record.insert();
+			// add the new participant
+			var g_record_new = new GlideRecord("x_305439_digital_m_participants");
+			g_record_new.initialize();
+			g_record_new.setValue("cg_id", businessId);
+			g_record_new.setValue("participant_name", name);
+			g_record_new.setValue("type", participantType);
+			if(participantType == "application"){
+				g_record_new.setValue("application_type", participant[participantTypePlural].productTypes[0]);
+				g_record_new.setValue("cg_product_id", participant[participantTypePlural].products[0].businessId);
+			} else {
+				g_record_new.setValue("cg_product_id", businessId);
 			}
+			g_record_new.insert();
 		}
 	});
+	
+	// clean up missing participants in CG.
+	Object.keys(dbObjects).forEach(function(businessId) {
+		if(!(businessId in responsePartIds)){
+			var g_record = new GlideRecord("x_305439_digital_m_participants");
+			g_record.addQuery("cg_id", businessId);
+			g_record.query();
+			g_record.next();
+			g_record.deleteRecord();
+		}
+	});
+}
+
+function getAllDbRecords(participantType){
+	var g_record = new GlideRecord("x_305439_digital_m_participants");
+	g_record.addQuery("type", participantType);
+	g_record.query();
+	var mapRecords = {};
+	while(g_record.next()){
+		mapRecords[g_record.cg_id] = getObject(g_record);
+	}
+	return mapRecords;
+}
+
+function getObject(g_record){
+	var obj = {};
+	obj.application_type = g_record.application_type + "";
+	obj.cg_id = g_record.cg_id + "";
+	obj.cg_product_id = g_record.cg_product_id + "";
+	obj.participant_name = g_record.participant_name + "";
+	obj.type = g_record.type + "";
+	return obj;
 }
 
 function getCgParticipants(type){
@@ -114,13 +123,13 @@ function getCgParticipants(type){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-03-21 14:54:15</sys_created_on>
         <sys_id>06e119064f1073002f86b5e18110c7b7</sys_id>
-        <sys_mod_count>22</sys_mod_count>
+        <sys_mod_count>33</sys_mod_count>
         <sys_name>LoadParticipants</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_06e119064f1073002f86b5e18110c7b7</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-10 10:25:06</sys_updated_on>
+        <sys_updated_on>2019-06-05 14:31:49</sys_updated_on>
     </sys_script_include>
 </record_update>
