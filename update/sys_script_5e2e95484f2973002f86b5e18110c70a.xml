@@ -34,25 +34,22 @@
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
 
-	// Add your code here
-	gs.debug("Sensor Flow Create");
-	
 	try{
 		var xmlDoc = new XMLDocument2();
 		xmlDoc.parseXML(current.payload);
 
 		var responseBody = xmlDoc.getNodeText("//result/output");
 		var response = JSON.parse(responseBody);
-		gs.info("[Sensor Flow Create] response body=" + responseBody);
+		gs.debug("[Sensor Flow Create] response body=" + responseBody);
 		var flowUtils = new FlowUtils();
 		var flowRecord = getFlow(current.agent_correlator);
 		
 		var isUpdateOperation = isUpdate(current.agent_correlator);
-		var operationName = getOperationName(current.agent_correlator);
+		var operationName = getOperationName(isUpdateOperation);
+		gs.debug("[Sensor Flow Create] operationName=" + operationName);
 
 		if(response.status != "201" && response.status != "200"){
-			gs.error("[Sensor Flow Create] " + responseBody);
-			flowUtils.addJournalEntry(flowRecord, "Failed to {0} flow.", operationName);
+			flowUtils.addJournalEntry(flowRecord, "[Flow] Failed to " + operationName + " the flow.");
 			
 			if(typeof response.errors === 'object' && !gs.nil(response.errors)){
 				gs.addErrorMessage(JSON.stringify(response.errors));
@@ -68,7 +65,7 @@
 				flowRecord.setValue("cg_id", response.data.businessId);
 				flowRecord.update();
 			}
-			flowUtils.addJournalEntry(flowRecord, "Successfully {0}d a flow.", operationName);
+			flowUtils.addJournalEntry(flowRecord, "[Flow] Successfully " + operationName + "d the flow.", operationName);
 		} 
 	} catch (ex){
 		var record = getFlow(current.agent_correlator);
@@ -88,10 +85,21 @@ function getFlow(correlator){
 }
 
 function isUpdate(correlator){
+	var update = false;
 	if(correlator.startsWith("Update")){
-		return true;
+		update = true;
 	} 
-	return false;
+	gs.debug("[Sensor Flow Create] evaluating operation type: correlator={0}, isUpdate={1}", correlator, update);
+	return update;
+}
+
+function getOperationName(isUpdate){
+	var name = "create";
+	if(isUpdate){
+		name = "update";
+	}
+	gs.debug("[Sensor Flow Create] evaluating operation name: correlator={0}, operation={1}", correlator, name);
+	return name;
 }]]></script>
         <sys_class_name>sys_script</sys_class_name>
         <sys_created_by>admin</sys_created_by>
@@ -99,7 +107,7 @@ function isUpdate(correlator){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>5e2e95484f2973002f86b5e18110c70a</sys_id>
-        <sys_mod_count>27</sys_mod_count>
+        <sys_mod_count>40</sys_mod_count>
         <sys_name>Sensor Flow Create</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -107,7 +115,7 @@ function isUpdate(correlator){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_5e2e95484f2973002f86b5e18110c70a</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-06-07 12:48:38</sys_updated_on>
+        <sys_updated_on>2019-06-13 08:52:58</sys_updated_on>
         <template/>
         <when>after</when>
     </sys_script>

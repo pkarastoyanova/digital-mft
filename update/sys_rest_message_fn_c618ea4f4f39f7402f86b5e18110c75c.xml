@@ -11,20 +11,20 @@
         <oauth2_profile/>
         <protocol_name/>
         <qualified_name>AMFT-Communication Servers [ Update SFTP Server ]</qualified_name>
-        <rest_endpoint>https://${amft_host}:${amft_port}/servicenow/v1.0/products/${server_id}/server_communication_profiles/CP_SERVER_ST_SFTP_BOTH/${profile_id}</rest_endpoint>
+        <rest_endpoint>https://${amft_host}:${amft_port}/servicenow/v1.0/products/${server_id}/server_communication_profiles/CP_SERVER_ST_SFTP_BOTH/${profile_id}?_forced=true</rest_endpoint>
         <rest_message display_value="AMFT-Communication Servers">71e862544fa433002f86b5e18110c723</rest_message>
         <sys_class_name>sys_rest_message_fn</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-06-07 10:33:53</sys_created_on>
         <sys_id>c618ea4f4f39f7402f86b5e18110c75c</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>2</sys_mod_count>
         <sys_name>Update SFTP Server</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_rest_message_fn_c618ea4f4f39f7402f86b5e18110c75c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-06-07 10:33:53</sys_updated_on>
+        <sys_updated_on>2019-06-12 14:57:14</sys_updated_on>
         <use_basic_auth>false</use_basic_auth>
         <use_mid_server/>
         <use_mutual_auth>false</use_mutual_auth>

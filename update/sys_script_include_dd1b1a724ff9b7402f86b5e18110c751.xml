@@ -14,19 +14,18 @@ FlowClintHelper.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 		try {
 			gs.info("send update sys_id=" + sys_id);
 			var flow = this._getFlowRecord(sys_id);
-			gs.info("pesit login: " + flow.client_profile_1.pesit_client.login_name);
+			
 		} catch (ex){
-			gs.error("failed to update. " + ex.message);
+			gs.error("Failed to update. " + ex.message);
 		}
 	},
 	
 	_getFlowRecord: function (sys_id){
 		var flow_record = new GlideRecord("x_305439_digital_m_flow_settings");
 		if(flow_record.get(sys_id)){
-			gs.info("the record is found");
 			return flow_record;
 		} else {
-			gs.info("record is not found.");
+			gs.error("flow record with id={0} is not found.", sys_id);
 		}
 	},
     type: 'FlowClintHelper'
@@ -35,13 +34,13 @@ FlowClintHelper.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-06-06 15:16:27</sys_created_on>
         <sys_id>dd1b1a724ff9b7402f86b5e18110c751</sys_id>
-        <sys_mod_count>7</sys_mod_count>
+        <sys_mod_count>8</sys_mod_count>
         <sys_name>FlowClintHelper</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_dd1b1a724ff9b7402f86b5e18110c751</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-06-06 16:10:12</sys_updated_on>
+        <sys_updated_on>2019-06-10 07:53:18</sys_updated_on>
     </sys_script_include>
 </record_update>

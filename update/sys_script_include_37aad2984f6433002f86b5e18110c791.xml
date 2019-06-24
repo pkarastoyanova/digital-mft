@@ -44,13 +44,11 @@ CommProfiles.prototype = {
 				// get the key id
 				gs.info("attachment object is not found for filename=" + clientProfile.sftp_client.key_alias);
 				var restMethod;
-				var participant_id;
-				if(!gs.nil(clientProfile.client.cg_product_id)){
-					restMethod = "Get product SSH key";
-					participant_id = clientProfile.client.cg_product_id;
-				} else {
+				var participant_id = clientProfile.client.cg_product_id;
+				if(clientProfile.client.type == "partner"){
 					restMethod = "Get partner SSH key";
-					participant_id = clientProfile.client.cg_id;
+				} else {
+					restMethod = "Get product SSH key";
 				}
 				
 				r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-SSH Keys', restMethod);
@@ -65,7 +63,7 @@ CommProfiles.prototype = {
 				new ConnectionSettings().setMandatoryProps(r);
 
 				r.setEccCorrelator("Create SSH Key-" + clientProfile.sys_id);
-				r.setStringParameterNoEscape('partner_id', clientProfile.client.cg_id);
+				r.setStringParameterNoEscape('partner_id', clientProfile.client.cg_product_id);
 				
 				var body = this.getSshKeyRequestBody(attachment_obj);
 				r.setRequestBody(body);
@@ -106,32 +104,11 @@ CommProfiles.prototype = {
 	},
 	
 	sendAsyncServerProfileCreate: function(server_record, app_name, is_pesit, client_prifle_id){
-// 		var request_name;
-// 		if(is_pesit === true){
-// 			request_name = 'Create PESIT Server';
-// 		} else {
-// 			request_name = 'Create SFTP Server';
-// 		}
-		
-// 		var relayHelper = new GetStRelay();
-// 		var relayId = relayHelper.getStRelayId();
-		
-// 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication Servers', request_name);
-// 		new ConnectionSettings().setMandatoryProps(r);
-// 		r.setStringParameterNoEscape('server_id', relayId);
-// 		r.setEccCorrelator("Create a server-" + client_prifle_id);
-		
-// 		var serverRequest = getRequestBody(server_record, app_name, is_pesit);
-// 		var body = JSON.stringify(serverRequest);
-// 		r.setRequestBody(body);
-// 		gs.info("Sending async request to create server profile in CG.");
-// 		r.executeAsync();
-		
-		sendServerProfileRequest(server_record, app_name, is_pesit, client_prifle_id, undefined);
+		sendServerProfileRequest(server_record, app_name, is_pesit, client_prifle_id, undefined, false);
 	},
 	
 	sendAsyncServerProfileUpdate: function(server_record, app_name, is_pesit, client_id, cg_server_profile_id){
-		sendServerProfileRequest(server_record, app_name, is_pesit, client_id, cg_server_profile_id);
+		sendServerProfileRequest(server_record, app_name, is_pesit, client_id, cg_server_profile_id, true);
 	},
 	
 	sendAsyncClientDelete: function(client_record){
@@ -139,7 +116,7 @@ CommProfiles.prototype = {
 		try { 
 		 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', 'Delete link');
 		 new ConnectionSettings().setMandatoryProps(r);
-		 r.setStringParameterNoEscape('client_id', client_record.client.cg_id);
+		 r.setStringParameterNoEscape('client_id', client_record.client.cg_product_id);
 		 r.setStringParameterNoEscape('client_profile_id', client_record.cg_client_profile_id + "");
 		 r.setStringParameterNoEscape('server_id', client_record.server.cg_product_id);
 		 r.setEccCorrelator("Delete comm link");
@@ -175,12 +152,14 @@ CommProfiles.prototype = {
 		gs.debug("sendAsyncClientProfileCreate");
 		var restName;
 		var body;
-		var requireSshKey = requiresSshKey(current);
-		var sftpClient = isSftpClient(current);
-		var flowId = getFlowId(current);
+		var requireSshKey = requiresSshKey(client_record);
+		var sftpClient = isSftpClient(client_record);
+		var flowId = getFlowId(client_record);
+		
+		gs.debug("[sendAsyncClientProfileCreate] requiresSshKey={0}, isSftpClient={1}, flowId={2}", requireSshKey, sftpClient, flowId);
 		
 		if(sftpClient){
-			if(requiresSshKey){
+			if(requireSshKey){
 				restName = "Create SFTP Key";
 				if(isUpdate){
 					restName = "Update SFTP Key";
@@ -201,13 +180,9 @@ CommProfiles.prototype = {
 			body = getClientRequestBody(restName, client_record.pesit_client.getRefRecord(), client_record.sys_id, client_record.name, client_record.client.cg_product_id);
 		}
 		
-		var clientProductId;
-		if(gs.nil(client_record.client.cg_product_id)){
-			clientProductId = client_record.client.cg_id;
-		} else {
-			clientProductId = client_record.client.cg_product_id;
-		}
+		gs.debug("[sendAsyncClientProfileCreate] REST request name={0}", restName);
 		
+		var clientProductId = client_record.client.cg_product_id;
 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Communication links', restName);
 		new ConnectionSettings().setMandatoryProps(r);
 		
@@ -248,9 +223,8 @@ CommProfiles.prototype = {
     type: 'CommProfiles'
 };
 
-function sendServerProfileRequest(server_record, app_name, is_pesit, client_prifle_id, cg_server_prof_id){
+function sendServerProfileRequest(server_record, app_name, is_pesit, client_prifle_id, cg_server_prof_id, isServerUpdate){
 
-	var isServerUpdate = !gs.nil(cg_server_prof_id);
 	var request_name = getServerRequestName(is_pesit, isServerUpdate);
 
 	var relayHelper = new GetStRelay();
@@ -268,6 +242,7 @@ function sendServerProfileRequest(server_record, app_name, is_pesit, client_prif
 
 	var serverRequest = getRequestBody(server_record, app_name, is_pesit);
 	var body = JSON.stringify(serverRequest);
+	gs.debug("Server profile update request body: " + body);
 	r.setRequestBody(body);
 	gs.info("Sending async request to {0} profile in CG.", request_name);
 	r.executeAsync();
@@ -398,13 +373,13 @@ function getFlowId(clientRecord){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-03-28 17:13:48</sys_created_on>
         <sys_id>37aad2984f6433002f86b5e18110c791</sys_id>
-        <sys_mod_count>85</sys_mod_count>
+        <sys_mod_count>94</sys_mod_count>
         <sys_name>CommProfiles</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_37aad2984f6433002f86b5e18110c791</sys_update_name>
-        <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-06-07 10:20:33</sys_updated_on>
+        <sys_updated_by>receiver</sys_updated_by>
+        <sys_updated_on>2019-06-13 07:40:31</sys_updated_on>
     </sys_script_include>
 </record_update>

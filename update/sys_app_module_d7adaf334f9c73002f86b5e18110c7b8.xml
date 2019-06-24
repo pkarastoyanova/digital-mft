@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_app_module">
     <sys_app_module action="INSERT_OR_UPDATE">
-        <active>true</active>
+        <active>false</active>
         <application display_value="Digital MFT">eac542b04fa323002f86b5e18110c7e5</application>
         <assessment/>
         <content_page/>
@@ -25,7 +25,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>d7adaf334f9c73002f86b5e18110c7b8</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>Server Comm Profiles</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -33,7 +33,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_app_module_d7adaf334f9c73002f86b5e18110c7b8</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-04-02 17:28:10</sys_updated_on>
+        <sys_updated_on>2019-06-13 07:02:12</sys_updated_on>
         <timeline_page/>
         <title>Server Comm Profiles</title>
         <uncancelable>false</uncancelable>

@@ -2,7 +2,7 @@
     <sys_properties action="INSERT_OR_UPDATE">
         <choices/>
         <description>The business id of the SecureTransport relay server. Do not change this field, it will be automatically updated when st.relay.name is changed.</description>
-        <ignore_cache>false</ignore_cache>
+        <ignore_cache>true</ignore_cache>
         <is_private>false</is_private>
         <name>x_305439_digital_m.st.relay.id</name>
         <read_roles>x_305439_digital_m.configuration</read_roles>
@@ -11,16 +11,16 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-05-07 14:56:08</sys_created_on>
         <sys_id>2a64bf854f9173002f86b5e18110c754</sys_id>
-        <sys_mod_count>37</sys_mod_count>
+        <sys_mod_count>39</sys_mod_count>
         <sys_name>x_305439_digital_m.st.relay.id</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_properties_2a64bf854f9173002f86b5e18110c754</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-07 17:18:55</sys_updated_on>
+        <sys_updated_on>2019-06-11 16:22:56</sys_updated_on>
         <type>string</type>
-        <value>6b1ff3df-9ab5-4b88-82e4-d62ec8b338e2</value>
+        <value>2d2df499-4181-4c6c-9e00-109c66da860b</value>
         <write_roles>x_305439_digital_m.configuration</write_roles>
     </sys_properties>
     <sys_translated_text action="delete_multiple" query="documentkey=2a64bf854f9173002f86b5e18110c754"/>

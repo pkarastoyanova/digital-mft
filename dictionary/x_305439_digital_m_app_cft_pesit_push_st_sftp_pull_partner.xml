@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element label="APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER" max_length="40" name="x_305439_digital_m_app_cft_pesit_push_st_sftp_pull_partner" type="collection">
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="3" default="True" label="Default max record length" max_length="40" name="default_max_record_length" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Custom"/>
+                <element inactive_on_update="false" label="Default" value="true"/>
+            </choice>
+        </element>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" hint="The file name to be used when Relay sends the file to the destionation server. ST expression language is supported. For example: ${basename(transfer.target)}.${timestamp}" label="Destination file" max_length="120" name="destination_file" type="string"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" hint="The folder name where the files will be uploaded on the destionation server." label="Destination folder" max_length="64" name="destination_folder" type="string"/>
         <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;// Add your code here&#13;&#10;&#9;return '';  // return the calculated value&#13;&#10;&#13;&#10;})(current);" choice="3" default="fixed" label="File record format" max_length="40" name="file_record_format" type="choice">

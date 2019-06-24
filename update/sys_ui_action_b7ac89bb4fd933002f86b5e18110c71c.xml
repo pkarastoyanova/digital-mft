@@ -5,7 +5,7 @@
         <client>true</client>
         <client_script_v2/>
         <comments/>
-        <condition/>
+        <condition>(gs.hasRole("x_305439_digital_m.app_sender") &amp;&amp; !current.cg_id.nil()) || gs.hasRole("x_305439_digital_m.app_receiver")</condition>
         <form_action>true</form_action>
         <form_button>true</form_button>
         <form_button_v2>false</form_button_v2>
@@ -23,7 +23,7 @@
         <list_link>false</list_link>
         <list_save_with_form_button>false</list_save_with_form_button>
         <list_style/>
-        <name>client save</name>
+        <name>Save</name>
         <onclick>updateRecord()</onclick>
         <order>100</order>
         <script><![CDATA[function updateRecord(){
@@ -33,8 +33,7 @@
 		var isValidField = validateFields();
 		var isRequiredFieldValid = checkRequiredFields();
 		if(isValidField && isRequiredFieldValid){
-			gsftSubmit(null, g_form.getFormElement(),'sysverb_update_and_stay');
-			sendRequest("updateProfiles");
+			gsftSubmit(null, g_form.getFormElement(),'sysverb_update');
 		}
 	} catch (ex){
 		jslog("Failure saving client settings. " + ex.message + " " + ex);
@@ -103,15 +102,15 @@ function isNullOrEmpty(field){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>b7ac89bb4fd933002f86b5e18110c71c</sys_id>
-        <sys_mod_count>34</sys_mod_count>
-        <sys_name>client save</sys_name>
+        <sys_mod_count>41</sys_mod_count>
+        <sys_name>Save</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_b7ac89bb4fd933002f86b5e18110c71c</sys_update_name>
-        <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-06-07 10:37:53</sys_updated_on>
+        <sys_updated_by>receiver</sys_updated_by>
+        <sys_updated_on>2019-06-13 14:59:28</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

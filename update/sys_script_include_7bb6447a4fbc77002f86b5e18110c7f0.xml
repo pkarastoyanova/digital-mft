@@ -19,11 +19,11 @@ FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			flowRequest.flow_name = record.flow_name + "";
 			flowRequest.flow_description = record.u_comments + "";
 			flowRequest.flow_tags = ["servicenow"];
-			flowRequest.contact_email = userData.email + "";
-			flowRequest.contact_firstname = userData.firstName + "";
-			flowRequest.contact_lastname = userData.lastName + "";
-			flowRequest.contact_jobtitle = userData.title + "";
-			flowRequest.contact_phone = userData.phone + "";
+			flowRequest.contact_email = userData.email;
+			flowRequest.contact_firstname = userData.firstName;
+			flowRequest.contact_lastname = userData.lastName;
+			flowRequest.contact_jobtitle = userData.title;
+			flowRequest.contact_phone = userData.phone;
 
 			if(record.flow_model_name == 'PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER'){
 				// Participants information
@@ -35,7 +35,7 @@ FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 				var _0043 = record.model_0043.getRefRecord();
 				flowRequest.publish_folder = _0043.destination_folder + "";
 				flowRequest.publish_file_as = _0043.destination_file + "";
-				flowRequest.source_protocol_sftp_transfer_mode = _0043.get.src_transfer_mode + "";
+				flowRequest.source_protocol_sftp_transfer_mode = _0043.src_transfer_mode + "";
 				flowRequest.target_protocol_sftp_transfer_mode = _0043.target_transfer_mode + "";
 
 				// communication settings
@@ -64,6 +64,7 @@ FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 				flowRequest.source_file_type = record.model_0023.source_file_type + "";
 				flowRequest.source_record_format = record.model_0023.file_record_format + "";
 				flowRequest.source_max_record_length = record.model_0023.maximum_record_length + "";
+				flowRequest.use_default_max_record_length = (record.model_0023.use_default_max_record_length === 'true');
 				flowRequest.relay_receive_file_as = record.model_0023.relay_receive_file_as + "";
 				flowRequest.target_protocol_sftp_transfer_mode = record.model_0023.sftp_transfer_mode + "";
 				flowRequest.publish_folder = record.model_0023.destination_folder + "";
@@ -162,27 +163,44 @@ FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	 Sends asynchronous REST request to create a new flow in CentralGovernance.
 	*/
 	sendAsyncFlowCreateRequest: function(current){
+		sendFlowRequest(current, false, this.getRequestBody(current));
+	},
+	
+	createFlowPrerequisites: function (current){
+		var comProfiles = new CommProfiles();
+		var comProfilesUtils = new CommProfilesUtils();
+
+// 		var server_record_1 = current.server_profile_1.getRefRecord();
+// 		var server_record_2 = current.server_profile_2.getRefRecord();
 		
-// 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Create a Flow');
-// 		new ConnectionSettings().setMandatoryProps(r);
-// 		r.setStringParameterNoEscape('flow_name', current.flow_model_name);
-// 		r.setEccCorrelator("Create a Flow-" + current.sys_id);
+// 		var client_record_1 = current.client_profile_1;
+// 		var client_record_2 = current.client_profile_2;
 		
-// 		var body = this.getRequestBody(current);
-// 		r.setRequestBody(body);
+// 		var isPesit = current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER";
 		
-// 		gs.debug("Flow create request body: {0}", r.getRequestBody());
-// 		gs.debug("Sending async request to create a flow in CG.");
-// 		r.executeAsync();
-		sendFlowRequest(current, false);
+// 		if(isPesit){
+// 			comProfiles.sendAsyncServerProfileCreate(server_record_2, current.destination.participant_name, false, client_record_2.sys_id);
+// 			comProfiles.sendAsyncServerProfileCreate(server_record_1, current.source.participant_name, true, client_record_1.sys_id);
+			
+// 		} else {
+// 			comProfiles.sendAsyncServerProfileCreate(server_record_2, current.destination.participant_name, false, client_record_2.sys_id);
+// 			comProfiles.sendAsyncServerProfileCreate(server_record_1, current.source.participant_name, false, client_record_1.sys_id);
+			
+// 		}
+		
+		var isPesitProfile = this.isPesit(current);
+		var server_profile_field = utils.getServerProfileFieldSn(current).profile;
+		var client_profile_field = this.getClientProfileFieldSn(current).profile;
+		
+		comProfiles.sendAsyncServerProfileCreate(server_profile_field, current.destination.participant_name, false, client_record_2.sys_id);
 	},
 	
 	sendAsyncFlowUpdate: function(current){
-		sendFlowRequest(current, true);
+		sendFlowRequest(current, true, this.getRequestBody(current));
 	},
 	
 	isPesit: function (current){
-		return gs.getUser().hasRole("x_305439_digital_m.app_sender") && current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER";
+		return this.isSender() && current.flow_model_name == "APP_CFT_PESIT_PUSH_ST_SFTP_PULL_PARTNER";
 	},
 	
 	addJournalEntry: function (flowRecord, message){
@@ -192,16 +210,43 @@ FlowUtils.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 		}
 	},
 	
+	isSender: function(){
+		return gs.getUser().hasRole("x_305439_digital_m.app_sender");
+	},
+	
+	getClientAppName: function(flow_record){
+		if(this.isSender()){
+			return flow_record.source.participant_name;
+		} else {
+			return flow_record.destination.participant_name;
+		}
+	},
+	
+	updateAsyncDeployStatus: function(flow_record){
+		try { 
+			 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Check Deploy Status');
+			 r.setQueryParameter("name", flow_record.flow_name);
+			 new ConnectionSettings().setMandatoryProps(r);
+			r.setEccCorrelator("Deploy status-" + flow_record.sys_id);
+			 var response = r.executeAsync();
+			}
+			catch(ex) {
+			 var message = ex.message;
+				gs.error("Error while trying to retrieve deployment status. " + message);
+			}
+	},
+	
     type: 'FlowUtils'
 });
 
-function sendFlowRequest(flow_record, isUpdate){
+function sendFlowRequest(flow_record, isUpdate, body){
 	var operation = getOperationName(isUpdate);
 	var requestName = operation + " a Flow";
 	
 	var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', requestName);
 	new ConnectionSettings().setMandatoryProps(r);
 	r.setStringParameterNoEscape('flow_name', flow_record.flow_model_name);
+	r.setRequestBody(body);
 	
 	if(isUpdate){
 		r.setStringParameterNoEscape('flow_id', flow_record.cg_id);
@@ -210,11 +255,8 @@ function sendFlowRequest(flow_record, isUpdate){
 		r.setEccCorrelator(requestName + "-" + flow_record.sys_id);
 	}
 
-	var body = this.getRequestBody(flow_record);
-	r.setRequestBody(body);
-
 	gs.debug("Flow {0} request body: {1}", operation.toLowerCase(), r.getRequestBody());
-	gs.debug("Sending async request to {0} flow with name={1} in CG.", operation.toLowerCase(), flow_record.name);
+	gs.info("Sending async request to {0} flow with name={1} in CG.", operation.toLowerCase(), flow_record.flow_name);
 	r.executeAsync();
 }
 
@@ -227,14 +269,16 @@ function getOperationName(isUpdate, upperCase){
 
 function getUserData(){
 	var userRecord = new GlideRecord("sys_user");
-	var foundRecord = userRecord.get(gs.getUser().getID());
+	var user = gs.getUser();
+	var id = user.getID();
+	var foundRecord = userRecord.get(id);
 	var userData = {};
 	if (foundRecord){
-		userData.firstName = userRecord.first_name;
-		userData.lastName = userRecord.last_name;
-		userData.email = userRecord.email;
-		userData.title = userRecord.title;
-		userData.phone = userRecord.phone;
+		userData.firstName = userRecord.first_name.toString();
+		userData.lastName = userRecord.last_name.toString();
+		userData.email = userRecord.email.toString();
+		userData.title = userRecord.title.toString();
+		userData.phone = userRecord.phone.toString();
 	} else {
 		userData.firstName = "";
 		userData.lastName = "";
@@ -248,13 +292,13 @@ function getUserData(){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2019-04-17 11:36:19</sys_created_on>
         <sys_id>7bb6447a4fbc77002f86b5e18110c7f0</sys_id>
-        <sys_mod_count>50</sys_mod_count>
+        <sys_mod_count>70</sys_mod_count>
         <sys_name>FlowUtils</sys_name>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_include_7bb6447a4fbc77002f86b5e18110c7f0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-06-07 12:30:41</sys_updated_on>
+        <sys_updated_on>2019-06-13 10:13:42</sys_updated_on>
     </sys_script_include>
 </record_update>

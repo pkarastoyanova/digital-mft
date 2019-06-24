@@ -31,14 +31,23 @@
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
 
-	if(current.journal.changes() && current.journal == "Successfully created a flow."){
-		gs.info("[Update Flow] journal has been updated.");
-		return;
+// 	if(current.journal.changes() && current.journal.startsWith("[Flow]") && current.journal.startsWith("[Server Profile Failure]") && current.journal.startsWith("[Client Profile Failure]") || current.journal.startsWith("[Flow] Successfully")){
+// 		gs.info("[Update Flow] journal has been updated.");
+// 		return;
+// 	}
+
+	if(current.flow_name.changes() 
+	   || current.u_comments.changes() 
+	   || current.model_0023.destination_file.changes() 
+	   || current.model_0023.destination_folder.changes() 
+	   || current.model_0023.pesit_flow_idf.changes() 
+	   || current.model_0043.destination_file.changes() 
+	   || current.model_0043.destination_folder.changes())
+	{	
+		gs.info("[Update Flow] update CG flow with name={0}.", current.flow_name);
+		var utils = new FlowUtils();
+		utils.sendAsyncFlowUpdate(current);
 	}
-	
-	gs.info("[Update Flow] update CG flow.");
-	var utils = new FlowUtils();
-	utils.sendAsyncFlowUpdate(current);
 
 })(current, previous);]]></script>
         <sys_class_name>sys_script</sys_class_name>
@@ -47,7 +56,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>5411b2b64f3db7402f86b5e18110c7fe</sys_id>
-        <sys_mod_count>12</sys_mod_count>
+        <sys_mod_count>30</sys_mod_count>
         <sys_name>Update Flow</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -55,7 +64,7 @@
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_5411b2b64f3db7402f86b5e18110c7fe</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-06-07 12:50:29</sys_updated_on>
+        <sys_updated_on>2019-06-13 09:03:50</sys_updated_on>
         <template/>
         <when>before</when>
     </sys_script>

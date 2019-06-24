@@ -46,15 +46,15 @@
 		var flowUtils = new FlowUtils();
 		
 		var isUpdateOperation = isUpdate(current.agent_correlator);
-		var operationName = getOperationName(current.agent_correlator);
+		var operationName = getOperationName(isUpdateOperation);
 
 		if(response.status != "201" && response.status != "200"){
 			gs.error("[Sensor Server Profile] " + responseBody);
-			flowUtils.addJournalEntry(flowRecord, "Failed to {0} server communication profile. {1}", operationName, response.errors);
+			flowUtils.addJournalEntry(flowRecord, "[Server Profile Failure] Failed to " + operationName + " server communication profile. " + response.errors);
 		} else {
-			gs.info("[Sensor Server Profile] Server communication profile was successfully {0}d.", operationName);
+			gs.info("[Sensor Server Profile] Server communication profile with name '{1}' was successfully {0}d", operationName, response.data.communication_profile.name);
 			if(isUpdateOperation){
-				flowUtils.addJournalEntry(flowRecord, "Successfully {0}d server communication profile.", operationName);
+				flowUtils.addJournalEntry(flowRecord, "Successfully updated server communication profile.");
 				return;
 			}
 			var comprofile = response.data.communication_profile;
@@ -74,7 +74,7 @@
 					serverRecord.setValue("login_key_alias", comprofile.keyAlias);
 				}
 				serverRecord.update();
-				flowUtils.addJournalEntry(flowRecord, "Successfully created server communication profile.");
+				flowUtils.addJournalEntry(flowRecord, "Successfully created server communication profile with name '" + comprofile.name + "'.");
 				
 				setClientRecord(current.agent_correlator + "", response.data.businessId);
 			} else {
@@ -82,7 +82,7 @@
 			}
 		}
 	} catch (ex){
-		flowUtils.addJournalEntry(flowRecord, "Failed to create server communication profile.");
+		flowUtils.addJournalEntry(flowRecord, "[Server Profile Failure] Failed to create server communication profile.");
 		gs.error("[Sensor Server Profile] Failed to create server communication profile. " + ex.message);
 	}
 
@@ -95,8 +95,8 @@ function isUpdate(correlator){
 	return false;
 }
 
-function getOperationName(correlator){
-	if(correlator.startsWith("Update")){
+function getOperationName(isUpdateOperation){
+	if(isUpdateOperation){
 		return "update";
 	}
 	return "create";
@@ -140,7 +140,7 @@ function getFlowRecord(correlator){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>434432d44f69b3002f86b5e18110c7d4</sys_id>
-        <sys_mod_count>32</sys_mod_count>
+        <sys_mod_count>38</sys_mod_count>
         <sys_name>Sensor Server Create</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -148,7 +148,7 @@ function getFlowRecord(correlator){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_434432d44f69b3002f86b5e18110c7d4</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-06-07 12:47:40</sys_updated_on>
+        <sys_updated_on>2019-06-12 09:08:37</sys_updated_on>
         <template/>
         <when>after</when>
     </sys_script>

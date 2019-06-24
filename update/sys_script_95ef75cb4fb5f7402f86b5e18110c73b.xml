@@ -29,11 +29,7 @@
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
 
-	if(previous.cg_id.nil()){
-		gs.debug("[Update Server Profile] skip server profile update. The profile has been just created in CG.");
-		return;
-	}
-	
+	gs.debug("[Update Server Profile] cg_id={0}, previous.cg_id={1}", current.cg_id, previous.cg_id);
 	var utils = new CommProfiles();
 	var comProfilesUtils = new CommProfilesUtils();
 	var flowHelper = new FlowUtils();
@@ -43,7 +39,14 @@
 		var isPesit = flowHelper.isPesit(flow_record);
 		var appName = getApplicationName(flow_record);
 		var client_record = comProfilesUtils.getClientProfileFieldSn(flow_record).profile;
-		utils.sendAsyncServerProfileUpdate(current, appName, isPesit, client_record.sys_id, current.cg_id);
+		
+// 		if(current.cg_id.nil() && previous.cg_id.nil() && flowHelper.isSender()){
+// 			utils.sendAsyncServerProfileCreate(current, appName, isPesit, client_record.sys_id);
+// 		}
+		
+		if(!previous.cg_id.nil()){
+			utils.sendAsyncServerProfileUpdate(current, appName, isPesit, client_record.sys_id, current.cg_id);
+		}
 	} else {
 		gs.error("[Update Server Profile] cannot find the flow record to which this profile belongs to. Server communication profile will not be updated.");
 	}
@@ -53,7 +56,7 @@
 function getFlowRecord(currnet){
 	var flow_record = new GlideRecord("x_305439_digital_m_flow_settings");
 	var query = flow_record.addQuery("server_profile_1", currnet.sys_id);
-	query.addOrCondition("server_profile_1", currnet.sys_id);
+	query.addOrCondition("server_profile_2", currnet.sys_id);
 	flow_record.query();
 	if(flow_record.next()){
 		return flow_record;
@@ -73,7 +76,7 @@ function getApplicationName(flow_record){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>95ef75cb4fb5f7402f86b5e18110c73b</sys_id>
-        <sys_mod_count>7</sys_mod_count>
+        <sys_mod_count>14</sys_mod_count>
         <sys_name>Update Server Profile</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -81,7 +84,7 @@ function getApplicationName(flow_record){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_95ef75cb4fb5f7402f86b5e18110c73b</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-06-07 09:11:11</sys_updated_on>
+        <sys_updated_on>2019-06-12 08:29:14</sys_updated_on>
         <template/>
         <when>before</when>
     </sys_script>

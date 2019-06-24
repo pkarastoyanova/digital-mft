@@ -37,7 +37,6 @@
 		if(current.name == "x_305439_digital_m.st.relay.name" && gs.nil(current.value)){
 			current.setAbortAction(true);
 			var element = current.getElement("name");
-			element.setError("Errrrrr");
 			
 			gs.info(current.getElement('name'));
 			gs.info(current.getElement('value'));
@@ -86,7 +85,7 @@ function isInt(value){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>3637a6bd4f55f3002f86b5e18110c7f2</sys_id>
-        <sys_mod_count>21</sys_mod_count>
+        <sys_mod_count>22</sys_mod_count>
         <sys_name>SysProp Validate</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -94,7 +93,7 @@ function isInt(value){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_3637a6bd4f55f3002f86b5e18110c7f2</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-10 08:21:19</sys_updated_on>
+        <sys_updated_on>2019-06-11 16:03:05</sys_updated_on>
         <template/>
         <when>before</when>
     </sys_script>

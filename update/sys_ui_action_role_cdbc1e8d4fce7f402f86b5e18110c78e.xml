@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_action_role">
+    <sys_ui_action_role action="INSERT_OR_UPDATE">
+        <sys_class_name>sys_ui_action_role</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-06-13 15:03:58</sys_created_on>
+        <sys_id>cdbc1e8d4fce7f402f86b5e18110c78e</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Deploy.x_305439_digital_m.app_sender</sys_name>
+        <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
+        <sys_ui_action display_value="Deploy">4a04334b4f0433002f86b5e18110c7f0</sys_ui_action>
+        <sys_update_name>sys_ui_action_role_cdbc1e8d4fce7f402f86b5e18110c78e</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-06-13 15:03:58</sys_updated_on>
+        <sys_user_role display_value="x_305439_digital_m.app_sender" name="x_305439_digital_m.app_sender">287f39174f7cf7002f86b5e18110c751</sys_user_role>
+    </sys_ui_action_role>
+</record_update>

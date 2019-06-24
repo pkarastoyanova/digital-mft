@@ -5,14 +5,14 @@
         <client>false</client>
         <client_script_v2/>
         <comments/>
-        <condition/>
+        <condition>gs.hasRole("x_305439_digital_m.app_sender") &amp;&amp; current.cg_id.nil()</condition>
         <form_action>true</form_action>
         <form_button>true</form_button>
         <form_button_v2>false</form_button_v2>
         <form_context_menu>false</form_context_menu>
         <form_link>false</form_link>
         <form_menu_button_v2>false</form_menu_button_v2>
-        <form_style/>
+        <form_style>primary</form_style>
         <hint/>
         <isolate_script>false</isolate_script>
         <list_action>false</list_action>
@@ -23,40 +23,46 @@
         <list_link>false</list_link>
         <list_save_with_form_button>false</list_save_with_form_button>
         <list_style/>
-        <name>Call Pet API</name>
+        <name>Create</name>
         <onclick/>
         <order>100</order>
-        <script><![CDATA[ try { 
-	 var r = new sn_ws.RESTMessageV2('x_305439_digital_m.PET', 'Default GET');
-	 r.setStringParameterNoEscape('pet_id', '97239163501735');
-// 	 r.setEccTopic("Call Pet API");     // only applicable for non mid server setup
-	 r.setMIDServer("vm15-39-mid-server");
-	 r.setEccParameter('skip_sensor', true);
-	 r.setEccCorrelator("Create a Flow");     // only applicable for mid server setup
-	 r.executeAsync();   // always goes to the ecc queue
-}
-catch(ex) {
- var message = ex.message;
+        <script><![CDATA[try {
+	current.update();
+
+	var flowHelper = new FlowUtils();
+	var comProfiles = new CommProfiles();
+	var comProfilesUtils = new CommProfilesUtils();
+	
+	var server_record = comProfilesUtils.getServerProfileFieldSn(current).profile;
+	var client_record = comProfilesUtils.getClientProfileFieldSn(current).profile;
+	var isPesit = flowHelper.isPesit(current);
+	var appName = flowHelper.getClientAppName(current);
+	
+	comProfiles.sendAsyncServerProfileCreate(server_record, appName, isPesit, client_record.sys_id);
+	
+	gs.addInfoMessage('Initiated flow creation.');
+} catch (ex){
+	gs.error("Create action: " + ex.message);
 }]]></script>
-        <show_insert>true</show_insert>
+        <show_insert>false</show_insert>
         <show_multiple_update>false</show_multiple_update>
         <show_query>false</show_query>
         <show_update>true</show_update>
         <sys_class_name>sys_ui_action</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2019-05-16 12:43:28</sys_created_on>
+        <sys_created_on>2019-06-12 07:22:11</sys_created_on>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
-        <sys_id>64a271c84f6973002f86b5e18110c709</sys_id>
-        <sys_mod_count>15</sys_mod_count>
-        <sys_name>Call Pet API</sys_name>
+        <sys_id>af0ca3604f4a3f402f86b5e18110c75b</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>Create</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
         <sys_policy/>
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
-        <sys_update_name>sys_ui_action_64a271c84f6973002f86b5e18110c709</sys_update_name>
+        <sys_update_name>sys_ui_action_af0ca3604f4a3f402f86b5e18110c75b</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-17 10:39:40</sys_updated_on>
+        <sys_updated_on>2019-06-12 12:29:53</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

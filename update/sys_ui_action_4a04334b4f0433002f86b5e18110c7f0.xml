@@ -5,7 +5,7 @@
         <client>false</client>
         <client_script_v2/>
         <comments/>
-        <condition>gs.hasRole("x_305439_digital_m.app_sender")</condition>
+        <condition>gs.hasRole("x_305439_digital_m.app_sender") &amp;&amp; (current.cg_status == "SavedNotDeployed" || current.cg_status == "DeployedInError")</condition>
         <form_action>true</form_action>
         <form_button>true</form_button>
         <form_button_v2>false</form_button_v2>
@@ -26,18 +26,20 @@
         <name>Deploy</name>
         <onclick/>
         <order>100</order>
-        <script><![CDATA[deploy();
+        <script><![CDATA[var body = getDeployRequestBody(current);
+deploy(body, current);
 
-function deploy(){
+function deploy(body, current){
 	try { 
 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Deploy');
 		new ConnectionSettings().setMandatoryProps(r);
-		r.setRequestBody(getRequestBody());
+		r.setRequestBody(body);
 	    
 		var response = r.execute();
 		var responseBody = response.getBody();
 		var httpStatus = response.getStatusCode();
-		gs.info("deploy http status: " + httpStatus);
+		gs.info("[deploy action] http status: " + httpStatus);
+		gs.debug("[deploy action] deploy response body: " + responseBody);
 		action.setRedirectURL(current);
 		if(httpStatus == 202){
 			gs.addInfoMessage("Flow with name '" + current.flow_name + "' request has been accepted for processing, but the processing has not been completed.");
@@ -45,18 +47,21 @@ function deploy(){
 			gs.error("Business ids is empty or invalid.");
 		} else if (httpStatus == 412){
 			gs.addErrorMessage("The deploy request has been triggered, but some products require restart or generates conflict with legacy flows.");
+			gs.error("[deploy action] The deploy request has been triggered, but some products require restart or generates conflict with legacy flows.");
 		} else {
 			gs.addErrorMessage("General error. Deployment procedure has failed.");
+			gs.error("[deploy action] General error. Deployment procedure has failed.");
 		}
 		
 	} catch(ex) {
 		 var message = ex.message;
+		gs.error("[deploy action] General error: " + message);
 	}
 }
 
-function getRequestBody(){
+function getDeployRequestBody(current){
 	var flowRequest = [];
-	flowRequest.push(current.cg_id);
+	flowRequest.push(current.cg_id.toString());
 	return JSON.stringify(flowRequest);
 }]]></script>
         <show_insert>false</show_insert>
@@ -69,7 +74,7 @@ function getRequestBody(){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>4a04334b4f0433002f86b5e18110c7f0</sys_id>
-        <sys_mod_count>55</sys_mod_count>
+        <sys_mod_count>59</sys_mod_count>
         <sys_name>Deploy</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -77,7 +82,7 @@ function getRequestBody(){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_4a04334b4f0433002f86b5e18110c7f0</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-14 15:54:55</sys_updated_on>
+        <sys_updated_on>2019-06-13 14:51:19</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

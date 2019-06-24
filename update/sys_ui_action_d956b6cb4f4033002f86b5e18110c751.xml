@@ -38,7 +38,7 @@
 
 	var server_record = comProfilesUtils.getServerProfileFieldSn(current).profile;
 	var client_record = comProfilesUtils.getClientProfileFieldSn(current).profile;
-	var app_name = getApplicationName();
+	var app_name = flowHelper.getClientAppName(current);
 	var isPesit = flowHelper.isPesit(current);
 	
 	if(!isPesit){
@@ -46,124 +46,116 @@
 	}
 	
 	comProfiles.sendAsyncServerProfileCreate(server_record, app_name, isPesit, client_record.sys_id);
-	flowHelper.sendAsyncFlowCreateRequest(current);
+// 	flowHelper.sendAsyncFlowCreateRequest(current);
 	
 } catch (ex){
-	gs.error(ex.message);
+	gs.error("Finish action: " + ex.message);
 }
 
 //sendRequest();
 
-function getApplicationName(){
-	if(gs.getUser().hasRole("x_305439_digital_m.app_sender")){
-		return current.source.participant_name;
-	} else {
-		return current.destination.participant_name;
-	}
-}
+// function sendRequest(){
+// 	try {
+		
+// 		gs.info("sending flow create request to CG.");
+// 		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Create a Flow');
+// 		new ConnectionSettings().setMandatoryProps(r);
+		
+// 		r.setStringParameterNoEscape('flow_name', current.flow_model_name);
+		
+// 		var body = flowHelper.getRequestBody(current);
+// 		gs.info("Create request body: " + body);
+// 		r.setRequestBody(flowHelper.getRequestBody(body));
 
-function sendRequest(){
-	try {
+// 		var response = r.execute();
+// 		var responseBody = response.getBody();
+// 		var httpStatus = response.getStatusCode();
 		
-		gs.info("sending flow create request to CG.");
-		var r = new sn_ws.RESTMessageV2('x_305439_digital_m.AMFT-Flows', 'Create a Flow');
-		new ConnectionSettings().setMandatoryProps(r);
+// 		gs.info("create new flow [" + current.flow_model_name + "] http status: " + httpStatus);
 		
-		r.setStringParameterNoEscape('flow_name', current.flow_model_name);
-		
-		var body = flowHelper.getRequestBody(current);
-		gs.info("Create request body: " + body);
-		r.setRequestBody(flowHelper.getRequestBody(body));
+// 		var responseBodyObj = JSON.parse(responseBody);
+// 		if(httpStatus != 201){
+// 			action.setRedirectURL(current);
+// 			if(typeof responseBodyObj.errors === 'object' && responseBodyObj.errors !== null){
+// 				gs.addErrorMessage(JSON.stringify(responseBodyObj.errors));
+// 			} else if (responseBodyObj.errors !== null){
+// 				gs.addErrorMessage(responseBodyObj.errors);
+// 			} else {
+// 				gs.addErrorMessage("Failed to create new flow in CentralGovernance.");
+// 			}
+// 		} else {
+// 			action.setRedirectURL(current);
+// 			current.setValue("cg_status", responseBodyObj.data.statusFlow.code);
+// 			current.setValue("cg_id", responseBodyObj.data.businessId);
 
-		var response = r.execute();
-		var responseBody = response.getBody();
-		var httpStatus = response.getStatusCode();
-		
-		gs.info("create new flow [" + current.flow_model_name + "] http status: " + httpStatus);
-		
-		var responseBodyObj = JSON.parse(responseBody);
-		if(httpStatus != 201){
-			action.setRedirectURL(current);
-			if(typeof responseBodyObj.errors === 'object' && responseBodyObj.errors !== null){
-				gs.addErrorMessage(JSON.stringify(responseBodyObj.errors));
-			} else if (responseBodyObj.errors !== null){
-				gs.addErrorMessage(responseBodyObj.errors);
-			} else {
-				gs.addErrorMessage("Failed to create new flow in CentralGovernance.");
-			}
-		} else {
-			action.setRedirectURL(current);
-			current.setValue("cg_status", responseBodyObj.data.statusFlow.code);
-			current.setValue("cg_id", responseBodyObj.data.businessId);
+// 			current.update();
+// 			gs.addInfoMessage("Flow with name '" + current.flow_name + "' successfully created.");
+// 		}
+// 	}
+// 	catch(ex) {
+// 		var message = ex.message;
+// 		gs.error(message);
+// 	}
+// }
 
-			current.update();
-			gs.addInfoMessage("Flow with name '" + current.flow_name + "' successfully created.");
-		}
-	}
-	catch(ex) {
-		var message = ex.message;
-		gs.error(message);
-	}
-}
+// function getUserData(){
+// 	var userRecord = new GlideRecord("sys_user");
+// 	userRecord.addQuery("sys_id", gs.getUser().getID());
+// 	userRecord.query();
+// 	var userData = {};
+// 	if (userRecord.next()){
+// 		userData.firstName = userRecord.get("first_name");
+// 		userData.lastName = userRecord.get("last_name");
+// 		userData.email = userRecord.get("email");
+// 		userData.title = userRecord.get("title");
+// 		userData.phone = userRecord.get("phone");
+// 	} else {
+// 		userData.firstName = "";
+// 		userData.lastName = "";
+// 		userData.email = "";
+// 		userData.title = "";
+// 		userData.phone = "";
+// 	}
+// 	return userData;
+// }
 
-function getUserData(){
-	var userRecord = new GlideRecord("sys_user");
-	userRecord.addQuery("sys_id", gs.getUser().getID());
-	userRecord.query();
-	var userData = {};
-	if (userRecord.next()){
-		userData.firstName = userRecord.get("first_name");
-		userData.lastName = userRecord.get("last_name");
-		userData.email = userRecord.get("email");
-		userData.title = userRecord.get("title");
-		userData.phone = userRecord.get("phone");
-	} else {
-		userData.firstName = "";
-		userData.lastName = "";
-		userData.email = "";
-		userData.title = "";
-		userData.phone = "";
-	}
-	return userData;
-}
-
-function getRequestBody(stRelayId){
-	var flowRequest = {};
-	var userData = getUserData();
-	if(current.flow_model_name == 'PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER'){
-		// general information
-		flowRequest.flow_name = current.flow_name + "";
-		flowRequest.flow_description = current.u_comments + "";
-		flowRequest.flow_tags = ["servicenow"] + "";
-		flowRequest.contact_email = userData.email;
-		flowRequest.contact_firstname = userData.firstName;
-		flowRequest.contact_lastname = userData.lastName;
-		flowRequest.contact_jobtitle = userData.title;
-		flowRequest.contact_phone = userData.phone;
+// function getRequestBody(stRelayId){
+// 	var flowRequest = {};
+// 	var userData = getUserData();
+// 	if(current.flow_model_name == 'PARTNER_SFTP_PUSH_ST_SFTP_PULL_PARTNER'){
+// 		// general information
+// 		flowRequest.flow_name = current.flow_name + "";
+// 		flowRequest.flow_description = current.u_comments + "";
+// 		flowRequest.flow_tags = ["servicenow"] + "";
+// 		flowRequest.contact_email = userData.email;
+// 		flowRequest.contact_firstname = userData.firstName;
+// 		flowRequest.contact_lastname = userData.lastName;
+// 		flowRequest.contact_jobtitle = userData.title;
+// 		flowRequest.contact_phone = userData.phone;
 		
-		// Participants information
-		flowRequest.source_partner_id = current.source.cg_id + "";
-		flowRequest.st_relay_id = stRelayId + "";
-		flowRequest.target_partner_id = current.destination.cg_id + "";
+// 		// Participants information
+// 		flowRequest.source_partner_id = current.source.cg_id + "";
+// 		flowRequest.st_relay_id = stRelayId + "";
+// 		flowRequest.target_partner_id = current.destination.cg_id + "";
 		
-		// Specific flow settings
-		flowRequest.publish_folder = current.u_destination_folder + "";
-		flowRequest.publish_file_as = current.u_destination_file + "";
-		flowRequest.source_protocol_sftp_transfer_mode = current.src_transfer_type + "";
-		flowRequest.target_protocol_sftp_transfer_mode = current.dest_transfer_type + "";
+// 		// Specific flow settings
+// 		flowRequest.publish_folder = current.u_destination_folder + "";
+// 		flowRequest.publish_file_as = current.u_destination_file + "";
+// 		flowRequest.source_protocol_sftp_transfer_mode = current.src_transfer_type + "";
+// 		flowRequest.target_protocol_sftp_transfer_mode = current.dest_transfer_type + "";
 		
-		// communication settings
-		flowRequest.source_to_relay_sender_profile_id = "";
-		flowRequest.source_to_relay_receiver_profile_id = "";
-		flowRequest.relay_to_target_sender_profile_id = "";
-		flowRequest.relay_to_target_receiver_profile_id = "";
+// 		// communication settings
+// 		flowRequest.source_to_relay_sender_profile_id = "";
+// 		flowRequest.source_to_relay_receiver_profile_id = "";
+// 		flowRequest.relay_to_target_sender_profile_id = "";
+// 		flowRequest.relay_to_target_receiver_profile_id = "";
 		
-		flowRequest.source_protocol_sftp_auth_mode = "";
-		flowRequest.target_protocol_sftp_auth_mode = "";
-	}
+// 		flowRequest.source_protocol_sftp_auth_mode = "";
+// 		flowRequest.target_protocol_sftp_auth_mode = "";
+// 	}
 	
-	return JSON.stringify(flowRequest);
-}]]></script>
+// 	return JSON.stringify(flowRequest);
+// }]]></script>
         <show_insert>false</show_insert>
         <show_multiple_update>false</show_multiple_update>
         <show_query>false</show_query>
@@ -174,7 +166,7 @@ function getRequestBody(stRelayId){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>d956b6cb4f4033002f86b5e18110c751</sys_id>
-        <sys_mod_count>40</sys_mod_count>
+        <sys_mod_count>52</sys_mod_count>
         <sys_name>Finish</sys_name>
         <sys_overrides display_value="Next">98e5e6fa4f0433002f86b5e18110c71e</sys_overrides>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -182,7 +174,7 @@ function getRequestBody(stRelayId){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_d956b6cb4f4033002f86b5e18110c751</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-23 15:30:45</sys_updated_on>
+        <sys_updated_on>2019-06-12 12:30:35</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

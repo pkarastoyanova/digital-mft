@@ -52,7 +52,7 @@ try{
 		action.setRedirectURL("/x_305439_digital_m_flow_settings.do?sys_id=" + sys_id + "&sysparm_view=settings");
 	}
 }catch (ex){
-	gs.error(ex.message);
+	gs.error("Next action 2: " + ex.message);
 }
 
 current.update();
@@ -68,7 +68,7 @@ current.update();
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>98e5e6fa4f0433002f86b5e18110c71e</sys_id>
-        <sys_mod_count>28</sys_mod_count>
+        <sys_mod_count>30</sys_mod_count>
         <sys_name>Next</sys_name>
         <sys_overrides display_value="Save">47f371dfc0a8000600d86dd2da62a9e7</sys_overrides>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -76,7 +76,7 @@ current.update();
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_ui_action_98e5e6fa4f0433002f86b5e18110c71e</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-05-21 16:14:16</sys_updated_on>
+        <sys_updated_on>2019-06-11 17:55:46</sys_updated_on>
         <table>x_305439_digital_m_flow_settings</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

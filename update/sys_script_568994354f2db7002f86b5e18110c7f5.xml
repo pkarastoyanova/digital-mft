@@ -30,7 +30,7 @@
         <rest_variables/>
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
-gs.info("Create Client Profile Business Rule");
+
 	try{
 		var requireSshKey = requiresSshKey(current);
 		var sftpClient = isSftpClient(current);
@@ -55,8 +55,10 @@ function isSftpClient(current){
 	return !gs.nil(current.sftp_client);
 }
 
-function requiresSshKey(current){
-	return !gs.nil(current.sftp_client) && current.sftp_client.login_type == "PUBLIC_KEY";
+function requiresSshKey(client_profile){
+	var sftp = client_profile.sftp_client;
+	gs.debug("[Create client profile] sftp.login_type=" + sftp.login_type);
+	return !gs.nil(sftp) && sftp.login_type == "PUBLIC_KEY";
 }
 
 function getFlowId(clientRecord){
@@ -82,7 +84,7 @@ function getFlowId(clientRecord){
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>568994354f2db7002f86b5e18110c7f5</sys_id>
-        <sys_mod_count>29</sys_mod_count>
+        <sys_mod_count>33</sys_mod_count>
         <sys_name>Create Client Profile</sys_name>
         <sys_overrides/>
         <sys_package display_value="digital-mft" source="x_305439_digital_m">3006e9b44f2323002f86b5e18110c7cd</sys_package>
@@ -90,7 +92,7 @@ function getFlowId(clientRecord){
         <sys_scope display_value="digital-mft">3006e9b44f2323002f86b5e18110c7cd</sys_scope>
         <sys_update_name>sys_script_568994354f2db7002f86b5e18110c7f5</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-06-06 16:22:23</sys_updated_on>
+        <sys_updated_on>2019-06-13 07:26:35</sys_updated_on>
         <template/>
         <when>async</when>
     </sys_script>
